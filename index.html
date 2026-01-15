@@ -139,3 +139,51 @@
 
         function formatEstado(valor) {
             if (!valor) return null;
+            const v = valor.toString().toUpperCase().trim();
+            if (v === "NA") return null;
+            if (v === "FALTA") return '<span style="color:#ff4444; font-weight:bold;">FALTA</span>';
+            if (v === "?" || v === "PEND") return '<span style="color: #ffaa00; font-weight: bold;">?</span>';
+            return `<span style="color:#00ff88; font-weight:bold;">${v}/10</span>`;
+        }
+
+        function renderGames(games) {
+            let html = "";
+            games.forEach(j => {
+                const sCaja = formatEstado(j["Estado Caja"]);
+                const sPort = formatEstado(j["Estado Portada"]);
+                const sIns = formatEstado(j["Estado Inserto"]);
+                const sMan = formatEstado(j["Estado Manual"]);
+                const sJgo = formatEstado(j["Estado Juego"]);
+                const sSpin = formatEstado(j["Estado Spinecard"]);
+                const sExt = formatEstado(j["Estado Extras"]);
+                const notaGral = formatNotaGeneral(j["Estado General"]);
+                const colorBadge = getColorForNota(j["Estado General"]);
+                const bandera = getFlag(j["Región"]);
+
+                html += `
+                    <div class="card">
+                        <div class="grade-badge" style="background-color: ${colorBadge};">${notaGral}</div>
+                        <span class="platform-tag">${j["Plataforma"]}</span>
+                        <span class="game-title">${j["Nombre Juego"]}</span>
+                        ${j["Edición"] ? `<span class="edition-text">${j["Edición"]}</span>` : ''}
+                        <div class="region-row">${bandera} ${j["Región"] || '-'}</div>
+                        <div class="details-grid">
+                            ${sCaja ? `<div>📦 Caja: ${sCaja}</div>` : ''}
+                            ${sPort ? `<div>🖼️ Portada: ${sPort}</div>` : ''}
+                            ${sIns ? `<div>📥 Inserto: ${sIns}</div>` : ''}
+                            ${sMan ? `<div>📖 Manual: ${sMan}</div>` : ''}
+                            ${sJgo ? `<div>🎮 Juego: ${sJgo}</div>` : ''}
+                            ${sSpin ? `<div>🔖 Obi: ${sSpin}</div>` : ''}
+                            ${sExt ? `<div>✨ Extras: ${sExt}</div>` : ''}
+                            <div>📦 Est: ${j["Completitud"] || '-'}</div>
+                        </div>
+                        ${j["Extras"] ? `<div style="font-size:0.75em; color:#888; margin-bottom:10px;"><b>Extras:</b> ${j["Extras"]}</div>` : ''}
+                        <div class="price-tag">Tasación: ${j["Tasación Actual"] || 'S/T'}</div>
+                        <div class="logistics">Serial: ${j["Serial"] || '-'} | Ubicación: ${j["Ubicación"] || '-'}</div>
+                    </div>`;
+            });
+            document.getElementById('game-grid').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
