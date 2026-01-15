@@ -70,7 +70,7 @@
             const v = valor.toString().toUpperCase().trim();
             if (v === "NA") return null;
             if (v === "FALTA") return '<span style="color:#ff4444">FALTA</span>';
-            if (v === "PEND") return '<span style="color:#ffaa00">PEND</span>';
+            if (v === "?") return '<span style="color:#ffaa00">?</span>';
             return `<span style="color:#00ff88">${v}/10</span>`;
         }
 
@@ -97,7 +97,7 @@
                             ${sPort ? `<div>🖼️ Port: ${sPort}</div>` : ''}
                             ${sIns ? `<div>📥 Ins: ${sIns}</div>` : ''}
                             ${sMan ? `<div>📖 Man: ${sMan}</div>` : ''}
-                            ${sJgo ? `<div>🎮 Jgo: ${sJgo}</div>` : ''}
+                            ${sJgo ? `<div>🎮 Jue: ${sJgo}</div>` : ''}
                             ${sSpin ? `<div>🔖 Obi: ${sSpin}</div>` : ''}
                             ${sExt ? `<div>✨ Ext: ${sExt}</div>` : ''}
                             <div>🌍 Reg: ${j["Región"] || '-'}</div>
