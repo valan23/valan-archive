@@ -134,11 +134,12 @@
                         <div class="region-row">${getFlag(j["Región"])} ${j["Región"] || ""}</div>
                         <div class="details-grid">
                             ${formatEstado(j["Estado Caja"]) ? `<div>📦 Caja: ${formatEstado(j["Estado Caja"])}</div>` : ''}
-                            ${formatEstado(j["Estado Portada"]) ? `<div>🖼️ Port: ${formatEstado(j["Estado Portada"])}</div>` : ''}
-                            ${formatEstado(j["Estado Inserto"]) ? `<div>📥 Ins: ${formatEstado(j["Estado Inserto"])}</div>` : ''}
-                            ${formatEstado(j["Estado Manual"]) ? `<div>📖 Man: ${formatEstado(j["Estado Manual"])}</div>` : ''}
-                            ${formatEstado(j["Estado Juego"]) ? `<div>🎮 Jgo: ${formatEstado(j["Estado Juego"])}</div>` : ''}
+                            ${formatEstado(j["Estado Portada"]) ? `<div>🖼️ Portada: ${formatEstado(j["Estado Portada"])}</div>` : ''}
+                            ${formatEstado(j["Estado Inserto"]) ? `<div>📥 Inserto: ${formatEstado(j["Estado Inserto"])}</div>` : ''}
+                            ${formatEstado(j["Estado Manual"]) ? `<div>📖 Manual: ${formatEstado(j["Estado Manual"])}</div>` : ''}
+                            ${formatEstado(j["Estado Juego"]) ? `<div>🎮 Juego: ${formatEstado(j["Estado Juego"])}</div>` : ''}
                             ${formatEstado(j["Estado Spinecard"]) ? `<div>🔖 Obi: ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
+                            ${formatEstado(j["Estado Extras"]) ? `<div>🎁 Extras: ${formatEstado(j["Estado Extras"])}</div>` : ''}
                         </div>
                         <div class="price-tag">Tasación: ${j["Tasación Actual"] || "S/T"}</div>
                     </div>`;
