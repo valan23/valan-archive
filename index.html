@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valan Archive | Ultra</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.2/css/flag-icons.min.css"/>
 <style>
         :root { --accent: #00f2ff; --bg: #0b0b0e; --card: #16161a; --text: #e0e0e0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
@@ -58,7 +59,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+    
+        .region-row .fi {
+            width: 18px;
+            height: 14px;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5); /* Para que las banderas claras se vean bien */
         }
         
         .details-grid { 
@@ -95,17 +101,24 @@
 
         // Función para asignar banderas según el texto de la Región
         function getFlag(region) {
-            if (!region) return "🌍";
-            const r = region.toUpperCase();
-            if (r.includes("ESP") || r.includes("ESPAÑA")) return "🇪🇸";
-            if (r.includes("JAP") || r.includes("NTSC-J")) return "🇯🇵";
-            if (r.includes("USA") || r.includes("NTSC-U")) return "🇺🇸";
-            if (r.includes("EUR") || r.includes("PAL")) return "🇪🇺";
-            if (r.includes("UK") || r.includes("REINO UNIDO")) return "🇬🇧";
-            if (r.includes("FRA") || r.includes("FRANCIA")) return "🇫🇷";
-            if (r.includes("GER") || r.includes("ALEMANIA")) return "🇩🇪";
-            if (r.includes("ITA") || r.includes("ITALIA")) return "🇮🇹";
-            return "🌍";
+            if (!region) return '<span class="fi fi-xx"></span>'; // Icono de mundo/desconocido
+            const r = region.toUpperCase().trim();
+    
+            // Mapeo de códigos de país (ISO 3166-1-alpha-2)
+            let code = "xx"; 
+            if (r.includes("ESP")) code = "es";
+            else if (r.includes("JAP") || r.includes("NTSC-J") || r.includes("JPN")) code = "jp";
+            else if (r.includes("USA") || r.includes("NTSC-U")) code = "us";
+            else if (r.includes("EUR") || r.includes("PAL")) code = "eu";
+            else if (r.includes("UK") || r.includes("REINO UNIDO")) code = "gb";
+            else if (r.includes("FRA")) code = "fr";
+            else if (r.includes("GER") || r.includes("ALE")) code = "de";
+            else if (r.includes("ITA")) code = "it";
+            else if (r.includes("CAN")) code = "ca";
+            else if (r.includes("AUS")) code = "au";
+
+            // Devolvemos el HTML necesario para mostrar la bandera redondita o cuadrada
+            return `<span class="fi fi-${code}" style="border-radius: 2px;"></span>`;
         }
 
         function formatNotaGeneral(valor) {
