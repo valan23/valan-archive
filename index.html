@@ -70,7 +70,8 @@
             const v = valor.toString().toUpperCase().trim();
             if (v === "NA") return null;
             if (v === "FALTA") return '<span style="color:#ff4444">FALTA</span>';
-            if (v === "?") return '<span style="color: #ffaa00; font-weight: bold;">?</span>';
+            if (v === "?" || v === "PEND") {
+                return '<span style="color: #ffaa00; font-weight: bold;">?</span>';
             return `<span style="color:#00ff88">${v}/10</span>`;
         }
 
