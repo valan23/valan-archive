@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valan Archive | Videojuegos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        :root { --accent: #00f2ff; --bg: #0f0f12; --card-bg: #1e1e24; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: #e0e0e0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; padding: 40px 0; border-bottom: 1px solid #333; margin-bottom: 30px; }
+        h1 { color: var(--accent); font-size: 2.2em; text-transform: uppercase; letter-spacing: 3px; margin: 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border: 1px solid #333; padding: 20px; border-radius: 12px; transition: 0.3s; position: relative; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .platform { color: #ff0055; font-size: 0.8em; font-weight: bold; }
+        .title { display: block; font-size: 1.2em; font-weight: bold; margin: 10px 0; color: #fff; height: 3em; overflow: hidden; }
+        .region-badge { background: #333; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; float: right; }
+        .stats { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; font-size: 0.9em; margin: 10px 0; border-left: 3px solid var(--accent); }
+        .price { color: #00ff88; font-weight: bold; font-size: 1.1em; display: block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>VALAN ARCHIVE</h1>
+            <p>Inventario General de Videojuegos</p>
+        </header>
+        <div id="game-grid" class="grid">Cargando base de datos...</div>
+    </div>
+
+    <script>
+        const csvFile = "Inventario_JuegosRetro - Juegos.csv";
+
+        Papa.parse(csvFile, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                let html = "";
+                // Filtramos filas que tengan nombre de juego
+                const juegos = results.data.filter(j => j.Juego && j.Juego.trim() !== "");
+                
+                juegos.forEach(j => {
+                    html += `
+                        <div class="card">
+                            <span class="region-badge">${j.Región}</span>
+                            <span class="platform">${j.Plataforma}</span>
+                            <span class="title">${j.Juego}</span>
+                            <div class="stats">
+                                📦 Caja: ${j["Estado Caja"]}/10 | 📖 Manual: ${j["Estado Manual"]}/10
+                            </div>
+                            <span class="price">Tasación: ${j["Tasación Actual"]}</span>
+                        </div>
+                    `;
+                });
+                document.getElementById('game-grid').innerHTML = html;
+            }
+        });
+    </script>
+</body>
+</html>
