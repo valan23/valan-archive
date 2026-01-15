@@ -1,4 +1,43 @@
-<script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valan Archive | Explorer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        :root { --accent: #00f2ff; --bg: #0b0b0e; --card: #16161a; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; }
+        .header { text-align: center; padding: 20px; }
+        h1 { letter-spacing: 5px; color: var(--accent); text-shadow: 0 0 10px rgba(0,242,255,0.3); }
+        
+        /* Buscador */
+        .search-container { max-width: 600px; margin: 20px auto; position: relative; }
+        #searchInput { width: 100%; padding: 15px; border-radius: 30px; border: 1px solid #333; background: #222; color: white; font-size: 1em; outline: none; transition: 0.3s; }
+        #searchInput:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,242,255,0.1); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 15px; padding: 20px; border: 1px solid #222; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        
+        .platform-tag { font-size: 0.7em; font-weight: 800; padding: 4px 10px; border-radius: 5px; background: #ff0055; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
+        .game-title { font-size: 1.1em; font-weight: bold; margin: 10px 0; display: block; height: 2.4em; overflow: hidden; }
+        .info-row { font-size: 0.85em; color: #888; display: flex; justify-content: space-between; margin-top: 10px; }
+        .price-tag { display: block; margin-top: 15px; color: #00ff88; font-weight: bold; border-top: 1px solid #333; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>VALAN ARCHIVE</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar juego o consola..." onkeyup="filterGames()">
+        </div>
+    </div>
+
+    <div id="game-grid" class="grid"></div>
+
+    <script>
         let allGames = [];
         // Asegúrate de que este nombre sea EXACTO al de tu archivo subido
         const csvFile = "Inventario_JuegosRetro - Juegos.csv";
@@ -49,3 +88,5 @@
             renderGames(filtered);
         }
     </script>
+</body>
+</html>
