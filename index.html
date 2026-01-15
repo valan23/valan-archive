@@ -70,7 +70,7 @@
             const v = valor.toString().toUpperCase().trim();
             if (v === "NA") return null;
             if (v === "FALTA") return '<span style="color:#ff4444">FALTA</span>';
-            if (v === "?") return '<span style="color:#ffaa00">?</span>';
+            if (v === "?") return '<span style="color: #ffaa00; font-weight: bold;">?</span>';
             return `<span style="color:#00ff88">${v}/10</span>`;
         }
 
@@ -94,12 +94,12 @@
                         
                         <div class="details-grid">
                             ${sCaja ? `<div>📦 Caja: ${sCaja}</div>` : ''}
-                            ${sPort ? `<div>🖼️ Port: ${sPort}</div>` : ''}
-                            ${sIns ? `<div>📥 Ins: ${sIns}</div>` : ''}
-                            ${sMan ? `<div>📖 Man: ${sMan}</div>` : ''}
-                            ${sJgo ? `<div>🎮 Jue: ${sJgo}</div>` : ''}
+                            ${sPort ? `<div>🖼️ Portada: ${sPort}</div>` : ''}
+                            ${sIns ? `<div>📥 Inserto: ${sIns}</div>` : ''}
+                            ${sMan ? `<div>📖 Manual: ${sMan}</div>` : ''}
+                            ${sJgo ? `<div>🎮 Juego: ${sJgo}</div>` : ''}
                             ${sSpin ? `<div>🔖 Obi: ${sSpin}</div>` : ''}
-                            ${sExt ? `<div>✨ Ext: ${sExt}</div>` : ''}
+                            ${sExt ? `<div>✨ Extras: ${sExt}</div>` : ''}
                             <div>🌍 Reg: ${j["Región"] || '-'}</div>
                             <div>📦 Est: ${j["Completitud"] || '-'}</div>
                         </div>
