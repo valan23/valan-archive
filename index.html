@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valan Archive | Ultra</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <style>
+<style>
         :root { --accent: #00f2ff; --bg: #0b0b0e; --card: #16161a; --text: #e0e0e0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
         .container { max-width: 1300px; margin: 0 auto; }
@@ -25,13 +25,21 @@
         .grade-badge {
             position: absolute; top: 15px; right: 15px;
             background: var(--accent); color: #000; font-weight: 900;
-            width: 40px; height: 40px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 1.2em;
+            width: 42px; height: 42px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.1em;
+            z-index: 10; /* Asegura que esté arriba */
         }
 
         .platform-tag { font-size: 0.7em; font-weight: 800; color: #ff0055; text-transform: uppercase; }
         .edition-tag { font-size: 0.75em; color: #aaa; font-style: italic; display: block; margin-bottom: 5px; }
-        .game-title { font-size: 1.15em; font-weight: 700; margin: 5px 0; color: #fff; padding-right: 45px; }
+        
+        /* AQUÍ EL CAMBIO PARA EL TÍTULO */
+        .game-title { 
+            font-size: 1.15em; font-weight: 700; margin: 5px 0; color: #fff; 
+            padding-right: 50px; /* Deja espacio para que no choque con la nota */
+            display: block;
+            line-height: 1.3;
+        }
         
         .details-grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 5px;
@@ -65,19 +73,23 @@
             }
         });
 
+        // Función para la nota del recuadro azul (sin /10)
+        function formatNotaGeneral(valor) {
+            if (!valor) return '?';
+            const v = valor.toString().toUpperCase().trim();
+            if (v === "PEND" || v === "?") return '?';
+            return v;
+        }
+
+        // Función para los detalles (con /10 y colores)
         function formatEstado(valor) {
             if (!valor) return null;
-            // Limpiamos el texto: quitamos espacios y pasamos a mayúsculas
             const v = valor.toString().toUpperCase().trim();
-            // 1. Si es NA (No aplica), devolvemos null para que la fila se oculte
             if (v === "NA") return null;
-            // 2. Si es FALTA, lo ponemos en rojo
             if (v === "FALTA") return '<span style="color:#ff4444; font-weight:bold;">FALTA</span>';
-            // 3. Si es ? o PEND, lo ponemos en naranja SIN el /10
             if (v === "?" || v === "PEND") {
                 return '<span style="color: #ffaa00; font-weight: bold;">?</span>';
             }
-            // 4. Para todo lo demás (números del 0 al 10), ponemos /10 en verde
             return `<span style="color:#00ff88; font-weight:bold;">${v}/10</span>`;
         }
 
@@ -91,10 +103,13 @@
                 const sMan = formatEstado(j["Estado Manual"]);
                 const sJgo = formatEstado(j["Estado Juego"]);
                 const sExt = formatEstado(j["Estado Extras"]);
+                
+                // Nota General procesada
+                const notaGral = formatNotaGeneral(j["Estado General"]);
 
                 html += `
                     <div class="card">
-                        <div class="grade-badge">${j["Estado General"] || '-'}</div>
+                        <div class="grade-badge">${notaGral}</div>
                         <span class="platform-tag">${j["Plataforma"]}</span>
                         ${j["Edición"] ? `<span class="edition-tag">${j["Edición"]}</span>` : ''}
                         <span class="game-title">${j["Nombre Juego"]}</span>
