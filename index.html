@@ -3,60 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valan Archive | Videojuegos</title>
+    <title>Valan Archive | Explorer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        :root { --accent: #00f2ff; --bg: #0f0f12; --card-bg: #1e1e24; }
-        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: #e0e0e0; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        header { text-align: center; padding: 40px 0; border-bottom: 1px solid #333; margin-bottom: 30px; }
-        h1 { color: var(--accent); font-size: 2.2em; text-transform: uppercase; letter-spacing: 3px; margin: 0; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border: 1px solid #333; padding: 20px; border-radius: 12px; transition: 0.3s; position: relative; }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .platform { color: #ff0055; font-size: 0.8em; font-weight: bold; }
-        .title { display: block; font-size: 1.2em; font-weight: bold; margin: 10px 0; color: #fff; height: 3em; overflow: hidden; }
-        .region-badge { background: #333; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; float: right; }
-        .stats { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; font-size: 0.9em; margin: 10px 0; border-left: 3px solid var(--accent); }
-        .price { color: #00ff88; font-weight: bold; font-size: 1.1em; display: block; margin-top: 10px; }
+        :root { --accent: #00f2ff; --bg: #0b0b0e; --card: #16161a; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; }
+        .header { text-align: center; padding: 20px; }
+        h1 { letter-spacing: 5px; color: var(--accent); text-shadow: 0 0 10px rgba(0,242,255,0.3); }
+        
+        /* Buscador */
+        .search-container { max-width: 600px; margin: 20px auto; position: relative; }
+        #searchInput { width: 100%; padding: 15px; border-radius: 30px; border: 1px solid #333; background: #222; color: white; font-size: 1em; outline: none; transition: 0.3s; }
+        #searchInput:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,242,255,0.1); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 15px; padding: 20px; border: 1px solid #222; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        
+        .platform-tag { font-size: 0.7em; font-weight: 800; padding: 4px 10px; border-radius: 5px; background: #ff0055; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
+        .game-title { font-size: 1.1em; font-weight: bold; margin: 10px 0; display: block; height: 2.4em; overflow: hidden; }
+        .info-row { font-size: 0.85em; color: #888; display: flex; justify-content: space-between; margin-top: 10px; }
+        .price-tag { display: block; margin-top: 15px; color: #00ff88; font-weight: bold; border-top: 1px solid #333; padding-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>VALAN ARCHIVE</h1>
-            <p>Inventario General de Videojuegos</p>
-        </header>
-        <div id="game-grid" class="grid">Cargando base de datos...</div>
+
+    <div class="header">
+        <h1>VALAN ARCHIVE</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar juego o consola..." onkeyup="filterGames()">
+        </div>
     </div>
 
+    <div id="game-grid" class="grid"></div>
+
     <script>
+        let allGames = [];
         const csvFile = "Inventario_JuegosRetro - Juegos.csv";
 
         Papa.parse(csvFile, {
-            download: true,
-            header: true,
+            download: true, header: true,
             complete: function(results) {
-                let html = "";
-                // Filtramos filas que tengan nombre de juego
-                const juegos = results.data.filter(j => j.Juego && j.Juego.trim() !== "");
-                
-                juegos.forEach(j => {
-                    html += `
-                        <div class="card">
-                            <span class="region-badge">${j.Región}</span>
-                            <span class="platform">${j.Plataforma}</span>
-                            <span class="title">${j.Juego}</span>
-                            <div class="stats">
-                                📦 Caja: ${j["Estado Caja"]}/10 | 📖 Manual: ${j["Estado Manual"]}/10
-                            </div>
-                            <span class="price">Tasación: ${j["Tasación Actual"]}</span>
-                        </div>
-                    `;
-                });
-                document.getElementById('game-grid').innerHTML = html;
+                allGames = results.data.filter(j => j.Juego && j.Juego.trim() !== "");
+                renderGames(allGames);
             }
         });
+
+        function renderGames(games) {
+            let html = "";
+            games.forEach(j => {
+                html += `
+                    <div class="card">
+                        <span class="platform-tag">${j.Plataforma}</span>
+                        <span class="game-title">${j.Juego}</span>
+                        <div class="info-row">
+                            <span>🌍 ${j.Región}</span>
+                            <span>📦 ${j["Estado Caja"]}/10 | 📖 ${j["Estado Manual"]}/10</span>
+                        </div>
+                        <span class="price-tag">Tasación: ${j["Tasación Actual"] || 'S/T'}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('game-grid').innerHTML = html;
+        }
+
+        function filterGames() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allGames.filter(j => 
+                j.Juego.toLowerCase().includes(query) || 
+                j.Plataforma.toLowerCase().includes(query)
+            );
+            renderGames(filtered);
+        }
     </script>
 </body>
 </html>
