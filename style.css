@@ -1,0 +1,187 @@
+/* --- CONFIGURACIÓN DE COLORES Y VARIABLES --- */
+:root { 
+    --accent: #00f2ff;   /* Color cian neón para acentos */
+    --bg: #0b0b0e;       /* Fondo oscuro profundo */
+    --card: #16161a;     /* Fondo de las tarjetas de juego */
+    --text: #e0e0e0;     /* Color de texto principal gris claro */
+}
+
+/* --- ESTILOS GENERALES DEL CUERPO --- */
+body { 
+    font-family: 'Inter', sans-serif; 
+    background: var(--bg); 
+    color: var(--text); 
+    padding: 20px; 
+}
+
+/* --- CONTENEDOR PRINCIPAL (Ancho de la web) --- */
+.container { 
+    max-width: 1300px; 
+    margin: 0 auto; 
+}
+
+/* --- CABECERA (Logo y Buscador) --- */
+header { 
+    text-align: center; 
+    padding: 20px 0; 
+}
+
+/* --- LOGO PRINCIPAL --- */
+.logo-container {
+    padding: 10px 0;
+    max-width: 450px;
+    margin: 0 auto 20px auto;
+}
+
+.main-logo {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.4)); /* Brillo neón */
+    transition: transform 0.3s ease;
+}
+
+/* --- BARRA DE BÚSQUEDA --- */
+#searchInput { 
+    width: 100%; 
+    max-width: 500px; 
+    padding: 12px 20px; 
+    border-radius: 25px; 
+    border: 1px solid #333; 
+    background: #1a1a20; 
+    color: white; 
+    display: block; 
+    margin: 20px auto; 
+}
+
+/* --- CONTENEDOR DE FILTROS --- */
+.filter-container { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 10px; 
+    margin-bottom: 30px; 
+}
+
+/* --- BOTONES DE FILTRO (Estado Normal) --- */
+.filter-btn { 
+    background: #1a1a20; 
+    color: #aaa; 
+    border: 1px solid #333; 
+    padding: 8px 16px; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    font-size: 0.8em; 
+    font-weight: bold; 
+    transition: 0.3s; 
+    text-transform: uppercase; 
+}
+
+/* --- BOTONES DE FILTRO (Cuando están activos/seleccionados) --- */
+.filter-btn.active { 
+    background: var(--accent); 
+    color: #000; 
+    border-color: var(--accent); 
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); 
+}
+
+/* --- REJILLA DE TARJETAS (Grid Dinámico) --- */
+.grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+    gap: 20px; 
+}
+
+/* --- TARJETA DE CADA JUEGO --- */
+.card { 
+    background: var(--card); 
+    border-radius: 15px; 
+    padding: 20px; 
+    border: 1px solid #222; 
+    position: relative; 
+    transition: 0.3s; 
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- NOTA / ESTADO GENERAL (El número en el cuadro) --- */
+.grade-badge { 
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    color: #000; 
+    font-weight: 900; 
+    width: 42px; 
+    height: 42px; 
+    border-radius: 10px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 1.1em; 
+}
+
+/* --- ETIQUETA DE PLATAFORMA --- */
+.platform-tag { 
+    font-size: 0.7em; 
+    font-weight: 800; 
+    color: #ff0055; 
+    text-transform: uppercase; 
+}
+
+/* --- TÍTULO DEL JUEGO --- */
+.game-title { 
+    font-size: 1.15em; 
+    font-weight: 700; 
+    margin: 5px 0; 
+    color: #fff; 
+    padding-right: 50px; 
+    line-height: 1.3; 
+    display: block; 
+}
+
+/* --- TEXTO DE LA EDICIÓN (Ej: Collector's) --- */
+.edition-text { 
+    font-size: 0.75em; 
+    color: #888; 
+    display: block; 
+    margin-top: -2px; 
+}
+
+/* --- FILA DE REGIÓN (Bandera y Texto) --- */
+.region-row { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    margin-top: 5px; 
+    font-size: 0.85em; 
+    color: var(--accent); 
+}
+
+/* --- ICONOS DE BANDERA --- */
+.fi { 
+    display: inline-block; 
+    width: 1.3em; 
+    line-height: 1em; 
+    border-radius: 2px; 
+}
+
+/* --- CUADRÍCULA DE DETALLES (Caja, Manual, etc.) --- */
+.details-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 5px; 
+    background: rgba(0,0,0,0.2); 
+    padding: 10px; 
+    border-radius: 8px; 
+    margin: 12px 0; 
+    font-size: 0.8em; 
+}
+
+/* --- PRECIO O TASACIÓN --- */
+.price-tag { 
+    color: #00ff88; 
+    font-weight: bold; 
+    font-size: 0.9em; 
+    margin-top: auto; /* Empuja el precio al fondo de la tarjeta */
+}
