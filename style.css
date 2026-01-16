@@ -22,7 +22,8 @@ body {
     font-family: 'Inter', sans-serif; 
     background: var(--bg); 
     color: var(--text); 
-    padding: 20px; 
+    padding: 10px; /* Reducido para que no empuje el contenido hacia afuera en móviles */
+    line-height: 1.4;
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
@@ -59,7 +60,7 @@ header {
 /* --- BARRA DE BÚSQUEDA --- */
 #searchInput { 
     width: 100%; 
-    max-width: 100%; /* No puede ser mayor que el móvil */
+    max-width: 500px; /* Límite para escritorio, pero flexible en móvil */
     padding: 12px 20px; 
     border-radius: 25px; 
     border: 1px solid #333; 
@@ -67,7 +68,8 @@ header {
     color: white; 
     display: block; 
     margin: 15px auto;
-    font-size: 16px; /* Evita que el iPhone haga zoom automático al pulsar */
+    font-size: 16px; 
+    box-sizing: border-box; /* IMPRESCINDIBLE para que el padding no sume ancho */
 }
 
 /* --- CONTENEDOR DE FILTROS --- */
@@ -136,21 +138,22 @@ header {
 .brand-selector {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; /* Mejor center que flex-end para evitar saltos raros */
     gap: 10px; 
     margin: 15px 0;
     padding-bottom: 15px;
     border-bottom: 1px solid #222;
-    flex-wrap: wrap; /* Si no caben, saltan de línea */
+    flex-wrap: wrap; /* Esto permite que bajen de fila si no caben */
 }
 
 .brand-icon {
     cursor: pointer;
-    flex: 1 1 70px; /* Se estiran para llenar la fila, mínimo 70px */
+    flex: 1 1 60px; /* Reducido a 60px para que quepan mejor */
     max-width: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
 /* Estilo para las imágenes de los logos */
@@ -222,9 +225,8 @@ header {
 /* --- CUADRÍCULA DE JUEGOS --- */
 .grid {
     display: grid;
-    /* Esto crea columnas automáticas de mínimo 280px */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Bajamos a 250px para máxima compatibilidad */
+    gap: 20px;
     margin-top: 20px;
     width: 100%;
 }
