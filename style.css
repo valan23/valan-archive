@@ -222,6 +222,25 @@ header {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y texto */
+    padding: 6px 14px;
+}
+
+.btn-console-icon {
+    height: 18px; /* Tamaño pequeño para que no rompa el botón */
+    width: auto;
+    object-fit: contain;
+    /* Si tus iconos son negros y quieres que se vuelvan blancos al activar: */
+    transition: filter 0.3s;
+}
+
+.filter-btn.active .btn-console-icon {
+    filter: brightness(0) invert(1); /* Vuelve el icono blanco si el botón es oscuro */
+}
+
 /* --- CUADRÍCULA DE JUEGOS --- */
 .grid {
     display: grid;
@@ -353,4 +372,7 @@ header {
         padding: 6px 12px;
         font-size: 0.7em; /* Botones de consola más compactos */
     }
+    
+    .btn-console-icon {
+        height: 14px; /* Aún más pequeños en móvil */
 }
