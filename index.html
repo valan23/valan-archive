@@ -38,26 +38,89 @@
                 renderGames(allGames);
             }
         });
-        
+
         function createFilters(games) {
             const counts = games.reduce((acc, game) => {
                 const p = game["Plataforma"];
                 if (p) acc[p] = (acc[p] || 0) + 1;
                 return acc;
             }, {});
-
-            // El objeto con las rutas exactas a tus nuevos archivos
+        
+            // OBJETO ÚNICO CON LOGOS DE MARCA E ICONOS DE CONSOLA
             const brands = {
-                "SEGA": { logo: "images/icons/SEGA_logo.png", class: "sega", platforms: ["Master System", "Mega Drive", "Game Gear", "Mega CD", "Saturn", "32X", "Dreamcast"] },
-                "NINTENDO": { logo: "images/icons/NINTENDO_logo.png", class: "nintendo", platforms: ["Famicom", "Famicom Disk System", "Game Boy", "Super Famicom", "Virtual Boy", "Nintendo 64", "Game Boy Color", "Game Boy Advance", "Game Cube", "Nintendo DS", "Wii", "Nintendo 3DS", "Wii U", "Switch", "Switch 2"] },
-                "SONY": { logo: "images/icons/PLAYSTATION_logo.png", class: "sony", platforms: ["PlayStation", "PlayStation 2", "PlayStation Vita", "PlayStation 4", "PlayStation 5"] },
-                "MICROSOFT": { logo: "images/icons/MICROSOFT_logo.png", class: "microsoft", platforms: ["Xbox 360", "Xbox One", "Xbox Series X/S"] },
-                "OTROS": { logo: "images/icons/OTROS_logo.png", class: "otros", platforms: ["PC", "PC Engine", "3DO", "WonderSwan Color"] }
+                "SEGA": { 
+                    logo: "images/icons/SEGA_logo.png", 
+                    class: "sega", 
+                    platforms: ["Master System", "Mega Drive", "Game Gear", "Mega CD", "Saturn", "32X", "Dreamcast"],
+                    icons: {
+                        "Master System": "images/icons/sms.png",
+                        "Mega Drive": "images/icons/smd.png",
+                        "Game Gear": "images/icons/gg.png",
+                        "Mega CD": "images/icons/mcd.png",
+                        "Saturn": "images/icons/ss.png",
+                        "32X": "images/icons/32x.png",
+                        "Dreamcast": "images/icons/dc.png"
+                    }
+                },
+                "NINTENDO": { 
+                    logo: "images/icons/NINTENDO_logo.png", 
+                    class: "nintendo", 
+                    platforms: ["Famicom", "Famicom Disk System", "Game Boy", "Super Famicom", "Virtual Boy", "Nintendo 64", "Game Boy Color", "Game Boy Advance", "Game Cube", "Nintendo DS", "Wii", "Nintendo 3DS", "Wii U", "Switch", "Switch 2"],
+                    icons: {
+                        "Famicom": "images/icons/fc.png",
+                        "Famicom Disk System": "images/icons/fds.png",
+                        "Game Boy": "images/icons/gb.png",
+                        "Super Famicom": "images/icons/sfc.png",
+                        "Virtual Boy": "images/icons/vb.png",
+                        "Nintendo 64": "images/icons/n64.png",
+                        "Game Boy Color": "images/icons/gbc.png",
+                        "Game Boy Advance": "images/icons/gba.png",
+                        "Game Cube": "images/icons/gc.png",
+                        "Nintendo DS": "images/icons/nds.png",
+                        "Wii": "images/icons/wii.png",
+                        "Nintendo 3DS": "images/icons/3ds.png",
+                        "Wii U": "images/icons/wiiu.png",
+                        "Switch": "images/icons/switch.png",
+                        "Switch 2": "images/icons/switch2.png"
+                    }
+                },
+                "SONY": { 
+                    logo: "images/icons/PLAYSTATION_logo.png", 
+                    class: "sony", 
+                    platforms: ["PlayStation", "PlayStation 2", "PlayStation Vita", "PlayStation 4", "PlayStation 5"],
+                    icons: {
+                        "PlayStation": "images/icons/psx.png",
+                        "PlayStation 2": "images/icons/ps2.png",
+                        "PlayStation Vita": "images/icons/psvita.png",
+                        "PlayStation 4": "images/icons/ps4.png",
+                        "PlayStation 5": "images/icons/ps5.png"
+                    }
+                },
+                "MICROSOFT": { 
+                    logo: "images/icons/MICROSOFT_logo.png", 
+                    class: "microsoft", 
+                    platforms: ["Xbox 360", "Xbox One", "Xbox Series X/S"],
+                    icons: {
+                        "Xbox 360": "images/icons/x360.png",
+                        "Xbox One": "images/icons/xone.png",
+                        "Xbox Series X/S": "images/icons/xsx.png"
+                    }
+                },
+                "OTROS": { 
+                    logo: "images/icons/OTROS_logo.png", 
+                    class: "otros", 
+                    platforms: ["PC Engine", "3DO", "WonderSwan Color"],
+                    icons: {
+                        "PC Engine": "images/icons/pce.png",
+                        "3DO": "images/icons/3do.png",
+                        "WonderSwan Color": "images/icons/wsc.png"
+                    }
+                }
             };
 
             const container = document.getElementById('platform-filters');
-    
-            // 1. Empezamos creando el selector de marcas (la fila de arriba)
+
+            // 1. GENERAR SELECTOR DE MARCAS
             let html = `
                 <div class="brand-selector">
                     <div class="brand-icon active" onclick="showBrand('TODAS', this)">
@@ -65,8 +128,7 @@
                         <span>TODAS</span>
                     </div>
             `;
-        
-            // 2. Añadimos cada marca con su LOGO PNG
+
             for (const [brandName, data] of Object.entries(brands)) {
                 html += `
                     <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)">
@@ -75,28 +137,31 @@
                     </div>
                 `;
             }
-            html += `</div>`; // Cerramos la fila de marcas
+            html += `</div>`; 
 
-            // 3. Creamos los subgrupos de botones de consola (estarán ocultos al principio)
+            // 2. GENERAR SUBGRUPOS DE CONSOLAS
             for (const [brandName, data] of Object.entries(brands)) {
                 html += `<div id="group-${brandName}" class="platform-subgroup">`;
-        
+
                 data.platforms.forEach(p => {
-                    // Solo creamos el botón si realmente tienes juegos de esa consola en el CSV
                     if (counts[p]) {
+                        const iconUrl = data.icons && data.icons[p] ? data.icons[p] : null;
+                        const imgHtml = iconUrl ? `<img src="${iconUrl}" class="btn-console-icon" alt="">` : '';
+
                         html += `
                             <button class="filter-btn ${data.class}" onclick="filterByPlatform('${p}', this)">
-                                ${p} (${counts[p]})
+                                ${imgHtml}
+                                <span>${p} (${counts[p]})</span>
                             </button>`;
                     }
                 });
-        
                 html += `</div>`;
             }
-
-            // Inyectamos todo el HTML generado en el contenedor
+        
             container.innerHTML = html;
         }
+
+// Las demás funciones (showBrand, filterByPlatform, renderGames, etc.) se mantienen igual
 
         function showBrand(brand, element) {
             // 1. Quitar el estado activo de todos los iconos de marca
