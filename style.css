@@ -203,6 +203,17 @@ header {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Más flexible */
+    gap: 8px;
+    background: rgba(0,0,0,0.3); /* Un poco más oscuro para legibilidad */
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 0.75em; /* Ligeramente más pequeño para que quepa todo */
+}
+
 /* --- TARJETA DE CADA JUEGO --- */
 .card { 
     background: var(--card); 
