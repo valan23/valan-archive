@@ -99,18 +99,22 @@
         }
 
         function showBrand(brand, element) {
-            // Resetear iconos
+            // 1. Quitar el estado activo de todos los iconos de marca
             document.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
             element.classList.add('active');
 
-            // Ocultar todos los subgrupos
+            // 2. Ocultar todos los grupos de consolas
             document.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
 
             if (brand === 'TODAS') {
-                filterByPlatform('TODAS', element);
+                currentPlatform = "TODAS"; // Resetear filtro
+                // Quitar el active de cualquier botón de consola que estuviera marcado
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                applyFilters();
             } else {
-                // Mostrar el subgrupo de la marca elegida
-                document.getElementById(`group-${brand}`).classList.add('show');
+                // 3. Mostrar solo el grupo de la marca elegida
+                const targetGroup = document.getElementById(`group-${brand}`);
+                if (targetGroup) targetGroup.classList.add('show');
             }
         }
 
@@ -192,9 +196,12 @@
 
                         <div class="details-grid">
                             ${formatEstado(j["Estado Caja"]) ? `<div>📦 Caja: ${formatEstado(j["Estado Caja"])}</div>` : ''}
+                            ${formatEstado(j["Estado Inserto"]) ? `<div>📂 Inserto: ${formatEstado(j["Estado Inserto"])}</div>` : ''}
+                            ${formatEstado(j["Estado Portada"]) ? `<div>🖼️ Portada: ${formatEstado(j["Estado Portada"])}</div>` : ''}
                             ${formatEstado(j["Estado Manual"]) ? `<div>📖 Manual: ${formatEstado(j["Estado Manual"])}</div>` : ''}
-                            ${formatEstado(j["Estado Juego"]) ? `<div>🎮 Juego: ${formatEstado(j["Estado Juego"])}</div>` : ''}
+                            ${formatEstado(j["Estado Juego"]) ? `<div>💾 Juego: ${formatEstado(j["Estado Juego"])}</div>` : ''}
                             ${formatEstado(j["Estado Spinecard"]) ? `<div>🔖 Obi: ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
+                            ${formatEstado(j["Estado Extras"]) ? `<div>🎁 Extras: ${formatEstado(j["Estado Extras"])}</div>` : ''}
                         </div>
                         
                         <div class="price-tag">Tasación: ${j["Tasación Actual"] || "S/T"}</div>
