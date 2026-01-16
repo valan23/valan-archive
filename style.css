@@ -116,35 +116,75 @@ header {
 .filter-btn.otros.active { background: #9b9b9b; color: white; border-color: #666; box-shadow: 0 0 15px rgba(155, 155, 155, 0.4); }
 
 /* --- BARRA DE MARCAS (NIVEL 1) --- */
+/* --- BARRA DE MARCAS ACTUALIZADA PARA LOGOS PNG --- */
 .brand-selector {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    align-items: flex-end; /* Alinea los logos por la base para que se vean ordenados */
+    gap: 25px;
     margin: 20px 0;
     padding-bottom: 20px;
     border-bottom: 1px solid #222;
 }
 
 .brand-icon {
-    font-size: 2em;
-    color: #444;
     cursor: pointer;
     transition: 0.3s;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    min-width: 80px; /* Asegura un espacio uniforme */
 }
 
-.brand-icon span { font-size: 0.4em; font-weight: bold; letter-spacing: 1px; }
+/* Estilo para las imágenes de los logos */
+.brand-logo-img {
+    height: 35px;          /* Altura fija para que todos los logos midan lo mismo de alto */
+    width: auto;           /* El ancho se ajusta solo para no deformar el logo */
+    max-width: 100px;      /* Evita que logos muy largos se desmadren */
+    object-fit: contain;
+    filter: grayscale(1) brightness(0.5); /* Logo "apagado" en gris oscuro */
+    transition: all 0.3s ease;
+}
 
-/* Efectos de iluminacion al seleccionar marca */
-.brand-icon:hover, .brand-icon.active { color: var(--accent); transform: scale(1.1); }
-.brand-icon.sega.active { color: #00569e; text-shadow: 0 0 10px #00569e; }
-.brand-icon.nintendo.active { color: #e60012; text-shadow: 0 0 10px #e60012; }
-.brand-icon.sony.active { color: #003087; text-shadow: 0 0 10px #003087; }
-.brand-icon.microsoft.active { color: #107c10; text-shadow: 0 0 10px #107c10; }
-.brand-icon.otros.active { color: #9b9b9b; text-shadow: 0 0 10px #9b9b9b; }
+.brand-icon span { 
+    font-size: 0.6em; 
+    font-weight: 900; 
+    letter-spacing: 1px; 
+    color: #444; 
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+/* --- EFECTOS DE ILUMINACIÓN AL SELECCIONAR O PASAR EL RATÓN --- */
+.brand-icon:hover .brand-logo-img, 
+.brand-icon.active .brand-logo-img { 
+    filter: grayscale(0) brightness(1.2); /* Recupera color y da brillo */
+    transform: scale(1.1); 
+}
+
+.brand-icon:hover span,
+.brand-icon.active span {
+    color: var(--text);
+}
+
+/* Brillos de neón personalizados por marca para el logo */
+.brand-icon.sega.active .brand-logo-img { filter: drop-shadow(0 0 10px #00569e) grayscale(0) brightness(1.2); }
+.brand-icon.nintendo.active .brand-logo-img { filter: drop-shadow(0 0 10px #e60012) grayscale(0) brightness(1.2); }
+.brand-icon.sony.active .brand-logo-img { filter: drop-shadow(0 0 10px #003087) grayscale(0) brightness(1.2); }
+.brand-icon.microsoft.active .brand-logo-img { filter: drop-shadow(0 0 10px #107c10) grayscale(0) brightness(1.2); }
+.brand-icon.otros.active .brand-logo-img { filter: drop-shadow(0 0 10px #9b9b9b) grayscale(0) brightness(1.2); }
+
+/* Estilo especial para el icono de la casita (TODAS) */
+.brand-icon i {
+    font-size: 1.5em;
+    color: #444;
+    transition: 0.3s;
+}
+.brand-icon.active i {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent);
+}
 
 /* --- CONTENEDOR DE PLATAFORMAS (NIVEL 2) --- */
 .platform-subgroup {
