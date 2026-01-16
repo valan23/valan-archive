@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.2/css/flag-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -37,7 +38,7 @@
                 renderGames(allGames);
             }
         });
-
+        
         function createFilters(games) {
             const counts = games.reduce((acc, game) => {
                 const p = game["Plataforma"];
@@ -45,38 +46,66 @@
                 return acc;
             }, {});
 
-            // Mapeo de marcas
             const brands = {
-                "SEGA": ["Master System", "Mega Drive", "Game Gear", "Mega CD", "Saturn", "32X", "Dreamcast"],
-                "NINTENDO": ["Famicom", "Famicom Disk System", "Game Boy", "Super Famicom", "Virtual Boy", "Nintendo 64", "Game Boy Color", "Game Boy Advance", "Game Cube", "Nintendo DS", "Wii", "Nintendo 3DS", "Wii U", "Switch", "Switch 2"],
-                "SONY": ["PlayStation", "PlayStation 2", "PlayStation Vita", "PlayStation 4", "PlayStation 5"],
-                "MICROSOFT": ["Xbox 360", "Xbox One", "Xbox Series X/S"],
-                "OTROS": ["PC", "PC Engine", "3DO", "WonderSwan Color"]
+                "SEGA": { icon: "fa-solid fa-s", class: "sega", platforms: ["Master System", "Mega Drive", "Game Gear", "Mega CD", "Saturn", "32X", "Dreamcast"] },
+                "NINTENDO": { icon: "fa-solid fa-n", class: "nintendo", platforms: ["Famicom", "Famicom Disk System", "Game Boy", "Super Famicom", "Virtual Boy", "Nintendo 64", "Game Boy Color", "Game Boy Advance", "Game Cube", "Nintendo DS", "Wii", "Nintendo 3DS", "Wii U", "Switch", "Switch 2"] },
+                "SONY": { icon: "fa-brands fa-playstation", class: "sony", platforms: ["PlayStation", "PlayStation 2", "PlayStation Vita", "PlayStation 4", "PlayStation 5"] },
+                "MICROSOFT": { icon: "fa-brands fa-microsoft", class: "microsoft", platforms: ["Xbox 360", "Xbox One", "Xbox Series X/S"], },
+                "OTROS": { icon: "fa-solid fa-gamepad", class: "otros", platforms: ["PC Engine", "3DO", "WonderSwan Color"] }
             };
 
             const container = document.getElementById('platform-filters');
-            let html = `<button class="filter-btn active" onclick="filterByPlatform('TODAS', this)">TODAS (${games.length})</button>`;
+    
+            // Botón de Inicio / Todas
+            let html = `
+                <div class="brand-selector">
+                    <div class="brand-icon active" onclick="showBrand('TODAS', this)">
+                        <i class="fa-solid fa-house"></i>
+                        <span>TODAS</span>
+                    </div>
+            `;
 
-            for (const [brand, platforms] of Object.entries(brands)) {
-                // Solo mostramos la marca si tienes al menos un juego de ella
-                const filteredPlatforms = platforms.filter(p => counts[p]);
-        
-                if (filteredPlatforms.length > 0) {
-                    html += `<div class="filter-group">
-                        <div class="group-title">${brand}</div>
-                        <div style="display:flex; gap:5px; flex-wrap:wrap; justify-content:center;">`;
-            
-                    filteredPlatforms.forEach(p => {
-                        const brandClass = brand.split(' ')[0].toLowerCase(); // sega, nintendo, etc.
-                        html += `<button class="filter-btn ${brandClass}" onclick="filterByPlatform('${p}', this)">
+            // Crear iconos de marca
+            for (const [brandName, data] of Object.entries(brands)) {
+                html += `
+                    <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)">
+                        <i class="${data.icon}"></i>
+                        <span>${brandName}</span>
+                    </div>
+                `;
+            }
+            html += `</div>`;
+
+            // Crear subgrupos de plataformas (ocultos)
+            for (const [brandName, data] of Object.entries(brands)) {
+                html += `<div id="group-${brandName}" class="platform-subgroup">`;
+                data.platforms.forEach(p => {
+                    if (counts[p]) {
+                        html += `<button class="filter-btn ${data.class}" onclick="filterByPlatform('${p}', this)">
                             ${p} (${counts[p]})
                         </button>`;
-                    });
-
-                    html += `</div></div>`;
-                }
+                    }
+                });
+                html += `</div>`;
             }
+
             container.innerHTML = html;
+        }
+
+        function showBrand(brand, element) {
+            // Resetear iconos
+            document.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
+
+            // Ocultar todos los subgrupos
+            document.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
+
+            if (brand === 'TODAS') {
+                filterByPlatform('TODAS', element);
+            } else {
+                // Mostrar el subgrupo de la marca elegida
+                document.getElementById(`group-${brand}`).classList.add('show');
+            }
         }
 
         function filterByPlatform(platform, btn) {
