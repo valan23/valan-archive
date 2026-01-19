@@ -123,3 +123,89 @@
 
             if (brand === 'TODAS') {
                 currentPlatform = "TODAS";
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                applyFilters();
+            } else {
+                const targetGroup = document.getElementById(`group-${brand}`);
+                if (targetGroup) targetGroup.classList.add('show');
+            }
+        }
+
+        function filterByPlatform(platform, btn) {
+            currentPlatform = platform;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilters();
+        }
+
+        function filterGames() { applyFilters(); }
+
+        function applyFilters() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allGames.filter(j => {
+                const matchesP = (currentPlatform === "TODAS" || j["Plataforma"] === currentPlatform);
+                const matchesS = (j["Nombre Juego"] || "").toLowerCase().includes(q);
+                return matchesP && matchesS;
+            });
+            renderGames(filtered);
+        }
+
+        function getFlag(region) {
+            if (!region) return '<span class="fi fi-xx"></span>';
+            const r = region.toUpperCase();
+            let code = "xx";
+            if (r.includes("ESP")) code = "es";
+            else if (r.includes("JAP") || r.includes("JPN")) code = "jp";
+            else if (r.includes("USA") || r.includes("EEUU")) code = "us";
+            else if (r.includes("EUR") || r.includes("PAL")) code = "eu";
+            else if (r.includes("UK")) code = "gb";
+            return `<span class="fi fi-${code}"></span>`;
+        }
+
+        function getColorForNota(valor) {
+            const n = parseFloat(valor);
+            if (isNaN(n)) return '#333';
+            let r = n < 5 ? 255 : Math.round(255 - ((n - 5) * 51));
+            let g = n < 5 ? Math.round(68 + (n * 37.4)) : 255;
+            return `rgb(${r}, ${g}, 68)`;
+        }
+
+        function formatEstado(valor) {
+            if (!valor || valor.toUpperCase() === "NA") return null;
+            const v = valor.toUpperCase().trim();
+            if (v === "FALTA") return '<span style="color:#ff4444; font-weight:bold;">FALTA</span>';
+            if (v === "?" || v === "PEND") return '<span style="color:#ffaa00; font-weight:bold;">?</span>';
+            return `<span style="color:#00ff88; font-weight:bold;">${v}/10</span>`;
+        }
+
+        function renderGames(games) {
+            let html = "";
+            if (games.length === 0) {
+                html = "<p style='grid-column: 1/-1; text-align:center;'>No se encontraron juegos.</p>";
+            } else {
+                games.forEach(j => {
+                    const colorB = getColorForNota(j["Estado General"]);
+                    const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
+                    html += `
+                    <div class="card">
+                        <div class="grade-badge" style="background-color: ${colorB}">${notaG}</div>
+                        <div style="display:flex; justify-content: space-between; align-items: flex-start;">
+                            <span class="platform-tag">${j["Plataforma"]}</span>
+                            <span style="font-size: 0.7em; color: #666;">${j["Año"] || ""}</span>
+                        </div>
+                        <span class="game-title">${j["Nombre Juego"]}</span>
+                        <span class="edition-text">${j["Edición"] || ""}</span>
+                        <div class="region-row">${getFlag(j["Región"])} ${j["Región"] || ""}</div>
+                        <div class="details-grid">
+                            ${formatEstado(j["Estado Caja"]) ? `<div>📦 Caja: ${formatEstado(j["Estado Caja"])}</div>` : ''}
+                            ${formatEstado(j["Estado Juego"]) ? `<div>💾 Juego: ${formatEstado(j["Estado Juego"])}</div>` : ''}
+                        </div>
+                        <div class="price-tag">Tasación: ${j["Tasación Actual"] || "S/T"}</div>
+                    </div>`;
+                });
+            }
+            document.getElementById('game-grid').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
