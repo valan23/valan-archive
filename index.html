@@ -119,7 +119,6 @@
 
             const container = document.getElementById('platform-filters');
 
-            // 1. GENERAR SELECTOR DE MARCAS
             let html = `
                 <div class="brand-selector">
                     <div class="brand-icon active" onclick="showBrand('TODAS', this)">
@@ -138,7 +137,6 @@
             }
             html += `</div>`; 
 
-            // 2. GENERAR SUBGRUPOS DE CONSOLAS
             for (const [brandName, data] of Object.entries(brands)) {
                 html += `<div id="group-${brandName}" class="platform-subgroup">`;
 
@@ -163,7 +161,6 @@
         function showBrand(brand, element) {
             document.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
             element.classList.add('active');
-
             document.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
 
             if (brand === 'TODAS') {
@@ -247,7 +244,7 @@
                         <span class="game-title">${j["Nombre Juego"]}</span>
         
                         <div class="meta-row">
-                            <div style="font-size: 0.75em; color: #888;">${j["Edición"] || "Edición Estándar"}</div>
+                            <div style="font-size: 0.75em; color: #888;">${j["Edición"] ? j["Edición"] : ''}</div>
                             <div class="region-badge-container">
                                 ${getFlag(j["Región"])} 
                                 <span>${j["Región"] || "N/A"}</span>
