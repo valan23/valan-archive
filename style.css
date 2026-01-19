@@ -79,4 +79,58 @@ header { width: 100%; text-align: center; }
     object-fit: contain;
     margin-bottom: 8px;
     filter: grayscale(1) brightness(0.7); /* Estado apagado más sutil */
-    transition: all
+    transition: all 0.3s ease;
+}
+
+.brand-icon span, .filter-btn span {
+    font-size: 10px;
+    font-weight: bold;
+    color: #666; /* Texto apagado */
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+/* --- ESTADO ACTIVO --- */
+/* Solo iluminamos el icono y el texto, sin fondos */
+.brand-icon.active .brand-logo-img, 
+.filter-btn.active .btn-console-icon {
+    filter: grayscale(0) brightness(1.2); 
+    transform: scale(1.1);
+}
+
+.brand-icon.active span, 
+.filter-btn.active span { 
+    color: #fff; 
+}
+
+/* --- GRID DE JUEGOS --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card { 
+    background: var(--card); border-radius: 15px; padding: 20px; 
+    border: 1px solid #222; position: relative; transition: 0.3s; 
+}
+
+.grade-badge { 
+    position: absolute; top: 15px; right: 15px; color: #000; font-weight: 900; 
+    width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+}
+
+.platform-tag { font-size: 0.7em; font-weight: 800; color: #ff0055; text-transform: uppercase; }
+.game-title { font-size: 1.1em; font-weight: 700; color: #fff; display: block; margin: 5px 0; }
+.region-row { display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: var(--accent); }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .brand-icon, .filter-btn { width: 75px; height: 75px; }
+    .brand-logo-img, .btn-console-icon { height: 28px; }
+}
