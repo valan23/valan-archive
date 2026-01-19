@@ -83,8 +83,21 @@ function renderGames(games) {
                 </div>
             </div>
 
-            <div style="height: 60px; display: flex; align-items: flex-start; overflow: hidden; margin-bottom: 5px;">
-                <span class="game-title" style="margin: 0; line-height: 1.2;">
+            <div style="height: 60px; display: flex; align-items: center; overflow: hidden; margin-bottom: 5px; border-left: 3px solid #444; padding-left: 10px;">
+                <span class="game-title" style="
+                    margin: 0; 
+                    line-height: 1.1; 
+                    font-family: 'Segoe UI Black', 'Arial Black', sans-serif; 
+                    font-weight: 900; 
+                    font-size: 1.1em; 
+                    text-transform: uppercase; 
+                    letter-spacing: -0.2px;
+                    color: #ffffff;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                ">
                     ${j["Nombre Juego"]}
                 </span>
             </div>
