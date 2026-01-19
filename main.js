@@ -144,7 +144,7 @@ function filterGames() { applyFilters(); }
 
 function getFlag(region) {
     if (!region) return '<span class="fi fi-xx"></span>';
-    const codes = { "ESP": "es", "JAP": "jp", "JPN": "jp", "USA": "us", "EEUU": "us", "EUR": "eu", "PAL": "eu", "UK": "gb", "ITA": "it", "GER": "de" };
+    const codes = { "ESP": "es", "JAP": "jp", "USA": "us", "EU": "eu", "UK": "gb", "ITA": "it", "GER": "de", "AUS": "au", "ASIA": "hk"};
     const r = region.toUpperCase();
     let code = "xx";
     for (let key in codes) { if (r.includes(key)) code = codes[key]; }
