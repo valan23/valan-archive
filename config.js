@@ -58,10 +58,10 @@ const REGION_COLORS = {
     "JAP": { bg: "rgba(255, 0, 0, 0.2)", text: "#ffffff", border: "rgba(255, 0, 0, 0.5)" },
     "ESP": { bg: "rgba(255, 183, 0, 0.2)", text: "#ffffff", border: "rgba(255, 183, 0, 0.5)" },
     "EU": { bg: "rgba(0, 0, 255, 0.2)", text: "#ffffff", border: "rgba(0, 0, 255, 0.5)" },
-    "USA": { bg: "rgba(255, 0, 0, 0.2)", text: "#ffffff", border: "rgba(255, 0, 0, 0.5)" },
+    "USA": { bg: "rgba(0, 255, 255, 0.2)", text: "#ffffff", border: "rgba(0, 255, 255, 0.5)" },
     "UK":  { bg: "rgba(128, 0, 128, 0.2)", text: "#ffffff", border: "rgba(128, 0, 128, 0.5)" },
     "ITA": { bg: "rgba(144, 238, 144, 0.2)", text: "#ffffff", border: "rgba(144, 238, 144, 0.5)" },
     "AUS": { bg: "rgba(0, 100, 0, 0.2)", text: "#ffffff", border: "rgba(0, 100, 0, 0.5)" },
-    "GER": { bg: "rgba(255, 165, 0, 0.2)", text: "#ffffff", border: "rgba(255, 165, 0, 0.5)" },
+    "GER": { bg: "rgba(255, 100, 255, 0.2)", text: "#ffffff", border: "rgba(255, 100, 255, 0.5)" },
     "ASIA": { bg: "rgba(255, 255, 0, 0.2)", text: "#ffffff", border: "rgba(255, 255, 0, 0.5)" }
 };
