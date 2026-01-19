@@ -62,7 +62,7 @@ function renderGames(games) {
         const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
         const completitud = j["Completitud"] || "Desconocido";
         
-        // --- INTEGRACIÓN PASO 3: Obtener estilos de región ---
+        // --- Obtener estilos de región ---
         const style = getRegionStyle(j["Región"]);
 
         return `
@@ -71,8 +71,10 @@ function renderGames(games) {
     
             <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; padding-right: 35px;">
         
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <span class="platform-tag">${j["Plataforma"]}</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="platform-icon-card">
+                        ${getPlatformIcon(j["Plataforma"])}
+                    </div>
                     <span class="year-tag">${j["Año"] || ""}</span>
                 </div>
 
@@ -176,4 +178,16 @@ function getRegionStyle(region) {
     }
     
     return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
+}
+
+function getPlatformIcon(platformName) {
+    // Recorremos cada marca (Sega, Nintendo, etc.) en nuestro config
+    for (const brand in BRANDS_CONFIG) {
+        const icons = BRANDS_CONFIG[brand].icons;
+        if (icons && icons[platformName]) {
+            return `<img src="${icons[platformName]}" alt="${platformName}" style="height: 20px; width: auto; object-fit: contain;">`;
+        }
+    }
+    // Si no encuentra icono, devuelve el texto por defecto
+    return `<span class="platform-tag">${platformName}</span>`;
 }
