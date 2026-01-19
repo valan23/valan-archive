@@ -55,9 +55,9 @@ header { width: 100%; text-align: center; }
     animation: fadeIn 0.4s ease;
 }
 
-.platform-subgroup.show { display: flex; } /* SE MUESTRA SOLO EL ACTIVO */
+.platform-subgroup.show { display: flex; }
 
-/* --- BOTONES DE ICONOS --- */
+/* --- BOTONES DE ICONOS SIN GLOW --- */
 .brand-icon, .filter-btn {
     display: flex;
     flex-direction: column;
@@ -67,7 +67,7 @@ header { width: 100%; text-align: center; }
     transition: all 0.3s ease;
     width: 100px;
     height: 85px;
-    background: transparent;
+    background: transparent !important; /* Asegura que no haya fondo */
     border: none;
     padding: 5px;
 }
@@ -78,82 +78,5 @@ header { width: 100%; text-align: center; }
     max-width: 80px;
     object-fit: contain;
     margin-bottom: 8px;
-    filter: grayscale(0.6) brightness(0.9);
-}
-
-.brand-icon span, .filter-btn span {
-    font-size: 10px;
-    font-weight: bold;
-    color: #888;
-    text-transform: uppercase;
-}
-
-/* --- BRILLOS RADIALES PERMANENTES --- */
-/* El resplandor ahora está siempre visible, independientemente de si está activo o no */
-.brand-icon.sega, .filter-btn.sega { 
-    background: radial-gradient(circle, rgba(0, 86, 158, 0.25) 0%, transparent 70%); 
-}
-.brand-icon.nintendo, .filter-btn.nintendo { 
-    background: radial-gradient(circle, rgba(230, 0, 18, 0.25) 0%, transparent 70%); 
-}
-.brand-icon.sony, .filter-btn.sony { 
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%); 
-}
-.brand-icon.microsoft, .filter-btn.microsoft { 
-    background: radial-gradient(circle, rgba(16, 124, 16, 0.25) 0%, transparent 70%); 
-}
-.brand-icon.otros, .filter-btn.otros { 
-    background: radial-gradient(circle, rgba(155, 155, 155, 0.15) 0%, transparent 70%); 
-}
-
-/* El botón "TODAS" (Home) también puede tener un brillo neutro */
-.brand-icon:first-child {
-    background: radial-gradient(circle, rgba(0, 242, 255, 0.15) 0%, transparent 70%);
-}
-
-.brand-icon.active .brand-logo-img, 
-.filter-btn.active .btn-console-icon {
-    filter: grayscale(0) brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.7));
-    transform: scale(1.1);
-}
-
-.brand-icon.active span, .filter-btn.active span { color: #fff; }
-
-/* Incremento de intensidad al estar activo */
-.brand-icon.active.sega, .filter-btn.active.sega { background: radial-gradient(circle, rgba(0, 86, 158, 0.5) 0%, transparent 70%); }
-.brand-icon.active.nintendo, .filter-btn.active.nintendo { background: radial-gradient(circle, rgba(230, 0, 18, 0.5) 0%, transparent 70%); }
-.brand-icon.active.sony, .filter-btn.active.sony { background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%); }
-.brand-icon.active.microsoft, .filter-btn.active.microsoft { background: radial-gradient(circle, rgba(16, 124, 16, 0.5) 0%, transparent 70%); }
-.brand-icon.active.otros, .filter-btn.active.otros { background: radial-gradient(circle, rgba(16, 124, 16, 0.5) 0%, transparent 70%); }
-
-/* --- GRID DE JUEGOS --- */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.card { 
-    background: var(--card); border-radius: 15px; padding: 20px; 
-    border: 1px solid #222; position: relative; transition: 0.3s; 
-}
-
-.grade-badge { 
-    position: absolute; top: 15px; right: 15px; color: #000; font-weight: 900; 
-    width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-}
-
-.platform-tag { font-size: 0.7em; font-weight: 800; color: #ff0055; text-transform: uppercase; }
-.game-title { font-size: 1.1em; font-weight: 700; color: #fff; display: block; margin: 5px 0; }
-.region-row { display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: var(--accent); }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 600px) {
-    .brand-icon, .filter-btn { width: 75px; height: 75px; }
-    .brand-logo-img, .btn-console-icon { height: 28px; }
-}
+    filter: grayscale(1) brightness(0.7); /* Estado apagado más sutil */
+    transition: all
