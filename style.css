@@ -28,12 +28,17 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
 
 /* --- SISTEMA DE FILTROS --- */
 .filter-container {
-display: flex;
-flex-direction: column; 
-align-items: center;
-width: 100%;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    width: 100%;
+    background: #2a2a32; /* Gris suave para que el negro destaque */
+    padding: 20px 10px;
+    border-radius: 20px;
+    border: 1px solid #333; /* Un borde fino para dar relieve */
+    margin-bottom: 25px;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); /* Sombra interna para dar profundidad */
 }
-
 .brand-selector {
 display: flex;
 flex-wrap: wrap;
@@ -44,15 +49,14 @@ margin-bottom: 15px;
 }
 
 .platform-subgroup {
-display: none; /* OCULTO POR DEFECTO */
-flex-direction: row; /* HORIZONTAL */
-justify-content: center;
-flex-wrap: wrap; 
-gap: 10px;
-width: 100%;
-padding: 20px 0;
-border-top: 1px solid #222;
-animation: fadeIn 0.4s ease;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 10px;
+    width: 100%;
+    padding-top: 15px; /* Espacio con las marcas de arriba */
+    animation: fadeIn 0.4s ease;
 }
 
 .platform-subgroup.show { display: flex; }
@@ -78,8 +82,8 @@ animation: fadeIn 0.4s ease;
     max-width: 80px;
     object-fit: contain;
     margin-bottom: 8px;
-    /* Crea un borde suave blanco para que el negro resalte sobre el fondo oscuro */
-    filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(255,255,255,0.5)) opacity(0.7);
+    /* Efecto sutil: ya no invertimos ni ponemos halos fuertes */
+    filter: brightness(0.9) opacity(0.8); 
     transition: all 0.3s ease;
 }
 
@@ -91,11 +95,10 @@ animation: fadeIn 0.4s ease;
     transition: color 0.3s ease;
 }
 
-/* --- ESTADO ACTIVO (ILUMINACIÓN MÁS FUERTE) --- */
+/* Estado Activo: El logo resalta */
 .brand-icon.active .brand-logo-img, 
 .filter-btn.active .btn-console-icon {
-    /* El halo se vuelve más brillante y definido al seleccionar */
-    filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.8)) opacity(1);
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.2));
     transform: scale(1.1);
 }
 
