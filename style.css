@@ -57,45 +57,45 @@ animation: fadeIn 0.4s ease;
 
 .platform-subgroup.show { display: flex; }
 
-/* --- BOTONES DE ICONOS SIN GLOW --- */
+/* --- BOTONES DE ICONOS (CON SILUETA DE LUZ) --- */
 .brand-icon, .filter-btn {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-transition: all 0.3s ease;
-width: 100px;
-height: 85px;
-background: transparent !important; /* Asegura que no haya fondo */
-border: none;
-padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100px;
+    height: 85px;
+    background: transparent !important;
+    border: none;
+    padding: 5px;
 }
 
 .brand-logo-img, .btn-console-icon {
-height: 35px;
-width: auto;
-max-width: 80px;
-object-fit: contain;
-margin-bottom: 8px;
-filter: grayscale(1) brightness(0.7); /* Estado apagado más sutil */
-    transition: all
+    height: 35px;
+    width: auto;
+    max-width: 80px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    /* Crea un borde suave blanco para que el negro resalte sobre el fondo oscuro */
+    filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.5)) drop-shadow(-1px -1px 0px rgba(255,255,255,0.5)) opacity(0.7);
     transition: all 0.3s ease;
 }
 
 .brand-icon span, .filter-btn span {
     font-size: 10px;
     font-weight: bold;
-    color: #666; /* Texto apagado */
+    color: #888;
     text-transform: uppercase;
     transition: color 0.3s ease;
 }
 
-/* --- ESTADO ACTIVO --- */
-/* Solo iluminamos el icono y el texto, sin fondos */
+/* --- ESTADO ACTIVO (ILUMINACIÓN MÁS FUERTE) --- */
 .brand-icon.active .brand-logo-img, 
 .filter-btn.active .btn-console-icon {
-    filter: grayscale(0) brightness(1.2); 
+    /* El halo se vuelve más brillante y definido al seleccionar */
+    filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.8)) opacity(1);
     transform: scale(1.1);
 }
 
