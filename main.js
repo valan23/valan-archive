@@ -21,18 +21,35 @@ function createFilters(games) {
     }, {});
 
     const container = document.getElementById('platform-filters');
-    let html = `<div class="brand-selector">
-                    <div class="brand-icon active" onclick="showBrand('TODAS', this)">
-                        <i class="fa-solid fa-house"></i> <span>TODAS</span>
-                    </div>`;
+    
+    // Contenedor principal
+    let html = `<div class="brand-selector" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">`;
 
+    // --- BOTÓN TODAS ---
+    html += `
+        <div class="brand-icon active" onclick="showBrand('TODAS', this)" 
+             style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 12px; border-radius: 6px;">
+            <div style="width: 24px; height: 24px; display: flex; justify-content: center; align-items: center;">
+                <i class="fa-solid fa-house" style="font-size: 20px;"></i>
+            </div>
+            <span style="font-weight: 600; font-size: 0.9em;">TODAS</span>
+        </div>`;
+
+    // --- BOTONES DE MARCAS ---
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
-        html += `<div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)">
-                    <img src="${data.logo}" alt="" class="brand-logo-img"> <span>${brandName}</span>
-                 </div>`;
+        html += `
+            <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)" 
+                 style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 12px; border-radius: 6px;">
+                <div style="width: 24px; height: 24px; display: flex; justify-content: center; align-items: center;">
+                    <img src="${data.logo}" alt="" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </div>
+                <span style="font-weight: 600; font-size: 0.9em;">${brandName}</span>
+            </div>`;
     }
+    
     html += `</div>`; 
 
+    // El resto de la función (subgrupos) sigue igual...
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
         html += `<div id="group-${brandName}" class="platform-subgroup">`;
         data.platforms.forEach(p => {
