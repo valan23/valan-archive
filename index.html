@@ -261,12 +261,13 @@
                         </div>
 
                         <div class="details-grid">
-                            ${isValid(j["Estado Caja"]) ? `<div><span>Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
-                            ${isValid(j["Estado Manual"]) ? `<div><span>Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
-                            ${isValid(j["Estado Juego"]) ? `<div><span>Juego:</span> ${formatEstado(j["Estado Juego"])}</div>` : ''}
-                            ${isValid(j["Estado Portada"]) ? `<div><span>Portada:</span> ${formatEstado(j["Estado Portada"])}</div>` : ''}
-                            ${isValid(j["Estado Spinecard"]) ? `<div><span>Obi:</span> ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
-                            ${isValid(j["Estado Extras"]) ? `<div><span>Extras:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
+                            ${isValid(j["Estado Caja"]) ? `<div><span>📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
+                            ${isValid(j["Estado Inserto"]) ? `<div><span>📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
+                            ${isValid(j["Estado Manual"]) ? `<div><span>📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
+                            ${isValid(j["Estado Juego"]) ? `<div><span>💾Juego:</span> ${formatEstado(j["Estado Juego"])}</div>` : ''}
+                            ${isValid(j["Estado Portada"]) ? `<div><span>🖼️Portada:</span> ${formatEstado(j["Estado Portada"])}</div>` : ''}
+                            ${isValid(j["Estado Spinecard"]) ? `<div><span>🔖Obi:</span> ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
+                            ${isValid(j["Estado Extras"]) ? `<div><span>🎁Extras:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
                         </div>
         
                         <div class="price-tag">${j["Tasación Actual"] || "S/T"}</div>
