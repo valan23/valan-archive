@@ -1,60 +1,29 @@
 /* --- RESET Y BASES --- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
-    overflow-x: hidden;
-    width: 100%;
+body {
     font-family: 'Inter', sans-serif; 
     background: #0b0b0e; 
     color: #e0e0e0; 
     padding: 10px;
-    line-height: 1.4;
+    overflow-x: hidden;
 }
 
 :root { 
     --accent: #00f2ff; 
     --bg: #0b0b0e; 
     --card: #16161a; 
-    --text: #e0e0e0; 
 }
 
-/* --- CONTENEDOR Y HEADER --- */
-.container { 
-    width: 100%;
-    max-width: 1300px; 
-    margin: 0 auto; 
-    padding: 10px;
-}
+.container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 10px; }
+header { width: 100%; text-align: center; }
 
-header { width: 100%; text-align: center; padding: 10px 0; }
-
-.logo-container {
-    width: 100%;
-    max-width: 450px;
-    margin: 0 auto 20px auto;
-}
-
-.main-logo {
-    width: 100%;
-    height: auto;
-    filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.4));
-}
+.logo-container { width: 100%; max-width: 450px; margin: 0 auto 20px auto; }
+.main-logo { width: 100%; height: auto; filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.4)); }
 
 #searchInput { 
-    width: 100%; 
-    max-width: 500px; 
-    padding: 12px 20px; 
-    border-radius: 25px; 
-    border: 1px solid #333; 
-    background: #1a1a20; 
-    color: white; 
-    display: block; 
-    margin: 15px auto;
-    font-size: 16px;
+    width: 100%; max-width: 500px; padding: 12px 20px; border-radius: 25px; 
+    border: 1px solid #333; background: #1a1a20; color: white; display: block; margin: 15px auto;
 }
 
 /* --- SISTEMA DE FILTROS --- */
@@ -63,7 +32,6 @@ header { width: 100%; text-align: center; padding: 10px 0; }
     flex-direction: column; 
     align-items: center;
     width: 100%;
-    gap: 10px;
 }
 
 .brand-selector {
@@ -72,68 +40,102 @@ header { width: 100%; text-align: center; padding: 10px 0; }
     justify-content: center;
     gap: 15px;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
-/* --- BOTONES UNIFICADOS (Marcas y Consolas) --- */
+.platform-subgroup {
+    display: none; /* OCULTO POR DEFECTO */
+    flex-direction: row; /* HORIZONTAL */
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 10px;
+    width: 100%;
+    padding: 20px 0;
+    border-top: 1px solid #222;
+    animation: fadeIn 0.4s ease;
+}
+
+.platform-subgroup.show { display: flex; } /* SE MUESTRA SOLO EL ACTIVO */
+
+/* --- BOTONES DE ICONOS --- */
 .brand-icon, .filter-btn {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 100px; /* Ancho fijo para evitar solapamientos */
-    height: 80px; /* Altura fija para consistencia */
-    text-align: center;
+    width: 100px;
+    height: 85px;
     background: transparent;
     border: none;
-    padding: 10px;
+    padding: 5px;
 }
 
-/* Iconos */
 .brand-logo-img, .btn-console-icon {
-    height: 35px; /* Tamaño controlado */
+    height: 35px;
     width: auto;
     max-width: 80px;
     object-fit: contain;
     margin-bottom: 8px;
     filter: grayscale(0.6) brightness(0.9);
-    transition: all 0.4s ease;
-    z-index: 2;
 }
 
-/* Texto */
 .brand-icon span, .filter-btn span {
     font-size: 10px;
     font-weight: bold;
     color: #888;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    z-index: 2;
 }
 
-/* Brillos radiales de fondo (Identificación de marca) */
+/* --- BRILLOS RADIALES --- */
 .sega { background: radial-gradient(circle, rgba(0, 86, 158, 0.12) 0%, transparent 70%); }
 .nintendo { background: radial-gradient(circle, rgba(230, 0, 18, 0.12) 0%, transparent 70%); }
 .sony { background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%); }
 .microsoft { background: radial-gradient(circle, rgba(16, 124, 16, 0.12) 0%, transparent 70%); }
 .otros { background: radial-gradient(circle, rgba(155, 155, 155, 0.08) 0%, transparent 70%); }
 
-/* --- ESTADOS ACTIVOS --- */
-.brand-icon.active, .filter-btn.active {
-    transform: scale(1.05);
-}
-
 .brand-icon.active .brand-logo-img, 
 .filter-btn.active .btn-console-icon {
-    filter: grayscale(0) brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.6));
+    filter: grayscale(0) brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.7));
+    transform: scale(1.1);
 }
 
-.brand-icon.active span, .filter-btn.active span {
-    color: #fff;
+.brand-icon.active span, .filter-btn.active span { color: #fff; }
+
+.sega.active { background: radial-gradient(circle, rgba(0, 86, 158, 0.4) 0%, transparent 70%); }
+.nintendo.active { background: radial-gradient(circle, rgba(230, 0, 18, 0.4) 0%, transparent 70%); }
+.sony.active { background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%); }
+.microsoft.active { background: radial-gradient(circle, rgba(16, 124, 16, 0.4) 0%, transparent 70%); }
+
+/* --- GRID DE JUEGOS --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
 }
 
-/* Refuerzo de brillo al estar activo */
-.sega.active { background: radial-gradient(circle, rgba(0, 86, 158, 0.35) 0%, transparent 70
+.card { 
+    background: var(--card); border-radius: 15px; padding: 20px; 
+    border: 1px solid #222; position: relative; transition: 0.3s; 
+}
+
+.grade-badge { 
+    position: absolute; top: 15px; right: 15px; color: #000; font-weight: 900; 
+    width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+}
+
+.platform-tag { font-size: 0.7em; font-weight: 800; color: #ff0055; text-transform: uppercase; }
+.game-title { font-size: 1.1em; font-weight: 700; color: #fff; display: block; margin: 5px 0; }
+.region-row { display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: var(--accent); }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .brand-icon, .filter-btn { width: 75px; height: 75px; }
+    .brand-logo-img, .btn-console-icon { height: 28px; }
+}
