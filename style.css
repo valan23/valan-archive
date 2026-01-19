@@ -144,8 +144,8 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
 /* Badge de Nota (Esquina) */
 .grade-badge { 
     position: absolute; 
-    top: -10px; 
-    right: -10px; 
+    top: -12px; 
+    right: -12px; 
     color: #000; 
     font-weight: 900; 
     width: 42px; 
@@ -156,7 +156,7 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
     justify-content: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     font-size: 1.1em;
-    z-index: 10;
+    z-index: 20; /* Asegura que esté por encima */
 }
 
 /* Títulos y Etiquetas */
@@ -184,8 +184,28 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #3d3d4a;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     margin-bottom: 12px;
+    padding-right: 40px; /* Margen de seguridad para el Badge */
+}
+
+.region-badge-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 242, 255, 0.05);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.year-tag {
+    font-size: 0.75em;
+    color: #666;
+    font-weight: bold;
+    margin-left: 8px;
 }
 
 /* Cuadrícula de Detalles (Estados) */
