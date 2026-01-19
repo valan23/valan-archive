@@ -65,13 +65,20 @@ function renderGames(games) {
         return `
         <div class="card">
             <div class="grade-badge" style="background-color: ${colorB}">${notaG}</div>
-            <div class="card-header-info">
-                <span class="platform-tag">${j["Plataforma"]}</span>
-                <span class="year-tag">${j["Año"] || ""}</span>
-                <div class="region-badge-container">
-                    ${getFlag(j["Región"])} <span>${j["Región"] || "N/A"}</span>
+    
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; padding-right: 35px;">
+        
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="platform-tag">${j["Plataforma"]}</span>
+                    <span class="year-tag">${j["Año"] || ""}</span>
+                </div>
+
+                <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: rgba(0, 255, 255, 0.1); border: 1px solid rgba(0, 255, 255, 0.3); padding: 2px 6px; border-radius: 4px; width: fit-content;">
+                    ${getFlag(j["Región"])} 
+                    <span style="font-size: 0.7em; font-weight: bold; color: #00ffff;">${j["Región"] || "N/A"}</span>
                 </div>
             </div>
+
             <span class="game-title">${j["Nombre Juego"]}</span>
             ${isValid(j["Edición"]) ? `<div class="edition-text">${j["Edición"]}</div>` : ''}
             <div class="completitud-text">
