@@ -60,10 +60,12 @@ function renderGames(games) {
     container.innerHTML = games.map(j => {
         const colorB = getColorForNota(j["Estado General"]);
         const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
-        const completitud = j["Completitud"] || "Desconocido";
         
         // --- Obtener estilos de región ---
         const style = getRegionStyle(j["Región"]);
+
+        // --- NUEVO: Obtener color dinámico de completitud ---
+        const colorCompletitud = getCompletitudStyle(j["Completitud"]);
 
         return `
         <div class="card">
@@ -98,8 +100,19 @@ function renderGames(games) {
             <span class="game-title">${j["Nombre Juego"]}</span>
             ${isValid(j["Edición"]) ? `<div class="edition-text">${j["Edición"]}</div>` : ''}
             
-            <div class="completitud-text">
-                <span style="color: ${completitud.toLowerCase().includes('completo') ? '#00ff88' : '#ffaa00'}">● ${completitud}</span>
+            <div class="completitud-text" style="
+                margin-top: 8px; 
+                font-family: 'Segoe UI', Roboto, sans-serif; 
+                font-size: 0.85em; 
+                letter-spacing: 0.5px; 
+                text-transform: uppercase; 
+                font-weight: 800;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                color: ${colorCompletitud};
+                text-shadow: 0 0 8px ${colorCompletitud}44;">
+                <span style="font-size: 1.2em;">●</span> ${j["Completitud"] || "DESCONOCIDO"}
             </div>
 
             <div class="details-grid">
@@ -190,4 +203,18 @@ function getPlatformIcon(platformName) {
     }
     // Si no encuentra icono, devuelve el texto por defecto
     return `<span class="platform-tag">${platformName}</span>`;
+}
+
+function getCompletitudStyle(valor) {
+    if (!valor) return "#ccc";
+    const v = valor.toUpperCase();
+    
+    if (v.includes("NUEVO")) return COMPLETITUD_COLORS["NUEVO"].color;
+    if (v.includes("CASI COMPLETO")) return COMPLETITUD_COLORS["CASI COMPLETO"].color;
+    if (v.includes("COMPLETO")) return COMPLETITUD_COLORS["COMPLETO"].color;
+    if (v.includes("INCOMPLETO")) return COMPLETITUD_COLORS["INCOMPLETO"].color;
+    if (v.includes("SUELTO") || v.includes("CARTUCHO")) return COMPLETITUD_COLORS["SUELTO"].color;
+    if (v.includes("REPRO")) return COMPLETITUD_COLORS["REPRO"].color;
+    
+    return "#ccc"; // Color por defecto si no coincide
 }
