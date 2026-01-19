@@ -60,19 +60,14 @@ function renderGames(games) {
     container.innerHTML = games.map(j => {
         const colorB = getColorForNota(j["Estado General"]);
         const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
-        
-        // --- Obtener estilos de región ---
         const style = getRegionStyle(j["Región"]);
-
-        // --- NUEVO: Obtener color dinámico de completitud ---
         const colorCompletitud = getCompletitudStyle(j["Completitud"]);
 
         return `
-        <div class="card">
+        <div class="card" style="position: relative; padding-bottom: 50px;">
             <div class="grade-badge" style="background-color: ${colorB}">${notaG}</div>
     
             <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; padding-right: 35px;">
-        
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <div class="platform-icon-card">
                         ${getPlatformIcon(j["Plataforma"])}
@@ -80,16 +75,7 @@ function renderGames(games) {
                     <span class="year-tag">${j["Año"] || ""}</span>
                 </div>
 
-                <div class="region-badge-container" style="
-                    display: inline-flex; 
-                    align-items: center; 
-                    gap: 4px; 
-                    background: ${style.bg}; 
-                    border: 1px solid ${style.border}; 
-                    padding: 2px 6px; 
-                    border-radius: 4px; 
-                    width: fit-content;">
-                    
+                <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px; width: fit-content;">
                     ${getFlag(j["Región"])} 
                     <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">
                         ${j["Región"] || "N/A"}
@@ -99,27 +85,8 @@ function renderGames(games) {
 
             <span class="game-title">${j["Nombre Juego"]}</span>
             ${isValid(j["Edición"]) ? `<div class="edition-text">${j["Edición"]}</div>` : ''}
-            
-            <div class="completitud-text" style="
-                margin-top: 8px; 
-                font-family: 'Segoe UI', Roboto, sans-serif; 
-                font-size: 0.85em; 
-                letter-spacing: 0.5px; 
-                text-transform: uppercase; 
-                font-weight: 800;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                color: ${colorCompletitud};
-                text-shadow: 0 0 8px ${colorCompletitud}44;">
-                <span style="font-size: 1.2em;">●</span> ${j["Completitud"] || "DESCONOCIDO"}
-            </div>
 
-            <div class="details-grid" style="
-                font-family: 'Segoe UI', Roboto, sans-serif; 
-                font-size: 0.8em; 
-                letter-spacing: 0.3px; 
-                line-height: 1.4;">
+            <div class="details-grid" style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 0.8em; letter-spacing: 0.3px; line-height: 1.4; margin-top: 10px;">
                 ${isValid(j["Estado Caja"]) ? `<div><span style="color: #aaa;">📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
                 ${isValid(j["Estado Inserto"]) ? `<div><span style="color: #aaa;">📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
                 ${isValid(j["Estado Manual"]) ? `<div><span style="color: #aaa;">📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
@@ -128,7 +95,24 @@ function renderGames(games) {
                 ${isValid(j["Estado Spinecard"]) ? `<div><span style="color: #aaa;">🔖Obi:</span> ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
                 ${isValid(j["Estado Extras"]) ? `<div><span style="color: #aaa;">🎁Extras:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
             </div>
-            <div class="price-tag">${j["Tasación Actual"] || "S/T"}</div>
+
+            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <div class="completitud-text" style="
+                    font-family: 'Segoe UI', Roboto, sans-serif; 
+                    font-size: 0.75em; 
+                    letter-spacing: 0.5px; 
+                    text-transform: uppercase; 
+                    font-weight: 800;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    color: ${colorCompletitud};">
+                    <span style="font-size: 1.1em;">●</span> ${j["Completitud"] || "DESCONOCIDO"}
+                </div>
+                <div class="price-tag" style="position: static; margin: 0; font-weight: bold;">
+                    ${j["Tasación Actual"] || "S/T"}
+                </div>
+            </div>
         </div>`;
     }).join('');
 }
