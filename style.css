@@ -191,9 +191,7 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
 }
 
 .completitud-text {
-    /* Un pequeño resplandor para que el color luzca más "neon" */
-    text-shadow: 0 0 8px currentColor;
-    opacity: 0.9;
+    opacity: 1;
 }
 
 /* Fila de Región y Año */
