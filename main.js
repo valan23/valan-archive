@@ -70,20 +70,21 @@ function renderGames(games) {
     const isValid = (val) => val && val.trim() !== "" && val.toUpperCase() !== "NA";
 
     container.innerHTML = games.map(j => {
-        // --- LÓGICA DE LA PORTADA (MAPEO DE CARPETAS) ---
-        const platformMap = {
-            "NES": "fc",
-            "FAMICOM": "fc",
-            "NINTENDO": "fc",
-            "SUPER NINTENDO": "sfc",
-            "SNES": "sfc"
-        };
-        const plataformaCSV = j["Plataforma"] ? j["Plataforma"].toUpperCase() : "";
-        const carpetaSistema = platformMap[plataformaCSV] || plataformaCSV.toLowerCase().replace(/\s+/g, '');
-        
-        const fotoUrl = isValid(j["Portada"]) 
-            ? `covers/${carpetaSistema}/${j["Portada"]}` 
-            : `covers/default.webp`;
+    // --- LÓGICA DE LA PORTADA (RUTA CORREGIDA) ---
+    const platformMap = {
+        "NES": "fc",
+        "FAMICOM": "fc",
+        "NINTENDO": "fc",
+        "SUPER NINTENDO": "sfc",
+        "SNES": "sfc"
+    };
+    const plataformaCSV = j["Plataforma"] ? j["Plataforma"].toUpperCase() : "";
+    const carpetaSistema = platformMap[plataformaCSV] || plataformaCSV.toLowerCase().replace(/\s+/g, '');
+
+    // Añadimos 'images/' al principio de la ruta
+    const fotoUrl = isValid(j["Portada"]) 
+        ? `images/covers/${carpetaSistema}/${j["Portada"]}` 
+        : `images/covers/default.webp`;
 
         const colorB = getColorForNota(j["Estado General"]);
         const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
@@ -106,9 +107,9 @@ function renderGames(games) {
             </div>
 
             <div style="display: flex; align-items: center; height: 64px; margin-bottom: 5px; overflow: hidden;">
-                <img src="${fotoUrl}" 
-                     style="width: 48px; height: 64px; object-fit: cover; border-radius: 3px; background: #222;"
-                     onerror="this.src='covers/default.webp'">
+            <img src="${fotoUrl}" 
+                 style="width: 48px; height: 64px; object-fit: cover; border-radius: 3px; background: #222;"
+                 onerror="if (this.src.indexOf('default.webp') === -1) { this.src='images/covers/default.webp'; } else { this.onerror=null; this.src=''; this.style.background='#333'; }">
                 
                 <div style="height: 100%; display: flex; align-items: center; border-left: 2px solid #555; padding-left: 12px; margin-left: 12px; flex: 1;">
                     <span class="game-title" style="margin: 0; line-height: 1.2; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.05em; color: #eeeeee; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
