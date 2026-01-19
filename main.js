@@ -61,6 +61,9 @@ function renderGames(games) {
         const colorB = getColorForNota(j["Estado General"]);
         const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
         const completitud = j["Completitud"] || "Desconocido";
+        
+        // --- INTEGRACIÓN PASO 3: Obtener estilos de región ---
+        const style = getRegionStyle(j["Región"]);
 
         return `
         <div class="card">
@@ -73,17 +76,30 @@ function renderGames(games) {
                     <span class="year-tag">${j["Año"] || ""}</span>
                 </div>
 
-                <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: rgba(0, 255, 255, 0.1); border: 1px solid rgba(0, 255, 255, 0.3); padding: 2px 6px; border-radius: 4px; width: fit-content;">
+                <div class="region-badge-container" style="
+                    display: inline-flex; 
+                    align-items: center; 
+                    gap: 4px; 
+                    background: ${style.bg}; 
+                    border: 1px solid ${style.border}; 
+                    padding: 2px 6px; 
+                    border-radius: 4px; 
+                    width: fit-content;">
+                    
                     ${getFlag(j["Región"])} 
-                    <span style="font-size: 0.7em; font-weight: bold; color: #00ffff;">${j["Región"] || "N/A"}</span>
+                    <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">
+                        ${j["Región"] || "N/A"}
+                    </span>
                 </div>
             </div>
 
             <span class="game-title">${j["Nombre Juego"]}</span>
             ${isValid(j["Edición"]) ? `<div class="edition-text">${j["Edición"]}</div>` : ''}
+            
             <div class="completitud-text">
                 <span style="color: ${completitud.toLowerCase().includes('completo') ? '#00ff88' : '#ffaa00'}">● ${completitud}</span>
             </div>
+
             <div class="details-grid">
                 ${isValid(j["Estado Caja"]) ? `<div><span>📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
                 ${isValid(j["Estado Inserto"]) ? `<div><span>📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
@@ -149,4 +165,15 @@ function formatEstado(valor) {
     if (v === "FALTA") return '<span class="status-falta">FALTA</span>';
     if (v === "?" || v === "PEND") return '<span class="status-pend">?</span>';
     return `<span class="status-ok">${v}/10</span>`;
+}
+
+function getRegionStyle(region) {
+    if (!region) return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
+    
+    const r = region.toUpperCase();
+    for (let key in REGION_COLORS) {
+        if (r.includes(key)) return REGION_COLORS[key];
+    }
+    
+    return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
 }
