@@ -88,12 +88,28 @@ header { width: 100%; text-align: center; }
     text-transform: uppercase;
 }
 
-/* --- BRILLOS RADIALES --- */
-.sega { background: radial-gradient(circle, rgba(0, 86, 158, 0.12) 0%, transparent 70%); }
-.nintendo { background: radial-gradient(circle, rgba(230, 0, 18, 0.12) 0%, transparent 70%); }
-.sony { background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%); }
-.microsoft { background: radial-gradient(circle, rgba(16, 124, 16, 0.12) 0%, transparent 70%); }
-.otros { background: radial-gradient(circle, rgba(155, 155, 155, 0.08) 0%, transparent 70%); }
+/* --- BRILLOS RADIALES PERMANENTES --- */
+/* El resplandor ahora está siempre visible, independientemente de si está activo o no */
+.brand-icon.sega, .filter-btn.sega { 
+    background: radial-gradient(circle, rgba(0, 86, 158, 0.25) 0%, transparent 70%); 
+}
+.brand-icon.nintendo, .filter-btn.nintendo { 
+    background: radial-gradient(circle, rgba(230, 0, 18, 0.25) 0%, transparent 70%); 
+}
+.brand-icon.sony, .filter-btn.sony { 
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%); 
+}
+.brand-icon.microsoft, .filter-btn.microsoft { 
+    background: radial-gradient(circle, rgba(16, 124, 16, 0.25) 0%, transparent 70%); 
+}
+.brand-icon.otros, .filter-btn.otros { 
+    background: radial-gradient(circle, rgba(155, 155, 155, 0.15) 0%, transparent 70%); 
+}
+
+/* El botón "TODAS" (Home) también puede tener un brillo neutro */
+.brand-icon:first-child {
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.15) 0%, transparent 70%);
+}
 
 .brand-icon.active .brand-logo-img, 
 .filter-btn.active .btn-console-icon {
@@ -103,10 +119,12 @@ header { width: 100%; text-align: center; }
 
 .brand-icon.active span, .filter-btn.active span { color: #fff; }
 
-.sega.active { background: radial-gradient(circle, rgba(0, 86, 158, 0.4) 0%, transparent 70%); }
-.nintendo.active { background: radial-gradient(circle, rgba(230, 0, 18, 0.4) 0%, transparent 70%); }
-.sony.active { background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%); }
-.microsoft.active { background: radial-gradient(circle, rgba(16, 124, 16, 0.4) 0%, transparent 70%); }
+/* Incremento de intensidad al estar activo */
+.brand-icon.active.sega, .filter-btn.active.sega { background: radial-gradient(circle, rgba(0, 86, 158, 0.5) 0%, transparent 70%); }
+.brand-icon.active.nintendo, .filter-btn.active.nintendo { background: radial-gradient(circle, rgba(230, 0, 18, 0.5) 0%, transparent 70%); }
+.brand-icon.active.sony, .filter-btn.active.sony { background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%); }
+.brand-icon.active.microsoft, .filter-btn.active.microsoft { background: radial-gradient(circle, rgba(16, 124, 16, 0.5) 0%, transparent 70%); }
+.brand-icon.active.otros, .filter-btn.active.otros { background: radial-gradient(circle, rgba(16, 124, 16, 0.5) 0%, transparent 70%); }
 
 /* --- GRID DE JUEGOS --- */
 .grid {
