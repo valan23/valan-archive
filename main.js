@@ -115,14 +115,18 @@ function renderGames(games) {
                 <span style="font-size: 1.2em;">●</span> ${j["Completitud"] || "DESCONOCIDO"}
             </div>
 
-            <div class="details-grid">
-                ${isValid(j["Estado Caja"]) ? `<div><span>📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
-                ${isValid(j["Estado Inserto"]) ? `<div><span>📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
-                ${isValid(j["Estado Manual"]) ? `<div><span>📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
-                ${isValid(j["Estado Juego"]) ? `<div><span>💾Juego:</span> ${formatEstado(j["Estado Juego"])}</div>` : ''}
-                ${isValid(j["Estado Portada"]) ? `<div><span>🖼️Portada:</span> ${formatEstado(j["Estado Portada"])}</div>` : ''}
-                ${isValid(j["Estado Spinecard"]) ? `<div><span>🔖Obi:</span> ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
-                ${isValid(j["Estado Extras"]) ? `<div><span>🎁Extras:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
+            <div class="details-grid" style="
+                font-family: 'Segoe UI', Roboto, sans-serif; 
+                font-size: 0.8em; 
+                letter-spacing: 0.3px; 
+                line-height: 1.4;">
+                ${isValid(j["Estado Caja"]) ? `<div><span style="color: #aaa;">📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
+                ${isValid(j["Estado Inserto"]) ? `<div><span style="color: #aaa;">📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
+                ${isValid(j["Estado Manual"]) ? `<div><span style="color: #aaa;">📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
+                ${isValid(j["Estado Juego"]) ? `<div><span style="color: #aaa;">💾Juego:</span> ${formatEstado(j["Estado Juego"])}</div>` : ''}
+                ${isValid(j["Estado Portada"]) ? `<div><span style="color: #aaa;">🖼️Portada:</span> ${formatEstado(j["Estado Portada"])}</div>` : ''}
+                ${isValid(j["Estado Spinecard"]) ? `<div><span style="color: #aaa;">🔖Obi:</span> ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
+                ${isValid(j["Estado Extras"]) ? `<div><span style="color: #aaa;">🎁Extras:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
             </div>
             <div class="price-tag">${j["Tasación Actual"] || "S/T"}</div>
         </div>`;
@@ -177,9 +181,20 @@ function getColorForNota(valor) {
 function formatEstado(valor) {
     if (!valor || valor.toUpperCase() === "NA") return null;
     const v = valor.toUpperCase().trim();
-    if (v === "FALTA") return '<span class="status-falta">FALTA</span>';
-    if (v === "?" || v === "PEND") return '<span class="status-pend">?</span>';
-    return `<span class="status-ok">${v}/10</span>`;
+
+    // Caso: FALTA (Rojo)
+    if (v === "FALTA") {
+        return `<span style="color: #ff4d4d; font-weight: bold;">FALTA</span>`;
+    }
+    
+    // Caso: PENDIENTE o ? (Amarillo)
+    if (v === "?" || v === "PEND") {
+        return `<span style="color: #ffff00; font-weight: bold;">?</span>`;
+    }
+
+    // Caso: Tiene valor numérico (Verde)
+    // Usamos el color verde que definiste para "Completo" para mantener coherencia
+    return `<span style="color: #00ff88; font-weight: bold;">${v}/10</span>`;
 }
 
 function getRegionStyle(region) {
