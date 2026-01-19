@@ -80,27 +80,34 @@ header {
     gap: 10px;
 }
 
-
-/* --- BOTONES DE FILTRO (Estado Normal) --- */
+/* --- BOTONES DE FILTRO UNIFICADOS --- */
 .filter-btn { 
-    background: #1a1a20; 
-    color: #aaa; 
-    border: 1px solid #333; 
-    padding: 8px 16px; 
-    border-radius: 20px; 
+    background: transparent; /* Eliminamos el fondo #1a1a20 */
+    color: #888; 
+    border: none;            /* Eliminamos el borde sólido */
+    padding: 5px; 
     cursor: pointer; 
-    font-size: 0.8em; 
-    font-weight: bold; 
-    transition: 0.3s; 
-    text-transform: uppercase; 
+    transition: all 0.3s ease; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100px; /* Mismo ancho que .brand-icon */
+    text-align: center;
 }
 
 /* --- BOTONES DE FILTRO (Cuando están activos/seleccionados) --- */
+/* --- ESTADO ACTIVO UNIFICADO --- */
 .filter-btn.active { 
-    background: var(--accent); 
-    color: #000; 
-    border-color: var(--accent); 
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); 
+    background: transparent; /* Mantiene la transparencia */
+    color: var(--text); 
+    box-shadow: none;        /* Eliminamos la sombra exterior del botón */
+}
+
+/* Brillo neón en el icono de la consola al estar activa */
+.filter-btn.active .btn-console-icon {
+    filter: drop-shadow(0 0 8px var(--accent)) grayscale(0) brightness(1.2);
+    transform: scale(1.1);
 }
 
 /* --- GRUPOS DE FILTROS --- */
@@ -116,32 +123,32 @@ header {
 }
 
 /* Evita que los grupos se peguen entre sí cuando la pantalla es pequeña */
-.filter-container { 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 15px; /* Aumentado de 10 a 15 */
-    margin-bottom: 30px; 
-    align-items: flex-start;
+/* Asegura que el contenedor de filtros sea una columna vertical */
+.filter-container {
+    display: flex;
+    flex-direction: column; /* Obliga a que los subgrupos vayan debajo */
+    align-items: center;
+    width: 100%;
+    gap: 0; /* Controlamos el gap en los hijos */
 }
 
-/* Colores corporativos corregidos */
-.filter-btn.sega.active { background: #00569e; color: white; border-color: #0074d3; box-shadow: 0 0 15px rgba(0, 86, 158, 0.6); }
-.filter-btn.nintendo.active { background: #e60012; color: white; border-color: #ff2a3b; box-shadow: 0 0 15px rgba(230, 0, 18, 0.6); }
-.filter-btn.sony.active { background: #003087; color: white; border-color: #0047ca; box-shadow: 0 0 15px rgba(0, 48, 135, 0.6); }
-.filter-btn.microsoft.active { background: #107c10; color: white; border-color: #1bad1b; box-shadow: 0 0 15px rgba(16, 124, 16, 0.6); }
-.filter-btn.otros.active { background: #9b9b9b; color: white; border-color: #666; box-shadow: 0 0 15px rgba(155, 155, 155, 0.4); }
+/* Colores de neón específicos para consolas según su marca */
+.filter-btn.sega.active .btn-console-icon { filter: drop-shadow(0 0 10px #00569e) grayscale(0) brightness(1.2); }
+.filter-btn.nintendo.active .btn-console-icon { filter: drop-shadow(0 0 10px #e60012) grayscale(0) brightness(1.2); }
+.filter-btn.sony.active .btn-console-icon { filter: drop-shadow(0 0 10px #003087) grayscale(0) brightness(1.2); }
+.filter-btn.microsoft.active .btn-console-icon { filter: drop-shadow(0 0 10px #107c10) grayscale(0) brightness(1.2); }
+.filter-btn.otros.active .btn-console-icon { filter: drop-shadow(0 0 10px #9b9b9b) grayscale(0) brightness(1.2); }
 
 /* --- BARRA DE MARCAS (NIVEL 1) --- */
 /* --- BARRA DE MARCAS ACTUALIZADA PARA LOGOS PNG --- */
 /* La fila de marcas ocupa todo el ancho */
 .brand-selector {
     display: flex;
-    flex-wrap: wrap; /* Permite que bajen si no caben en móvil */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
     width: 100%;
-    padding-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 /* Estilo base para todos los selectores (Marcas y Consolas) */
@@ -211,13 +218,14 @@ header {
 /* El submenú de consolas siempre ocupará una nueva línea */
 .platform-subgroup {
     display: none;
-    width: 100%; /* Ocupa todo el ancho disponible debajo */
+    width: 100%;
     justify-content: center;
-    flex-wrap: wrap; /* Evita que se solapen y los manda a la siguiente línea si es necesario */
-    gap: 25px; /* Espacio horizontal y vertical entre iconos de consolas */
+    flex-wrap: wrap; 
+    gap: 20px; /* Espacio horizontal para evitar solapamiento */
     padding: 20px 0;
     border-top: 1px solid #222;
-    border-bottom: 1px solid #222;
+    margin-top: 5px;
+    animation: fadeIn 0.4s ease; /* Usamos la animación que ya tienes */
 }
 
 .platform-subgroup.show {
