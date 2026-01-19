@@ -343,28 +343,11 @@ header {
 
 /* --- AJUSTES PARA MÓVILES --- */
 @media (max-width: 600px) {
-    body {
-        padding: 10px; /* Menos margen en los bordes de la pantalla */
+    .brand-logo-img, .btn-console-icon {
+        height: 28px;
     }
-
-    .brand-logo-img {
-        height: 28px; /* Logos un pelín más pequeños para que quepan mejor */
-    }
-
-    .brand-icon span {
-        font-size: 0.5em; /* Texto de marca más pequeño */
-    }
-
-    .platform-subgroup {
-        gap: 8px;
-        padding: 15px 5px;
-    }
-.btn-console-icon {
-        height: 20px; /* Más pequeño en móviles */
-    }
-    
-    .filter-btn {
-        padding: 6px 12px;
-        gap: 6px;
+    .brand-icon, .filter-btn {
+        flex: 1 1 60px;
+        gap: 3px;
     }
 }
