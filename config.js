@@ -82,3 +82,12 @@ const REGION_COLORS = {
     "GER": { bg: "rgba(255, 100, 255, 0.2)", text: "#ffffff", border: "rgba(255, 100, 255, 0.5)" },
     "ASIA": { bg: "rgba(255, 255, 0, 0.2)", text: "#ffffff", border: "rgba(255, 255, 0, 0.5)" }
 };
+
+const COMPLETITUD_COLORS = {
+    "NUEVO": { color: "#bf00ff", label: "NUEVO" },           // Púrpura
+    "COMPLETO": { color: "#00ff88", label: "COMPLETO" },    // Verde
+    "CASI COMPLETO": { color: "#ffff00", label: "CASI COMPLETO" }, // Verde claro (GreenYellow)
+    "INCOMPLETO": { color: "#ffaa00", label: "INCOMPLETO" }, // Naranja
+    "SUELTO": { color: "#ff4d4d", label: "SUELTO" },        // Rojo
+    "REPRO": { color: "#bbbbbb", label: "REPRO" }           // Gris claro
+};
