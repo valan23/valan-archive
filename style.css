@@ -146,44 +146,51 @@ header {
     flex-wrap: wrap; /* Esto permite que bajen de fila si no caben */
 }
 
-.brand-icon {
+/* Estilo base para todos los selectores (Marcas y Consolas) */
+.brand-icon, .filter-btn {
+    background: none;
+    border: none;
     cursor: pointer;
-    flex: 1 1 60px; /* Reducido a 60px para que quepan mejor */
-    max-width: 100px;
+    flex: 1 1 80px; /* Tamaño flexible */
+    max-width: 110px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
 }
 
-/* Estilo para las imágenes de los logos */
-.brand-logo-img {
-    height: 35px;          /* Altura fija para que todos los logos midan lo mismo de alto */
-    width: auto;           /* El ancho se ajusta solo para no deformar el logo */
-    max-width: 100px;      /* Evita que logos muy largos se desmadren */
+/* Ajuste de las imágenes para que todas midan lo mismo */
+.brand-logo-img, .btn-console-icon {
+    height: 35px; /* Altura idéntica para marcas y consolas */
+    width: auto;
     object-fit: contain;
-    filter: grayscale(1) brightness(0.5); /* Logo "apagado" en gris oscuro */
+    filter: grayscale(1) brightness(0.5); /* Apagados por defecto */
     transition: all 0.3s ease;
 }
 
-.brand-icon span { 
-    font-size: 0.6em; 
-    font-weight: 900; 
-    letter-spacing: 1px; 
-    color: #444; 
+/* Texto debajo del icono */
+.brand-icon span, .filter-btn span {
+    font-size: 0.65em;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #555;
     text-transform: uppercase;
-    transition: 0.3s;
+    text-align: center;
 }
 
-/* --- EFECTOS DE ILUMINACIÓN AL SELECCIONAR O PASAR EL RATÓN --- */
-.brand-icon:hover .brand-logo-img, 
-.brand-icon.active .brand-logo-img { 
-    filter: grayscale(0) brightness(1.2); /* Recupera color y da brillo */
-    transform: scale(1.1); 
+/* Estado Activo (Cuando se seleccionan) */
+.brand-icon.active .brand-logo-img, 
+.brand-icon:hover .brand-logo-img,
+.filter-btn.active .btn-console-icon,
+.filter-btn:hover .btn-console-icon {
+    filter: grayscale(0) brightness(1.2);
+    transform: scale(1.1);
 }
 
-.brand-icon:hover span,
-.brand-icon.active span {
+.brand-icon.active span, .filter-btn.active span {
     color: var(--text);
 }
 
@@ -205,51 +212,25 @@ header {
     text-shadow: 0 0 10px var(--accent);
 }
 
-/* --- CONTENEDOR DE PLATAFORMAS (NIVEL 2) --- */
+/* Contenedor de consolas para que se vea como una línea limpia */
 .platform-subgroup {
-    display: none; /* Oculto por defecto */
+    display: none;
     justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0 20px 0;
+    padding: 15px;
+    border-bottom: 1px solid #222; /* Línea divisoria suave */
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 20px;
-    animation: fadeIn 0.4s ease;
 }
 
-.platform-subgroup.show { display: flex; }
+.platform-subgroup.show {
+    display: flex;
+}
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-.filter-btn {
-    display: inline-flex;  /* Alinea icono y texto en línea */
-    align-items: center;   /* Centra verticalmente */
-    justify-content: center;
-    gap: 10px;             /* Espacio entre el icono y el texto */
-    padding: 8px 16px;
-    background: #1a1a20;
-    border: 1px solid #333;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-console-icon {
-    height: 30px;          /* Altura similar a la de los logos de las compañías */
-    width: auto;           /* Mantiene la proporción */
-    max-width: 80px;       /* Evita que logos muy horizontales se estiren demasiado */
-    object-fit: contain;   /* Asegura que la imagen no se corte */
-    display: inline-block;
-    vertical-align: middle;
-    filter: grayscale(1) brightness(0.8); /* Opcional: para que parezcan "apagados" hasta que se activen */
-    transition: all 0.3s ease;
-}
-
-/* Efecto cuando el botón está activo */
-.filter-btn.active .btn-console-icon {
-    filter: grayscale(0) brightness(1.2);
-    transform: scale(1.1);
 }
 
 /* --- CUADRÍCULA DE JUEGOS --- */
