@@ -1,3 +1,4 @@
+/* --- RESET Y BASES --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,62 +6,47 @@
 }
 
 html, body {
-    overflow-x: hidden; /* Prohibido el scroll lateral */
+    overflow-x: hidden;
     width: 100%;
-}
-
-/* --- CONFIGURACIÓN DE COLORES Y VARIABLES --- */
-:root { 
-    --accent: #00f2ff;   /* Color cian neón para acentos */
-    --bg: #0b0b0e;       /* Fondo oscuro profundo */
-    --card: #16161a;     /* Fondo de las tarjetas de juego */
-    --text: #e0e0e0;     /* Color de texto principal gris claro */
-}
-
-/* --- ESTILOS GENERALES DEL CUERPO --- */
-body { 
     font-family: 'Inter', sans-serif; 
-    background: var(--bg); 
-    color: var(--text); 
-    padding: 10px; /* Reducido para que no empuje el contenido hacia afuera en móviles */
+    background: #0b0b0e; 
+    color: #e0e0e0; 
+    padding: 10px;
     line-height: 1.4;
 }
 
-/* --- CONTENEDOR PRINCIPAL --- */
+:root { 
+    --accent: #00f2ff; 
+    --bg: #0b0b0e; 
+    --card: #16161a; 
+    --text: #e0e0e0; 
+}
+
+/* --- CONTENEDOR Y HEADER --- */
 .container { 
     width: 100%;
     max-width: 1300px; 
     margin: 0 auto; 
-    padding: 10px; /* Margen de seguridad para que nada toque el borde */
-}
-
-header { 
-    width: 100%;
-    text-align: center; 
-    padding: 10px 0; 
-}
-
-/* --- LOGO PRINCIPAL --- */
-.logo-container {
     padding: 10px;
-    width: 100%; /* Cambiado de max-width fijo a 100% */
+}
+
+header { width: 100%; text-align: center; padding: 10px 0; }
+
+.logo-container {
+    width: 100%;
     max-width: 450px;
     margin: 0 auto 20px auto;
-    box-sizing: border-box;
 }
 
 .main-logo {
     width: 100%;
     height: auto;
-    display: block;
-    filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.4)); /* Brillo neón */
-    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.4));
 }
 
-/* --- BARRA DE BÚSQUEDA --- */
 #searchInput { 
     width: 100%; 
-    max-width: 500px; /* Límite para escritorio, pero flexible en móvil */
+    max-width: 500px; 
     padding: 12px 20px; 
     border-radius: 25px; 
     border: 1px solid #333; 
@@ -68,304 +54,86 @@ header {
     color: white; 
     display: block; 
     margin: 15px auto;
-    font-size: 16px; 
-    box-sizing: border-box; /* IMPRESCINDIBLE para que el padding no sume ancho */
+    font-size: 16px;
 }
 
-/* El contenedor principal debe apilar los elementos verticalmente */
+/* --- SISTEMA DE FILTROS --- */
 .filter-container {
     display: flex;
     flex-direction: column; 
+    align-items: center;
     width: 100%;
     gap: 10px;
 }
 
-/* --- BOTONES DE FILTRO UNIFICADOS --- */
-.filter-btn { 
-    background: transparent; /* Eliminamos el fondo #1a1a20 */
-    color: #888; 
-    border: none;            /* Eliminamos el borde sólido */
-    padding: 5px; 
-    cursor: pointer; 
-    transition: all 0.3s ease; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100px; /* Mismo ancho que .brand-icon */
-    text-align: center;
-}
-
-/* --- BOTONES DE FILTRO (Cuando están activos/seleccionados) --- */
-/* --- ESTADO ACTIVO UNIFICADO --- */
-.filter-btn.active { 
-    background: transparent; /* Mantiene la transparencia */
-    color: var(--text); 
-    box-shadow: none;        /* Eliminamos la sombra exterior del botón */
-}
-
-/* Brillo neón en el icono de la consola al estar activa */
-.filter-btn.active .btn-console-icon {
-    filter: drop-shadow(0 0 8px var(--accent)) grayscale(0) brightness(1.2);
-    transform: scale(1.1);
-}
-
-/* --- GRUPOS DE FILTROS --- */
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 12px; /* Un poco más de aire */
-    border-radius: 12px;
-    border: 1px solid #222;
-    transition: 0.3s;
-}
-
-/* Evita que los grupos se peguen entre sí cuando la pantalla es pequeña */
-/* Asegura que el contenedor de filtros sea una columna vertical */
-.filter-container {
-    display: flex;
-    flex-direction: column; /* Obliga a que los subgrupos vayan debajo */
-    align-items: center;
-    width: 100%;
-    gap: 0; /* Controlamos el gap en los hijos */
-}
-
-/* Colores de neón específicos para consolas según su marca */
-.filter-btn.sega.active .btn-console-icon { filter: drop-shadow(0 0 10px #00569e) grayscale(0) brightness(1.2); }
-.filter-btn.nintendo.active .btn-console-icon { filter: drop-shadow(0 0 10px #e60012) grayscale(0) brightness(1.2); }
-.filter-btn.sony.active .btn-console-icon { filter: drop-shadow(0 0 10px #003087) grayscale(0) brightness(1.2); }
-.filter-btn.microsoft.active .btn-console-icon { filter: drop-shadow(0 0 10px #107c10) grayscale(0) brightness(1.2); }
-.filter-btn.otros.active .btn-console-icon { filter: drop-shadow(0 0 10px #9b9b9b) grayscale(0) brightness(1.2); }
-
-/* --- BARRA DE MARCAS (NIVEL 1) --- */
-/* --- BARRA DE MARCAS ACTUALIZADA PARA LOGOS PNG --- */
-/* La fila de marcas ocupa todo el ancho */
 .brand-selector {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
     width: 100%;
     margin-bottom: 10px;
 }
 
-/* Estilo base para todos los selectores (Marcas y Consolas) */
+/* --- BOTONES UNIFICADOS (Marcas y Consolas) --- */
 .brand-icon, .filter-btn {
-    position: relative; /* Para que el brillo de fondo se posicione bien */
-    opacity: 1; /* Subimos la opacidad para que se vea el icono */
-    z-index: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100px; /* Ancho fijo para evitar solapamientos */
+    height: 80px; /* Altura fija para consistencia */
+    text-align: center;
+    background: transparent;
+    border: none;
+    padding: 10px;
 }
 
-/* Ajuste de las imágenes para que todas midan lo mismo */
-/* 1. Logos en estado normal (Apagados) */
+/* Iconos */
 .brand-logo-img, .btn-console-icon {
-    height: 35px;
+    height: 35px; /* Tamaño controlado */
     width: auto;
-    filter: grayscale(0.8) brightness(0.8); /* Menos agresivo que antes */
+    max-width: 80px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    filter: grayscale(0.6) brightness(0.9);
     transition: all 0.4s ease;
     z-index: 2;
 }
 
-/* Texto debajo del icono */
+/* Texto */
 .brand-icon span, .filter-btn span {
-    width: 100%; /* El texto ocupa todo el ancho del botón */
-    word-wrap: break-word; /* Si el nombre es largo (ej. Master System), lo parte */
-    font-size: 11px;
-    line-height: 1.2;
+    font-size: 10px;
+    font-weight: bold;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 2;
 }
 
-/* 2. Efecto de sombra blanca para destacar logos negros (Estado Activo) */
-/* Aplicamos un filtro que quita el gris, sube el brillo y añade el aura blanca */
+/* Brillos radiales de fondo (Identificación de marca) */
+.sega { background: radial-gradient(circle, rgba(0, 86, 158, 0.12) 0%, transparent 70%); }
+.nintendo { background: radial-gradient(circle, rgba(230, 0, 18, 0.12) 0%, transparent 70%); }
+.sony { background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%); }
+.microsoft { background: radial-gradient(circle, rgba(16, 124, 16, 0.12) 0%, transparent 70%); }
+.otros { background: radial-gradient(circle, rgba(155, 155, 155, 0.08) 0%, transparent 70%); }
+
+/* --- ESTADOS ACTIVOS --- */
+.brand-icon.active, .filter-btn.active {
+    transform: scale(1.05);
+}
+
 .brand-icon.active .brand-logo-img, 
 .filter-btn.active .btn-console-icon {
-    filter: 
-        grayscale(0) 
-        brightness(1.5) 
-        drop-shadow(0 0 5px rgba(255, 255, 255, 0.6)) 
-        drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
-    transform: scale(1.1);
-    opacity: 1;
+    filter: grayscale(0) brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.6));
 }
 
-/* 3. Refuerzo opcional para el texto cuando está activo */
 .brand-icon.active span, .filter-btn.active span {
     color: #fff;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }
 
-/* Brillo de fondo base para identificar la marca incluso apagado */
-.brand-icon.sega, .filter-btn.sega { background: radial-gradient(circle, rgba(0, 86, 158, 0.15) 0%, transparent 70%); }
-.brand-icon.nintendo, .filter-btn.nintendo { background: radial-gradient(circle, rgba(230, 0, 18, 0.15) 0%, transparent 70%); }
-.brand-icon.sony, .filter-btn.sony { background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%); }
-.brand-icon.microsoft, .filter-btn.microsoft { background: radial-gradient(circle, rgba(16, 124, 16, 0.15) 0%, transparent 70%); }
-.brand-icon.otros, .filter-btn.otros { background: radial-gradient(circle, rgba(155, 155, 155, 0.1) 0%, transparent 70%); }
-
-/* CUANDO ESTÁN ACTIVOS: El brillo se intensifica */
-.brand-icon.sega.active, .filter-btn.sega.active { background: radial-gradient(circle, rgba(0, 86, 158, 0.4) 0%, transparent 70%); }
-.brand-icon.nintendo.active, .filter-btn.nintendo.active { background: radial-gradient(circle, rgba(230, 0, 18, 0.4) 0%, transparent 70%); }
-.brand-icon.sony.active, .filter-btn.sony.active { background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%); }
-.brand-icon.microsoft.active, .filter-btn.microsoft.active { background: radial-gradient(circle, rgba(16, 124, 16, 0.4) 0%, transparent 70%); }
-.brand-icon.otros.active, .filter-btn.otros.active { background: radial-gradient(circle, rgba(155, 155, 155, 0.1) 0%, transparent 70%); }
-
-/* Estilo especial para el icono de la casita (TODAS) */
-.brand-icon i {
-    font-size: 1.5em;
-    color: #444;
-    transition: 0.3s;
-}
-
-/* Perfilado para que el logo negro resalte sobre el aura de color */
-.brand-icon.active .brand-logo-img, 
-.filter-btn.active .btn-console-icon {
-    filter: grayscale(0) brightness(1.2) drop-shadow(0 0 3px rgba(255,255,255,0.8));
-    transform: scale(1.1);
-}
-
-/* Contenedor de consolas para que se vea como una línea limpia */
-/* El submenú de consolas siempre ocupará una nueva línea */
-.platform-subgroup {
-    display: none;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap; 
-    gap: 20px; /* Espacio horizontal para evitar solapamiento */
-    padding: 20px 0;
-    border-top: 1px solid #222;
-    margin-top: 5px;
-    animation: fadeIn 0.4s ease; /* Usamos la animación que ya tienes */
-}
-
-.platform-subgroup.show {
-    display: flex;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- CUADRÍCULA DE JUEGOS --- */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Bajamos a 250px para máxima compatibilidad */
-    gap: 20px;
-    margin-top: 20px;
-    width: 100%;
-}
-
-.details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Más flexible */
-    gap: 8px;
-    background: rgba(0,0,0,0.3); /* Un poco más oscuro para legibilidad */
-    padding: 12px;
-    border-radius: 8px;
-    margin: 12px 0;
-    font-size: 0.75em; /* Ligeramente más pequeño para que quepa todo */
-}
-
-/* --- TARJETA DE CADA JUEGO --- */
-.card { 
-    background: var(--card); 
-    border-radius: 15px; 
-    padding: 20px; 
-    border: 1px solid #222; 
-    position: relative; 
-    transition: 0.3s; 
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent);
-    box-shadow: 0 5px 15px rgba(0, 242, 255, 0.1);
-}
-
-/* --- NOTA / ESTADO GENERAL (El número en el cuadro) --- */
-.grade-badge { 
-    position: absolute; 
-    top: 15px; 
-    right: 15px; 
-    color: #000; 
-    font-weight: 900; 
-    width: 42px; 
-    height: 42px; 
-    border-radius: 10px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-size: 1.1em; 
-}
-
-/* --- ETIQUETA DE PLATAFORMA --- */
-.platform-tag { 
-    font-size: 0.7em; 
-    font-weight: 800; 
-    color: #ff0055; 
-    text-transform: uppercase; 
-}
-
-/* --- TÍTULO DEL JUEGO --- */
-.game-title { 
-    font-size: 1.15em; 
-    font-weight: 700; 
-    margin: 5px 0; 
-    color: #fff; 
-    padding-right: 50px; 
-    line-height: 1.3; 
-    display: block; 
-}
-
-/* --- TEXTO DE LA EDICIÓN (Ej: Collector's) --- */
-.edition-text { 
-    font-size: 0.75em; 
-    color: #888; 
-    display: block; 
-    margin-top: -2px; 
-}
-
-/* --- FILA DE REGIÓN (Bandera y Texto) --- */
-.region-row { 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    margin-top: 5px; 
-    font-size: 0.85em; 
-    color: var(--accent); 
-}
-
-/* --- ICONOS DE BANDERA --- */
-.fi { 
-    display: inline-block; 
-    width: 1.3em; 
-    line-height: 1em; 
-    border-radius: 2px; 
-}
-
-/* --- PRECIO O TASACIÓN --- */
-.price-tag { 
-    color: #00ff88; 
-    font-weight: bold; 
-    font-size: 0.9em; 
-    margin-top: auto; /* Empuja el precio al fondo de la tarjeta */
-}
-
-/* --- AJUSTES PARA MÓVILES --- */
-@media (max-width: 600px) {
-    .brand-icon, .filter-btn {
-        width: 75px; /* Más estrechos en móvil */
-        gap: 5px;
-    }
-
-    .brand-logo-img, .btn-console-icon {
-        height: 25px; /* Iconos algo más pequeños */
-    }
-
-    .platform-subgroup {
-        gap: 10px; /* Menos espacio entre consolas en móvil */
-    }
-}
+/* Refuerzo de brillo al estar activo */
+.sega.active { background: radial-gradient(circle, rgba(0, 86, 158, 0.35) 0%, transparent 70
