@@ -46,239 +46,80 @@
                 return acc;
             }, {});
         
-            // OBJETO ÚNICO CON LOGOS DE MARCA E ICONOS DE CONSOLA
             const brands = {
                 "SEGA": { 
                     logo: "images/icons/SEGA_logo.png", 
                     class: "sega", 
                     platforms: ["Master System", "Mega Drive", "Game Gear", "Mega CD", "Saturn", "32X", "Dreamcast"],
-                    icons: {
-                        "Master System": "images/icons/sms.png",
-                        "Mega Drive": "images/icons/smd.png",
-                        "Game Gear": "images/icons/gg.png",
-                        "Mega CD": "images/icons/mcd.png",
-                        "Saturn": "images/icons/ss.png",
-                        "32X": "images/icons/32x.png",
-                        "Dreamcast": "images/icons/dc.png"
-                    }
+                    icons: { "Master System": "images/icons/sms.png", "Mega Drive": "images/icons/smd.png", "Game Gear": "images/icons/gg.png", "Mega CD": "images/icons/mcd.png", "Saturn": "images/icons/ss.png", "32X": "images/icons/32x.png", "Dreamcast": "images/icons/dc.png" }
                 },
                 "NINTENDO": { 
                     logo: "images/icons/NINTENDO_logo.png", 
                     class: "nintendo", 
                     platforms: ["Famicom", "Famicom Disk System", "Game Boy", "Super Famicom", "Virtual Boy", "Nintendo 64", "Game Boy Color", "Game Boy Advance", "Game Cube", "Nintendo DS", "Wii", "Nintendo 3DS", "Wii U", "Switch", "Switch 2"],
-                    icons: {
-                        "Famicom": "images/icons/fc.png",
-                        "Famicom Disk System": "images/icons/fds.png",
-                        "Game Boy": "images/icons/gb.png",
-                        "Super Famicom": "images/icons/sfc.png",
-                        "Virtual Boy": "images/icons/vb.png",
-                        "Nintendo 64": "images/icons/n64.png",
-                        "Game Boy Color": "images/icons/gbc.png",
-                        "Game Boy Advance": "images/icons/gba.png",
-                        "Game Cube": "images/icons/gc.png",
-                        "Nintendo DS": "images/icons/nds.png",
-                        "Wii": "images/icons/wii.png",
-                        "Nintendo 3DS": "images/icons/3ds.png",
-                        "Wii U": "images/icons/wiiu.png",
-                        "Switch": "images/icons/switch.png",
-                        "Switch 2": "images/icons/switch2.png"
-                    }
+                    icons: { "Famicom": "images/icons/fc.png", "Famicom Disk System": "images/icons/fds.png", "Game Boy": "images/icons/gb.png", "Super Famicom": "images/icons/sfc.png", "Virtual Boy": "images/icons/vb.png", "Nintendo 64": "images/icons/n64.png", "Game Boy Color": "images/icons/gbc.png", "Game Boy Advance": "images/icons/gba.png", "Game Cube": "images/icons/gc.png", "Nintendo DS": "images/icons/nds.png", "Wii": "images/icons/wii.png", "Nintendo 3DS": "images/icons/3ds.png", "Wii U": "images/icons/wiiu.png", "Switch": "images/icons/switch.png", "Switch 2": "images/icons/switch2.png" }
                 },
                 "SONY": { 
                     logo: "images/icons/PLAYSTATION_logo.png", 
                     class: "sony", 
                     platforms: ["PlayStation", "PlayStation 2", "PlayStation Vita", "PlayStation 4", "PlayStation 5"],
-                    icons: {
-                        "PlayStation": "images/icons/psx.png",
-                        "PlayStation 2": "images/icons/ps2.png",
-                        "PlayStation Vita": "images/icons/psvita.png",
-                        "PlayStation 4": "images/icons/ps4.png",
-                        "PlayStation 5": "images/icons/ps5.png"
-                    }
+                    icons: { "PlayStation": "images/icons/psx.png", "PlayStation 2": "images/icons/ps2.png", "PlayStation Vita": "images/icons/psvita.png", "PlayStation 4": "images/icons/ps4.png", "PlayStation 5": "images/icons/ps5.png" }
                 },
                 "MICROSOFT": { 
                     logo: "images/icons/MICROSOFT_logo.png", 
                     class: "microsoft", 
                     platforms: ["Xbox 360", "Xbox One", "Xbox Series X/S"],
-                    icons: {
-                        "Xbox 360": "images/icons/x360.png",
-                        "Xbox One": "images/icons/xone.png",
-                        "Xbox Series X/S": "images/icons/xsx.png"
-                    }
+                    icons: { "Xbox 360": "images/icons/x360.png", "Xbox One": "images/icons/xone.png", "Xbox Series X/S": "images/icons/xsx.png" }
                 },
                 "OTROS": { 
                     logo: "images/icons/OTROS_logo.png", 
                     class: "otros", 
                     platforms: ["PC Engine", "3DO", "WonderSwan Color"],
-                    icons: {
-                        "PC Engine": "images/icons/pce.png",
-                        "3DO": "images/icons/3do.png",
-                        "WonderSwan Color": "images/icons/wsc.png"
-                    }
+                    icons: { "PC Engine": "images/icons/pce.png", "3DO": "images/icons/3do.png", "WonderSwan Color": "images/icons/wsc.png" }
                 }
             };
 
             const container = document.getElementById('platform-filters');
 
             // 1. GENERAR SELECTOR DE MARCAS
-            let html = `
-                <div class="brand-selector">
-                    <div class="brand-icon active" onclick="showBrand('TODAS', this)">
-                        <i class="fa-solid fa-house"></i>
-                        <span>TODAS</span>
-                    </div>
-            `;
+            let html = `<div class="brand-selector">
+                <div class="brand-icon active" onclick="showBrand('TODAS', this)">
+                    <i class="fa-solid fa-house"></i>
+                    <span>TODAS</span>
+                </div>`;
 
             for (const [brandName, data] of Object.entries(brands)) {
                 html += `
                     <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)">
-                        <img src="${data.logo}" alt="Logo ${brandName}" class="brand-logo-img">
+                        <img src="${data.logo}" alt="${brandName}" class="brand-logo-img">
                         <span>${brandName}</span>
-                    </div>
-                `;
+                    </div>`;
             }
             html += `</div>`; 
 
-            // 2. GENERAR SUBGRUPOS DE CONSOLAS (Formato idéntico a Marcas)
+            // 2. GENERAR SUBGRUPOS DE CONSOLAS
             for (const [brandName, data] of Object.entries(brands)) {
                 html += `<div id="group-${brandName}" class="platform-subgroup">`;
-
                 data.platforms.forEach(p => {
                     if (counts[p]) {
-                        const iconUrl = data.icons && data.icons[p] ? data.icons[p] : null;
-                        
-                        // Si no hay icono, usamos un gamepad genérico de FontAwesome
-                        const imgHtml = iconUrl 
-                            ? `<img src="${iconUrl}" class="btn-console-icon" alt="${p}">` 
-                            : `<i class="fa-solid fa-gamepad" style="font-size: 24px; margin-bottom: 5px; color: #444;"></i>`;
-
+                        const iconUrl = data.icons[p] || null;
+                        const imgHtml = iconUrl ? `<img src="${iconUrl}" class="btn-console-icon">` : `<i class="fa-solid fa-gamepad"></i>`;
                         html += `
-                            <div class="filter-btn" onclick="filterByPlatform('${p}', this)">
+                            <button class="filter-btn ${data.class}" onclick="filterByPlatform('${p}', this)">
                                 ${imgHtml}
                                 <span>${p}</span>
-                            </div>`;
+                            </button>`;
                     }
                 });
                 html += `</div>`;
             }
-        
             container.innerHTML = html;
         }
 
-// Las demás funciones (showBrand, filterByPlatform, renderGames, etc.) se mantienen igual
-
         function showBrand(brand, element) {
-            // 1. Quitar el estado activo de todos los iconos de marca
             document.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
             element.classList.add('active');
-
-            // 2. Ocultar todos los grupos de consolas
             document.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
 
             if (brand === 'TODAS') {
-                currentPlatform = "TODAS"; // Resetear filtro
-                // Quitar el active de cualquier botón de consola que estuviera marcado
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                applyFilters();
-            } else {
-                // 3. Mostrar solo el grupo de la marca elegida
-                const targetGroup = document.getElementById(`group-${brand}`);
-                if (targetGroup) targetGroup.classList.add('show');
-            }
-        }
-
-        function filterByPlatform(platform, btn) {
-            currentPlatform = platform;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            applyFilters();
-        }
-
-        function filterGames() { applyFilters(); }
-
-        function applyFilters() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allGames.filter(j => {
-                const matchesP = (currentPlatform === "TODAS" || j["Plataforma"] === currentPlatform);
-                const matchesS = (j["Nombre Juego"] || "").toLowerCase().includes(q);
-                return matchesP && matchesS;
-            });
-            renderGames(filtered);
-        }
-
-        function getFlag(region) {
-            if (!region) return '<span class="fi fi-xx"></span>';
-            const r = region.toUpperCase();
-            let code = "xx";
-            if (r.includes("ESP")) code = "es";
-            else if (r.includes("JAP") || r.includes("JPN")) code = "jp";
-            else if (r.includes("USA") || r.includes("EEUU")) code = "us";
-            else if (r.includes("EUR") || r.includes("PAL")) code = "eu";
-            else if (r.includes("UK") || r.includes("REINO UNIDO")) code = "gb";
-            else if (r.includes("AUSTRALIA") || r.includes("AUS")) code = "au";
-            else if (r.includes("ITA") || r.includes("ITALIA")) code = "it";
-            else if (r.includes("ALE") || r.includes("ALEMANIA") || r.includes("GER")) code = "de";
-            return `<span class="fi fi-${code}"></span>`;
-        }
-
-        function getColorForNota(valor) {
-            const n = parseFloat(valor);
-            if (isNaN(n)) return '#333';
-            let r = n < 5 ? 255 : Math.round(255 - ((n - 5) * 51));
-            let g = n < 5 ? Math.round(68 + (n * 37.4)) : 255;
-            return `rgb(${r}, ${g}, 68)`;
-        }
-
-        function formatEstado(valor) {
-            if (!valor || valor.toUpperCase() === "NA") return null;
-            const v = valor.toUpperCase().trim();
-            if (v === "FALTA") return '<span style="color:#ff4444; font-weight:bold;">FALTA</span>';
-            if (v === "?" || v === "PEND") return '<span style="color:#ffaa00; font-weight:bold;">?</span>';
-            return `<span style="color:#00ff88; font-weight:bold;">${v}/10</span>`;
-        }
-
-        function renderGames(games) {
-            let html = "";
-            if (games.length === 0) {
-                html = "<p style='grid-column: 1/-1; text-align:center;'>No se encontraron juegos.</p>";
-            } else {
-                games.forEach(j => {
-                    const colorB = getColorForNota(j["Estado General"]);
-                    const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
-                    const completitud = j["Completitud"] || "Desconocido";
-                    
-                    html += `
-                    <div class="card">
-                        <div class="grade-badge" style="background-color: ${colorB}">${notaG}</div>
-                        <div style="display:flex; justify-content: space-between; align-items: flex-start;">
-                            <span class="platform-tag">${j["Plataforma"]}</span>
-                            <span style="font-size: 0.7em; color: #666;">${j["Año"] || ""}</span>
-                        </div>
-                        <span class="game-title">${j["Nombre Juego"]}</span>
-                        <span class="edition-text">${j["Edición"] || ""}</span>
-                        
-                        <div style="font-size: 0.75em; margin: 5px 0;">
-                            <span style="color: ${completitud.toLowerCase().includes('completo') ? '#00ff88' : '#ffaa00'}">● ${completitud}</span>
-                        </div>
-
-                        <div class="region-row">${getFlag(j["Región"])} ${j["Región"] || ""}</div>
-
-                        <div class="details-grid">
-                            ${formatEstado(j["Estado Caja"]) ? `<div>📦 Caja: ${formatEstado(j["Estado Caja"])}</div>` : ''}
-                            ${formatEstado(j["Estado Inserto"]) ? `<div>📂 Inserto: ${formatEstado(j["Estado Inserto"])}</div>` : ''}
-                            ${formatEstado(j["Estado Portada"]) ? `<div>🖼️ Portada: ${formatEstado(j["Estado Portada"])}</div>` : ''}
-                            ${formatEstado(j["Estado Manual"]) ? `<div>📖 Manual: ${formatEstado(j["Estado Manual"])}</div>` : ''}
-                            ${formatEstado(j["Estado Juego"]) ? `<div>💾 Juego: ${formatEstado(j["Estado Juego"])}</div>` : ''}
-                            ${formatEstado(j["Estado Spinecard"]) ? `<div>🔖 Obi: ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
-                            ${formatEstado(j["Estado Extras"]) ? `<div>🎁 Extras: ${formatEstado(j["Estado Extras"])}</div>` : ''}
-                        </div>
-                        
-                        <div class="price-tag">Tasación: ${j["Tasación Actual"] || "S/T"}</div>
-                    </div>`;
-                });
-            }
-            document.getElementById('game-grid').innerHTML = html;
-        }
-    </script>
-</body>
-</html>
+                currentPlatform = "TODAS";
