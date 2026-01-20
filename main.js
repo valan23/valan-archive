@@ -1,18 +1,74 @@
+// main.js - El Director de Orquesta
 let allGames = [];
+let wishlistGames = [];
 let currentPlatform = "TODAS";
 
-// Inicialización
-Papa.parse(CSV_URL, {
-    download: true, header: true, skipEmptyLines: true,
-    transformHeader: h => h.trim(),
-    complete: function(results) {
-        allGames = results.data.filter(j => j["Nombre Juego"] && j["Nombre Juego"].trim() !== "");
-        createFilters(allGames);
-        renderGames(allGames);
-    }
-});
+/**
+ * INICIALIZACIÓN
+ * Carga los dos CSV (Juegos y Deseados) simultáneamente
+ */
+async function init() {
+    const loadCSV = (url) => {
+        return new Promise((resolve, reject) => {
+            Papa.parse(url, {
+                download: true, 
+                header: true, 
+                skipEmptyLines: true,
+                transformHeader: h => h.trim(),
+                complete: (results) => resolve(results.data),
+                error: (err) => reject(err)
+            });
+        });
+    };
 
-// --- Funciones de Lógica ---
+    try {
+        // Usamos las variables definidas en config.js
+        const [dataJuegos, dataDeseados] = await Promise.all([
+            loadCSV(CSV_URL_JUEGOS),
+            loadCSV(CSV_URL_DESEADOS)
+        ]);
+
+        // Limpieza de datos: eliminamos filas sin nombre
+        allGames = dataJuegos.filter(j => j["Nombre Juego"] && j["Nombre Juego"].trim() !== "");
+        wishlistGames = dataDeseados.filter(j => j["Nombre Juego"] && j["Nombre Juego"].trim() !== "");
+
+        // Renderizado inicial
+        createFilters(allGames);
+        renderGames(allGames); // Esta función debe estar en games.js
+
+    } catch (error) {
+        console.error("Error crítico al cargar las hojas de Google Sheets:", error);
+    }
+}
+
+// Arrancar la aplicación
+init();
+
+/**
+ * LÓGICA DE NAVEGACIÓN
+ * Cambia entre la pestaña de Colección y Deseados
+ */
+function switchSection(sectionId, btn) {
+    // Gestión de botones
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Gestión de visibilidad de secciones
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + sectionId).classList.add('active');
+    
+    // Al cambiar, pintamos los datos correspondientes
+    if(sectionId === 'videojuegos') {
+        renderGames(allGames); 
+    } else if(sectionId === 'deseados') {
+        renderWishlist(wishlistGames); // Esta función debe estar en wishlist_games.js
+    }
+}
+
+/**
+ * LÓGICA DE FILTRADO
+ * Crea los iconos de marcas y botones de consolas
+ */
 function createFilters(games) {
     const counts = games.reduce((acc, game) => {
         const p = game["Plataforma"];
@@ -21,9 +77,11 @@ function createFilters(games) {
     }, {});
 
     const container = document.getElementById('platform-filters');
+    if (!container) return;
     
     let html = `<div class="brand-selector" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">`;
 
+    // Botón Global "TODAS"
     html += `
         <div class="brand-icon active" onclick="showBrand('TODAS', this)" 
              style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px;">
@@ -31,6 +89,7 @@ function createFilters(games) {
             <span style="font-weight: 600; font-size: 1em;">TODAS</span>
         </div>`;
 
+    // Iconos de Marcas (Nintendo, Sega, etc.)
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
         html += `
             <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)" 
@@ -43,6 +102,7 @@ function createFilters(games) {
     
     html += `</div>`; 
 
+    // Subgrupos de plataformas por marca
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
         html += `<div id="group-${brandName}" class="platform-subgroup">`;
         data.platforms.forEach(p => {
@@ -58,139 +118,17 @@ function createFilters(games) {
     container.innerHTML = html;
 }
 
-function renderGames(games) {
-    const container = document.getElementById('game-grid');
-    if (games.length === 0) {
-        container.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>No se encontraron juegos.</p>";
-        return;
-    }
-
-    const isValid = (val) => val && val.trim() !== "" && val.toUpperCase() !== "NA";
-
-    container.innerHTML = games.map(j => {
-        const platformMap = {
-            "NES": "fc",
-            "FAMICOM": "fc",
-            "NINTENDO": "fc",
-            "SUPER NINTENDO": "sfc",
-            "SNES": "sfc"
-        };
-        const plataformaCSV = j["Plataforma"] ? j["Plataforma"].toUpperCase() : "";
-        const carpetaSistema = platformMap[plataformaCSV] || plataformaCSV.toLowerCase().replace(/\s+/g, '');
-
-        const fotoUrl = isValid(j["Portada"]) 
-            ? `images/covers/${carpetaSistema}/${j["Portada"]}` 
-            : `images/covers/default.webp`;
-
-        const colorB = getColorForNota(j["Estado General"]);
-        const notaG = (j["Estado General"] === "PEND" || !j["Estado General"]) ? "?" : j["Estado General"];
-        const style = getRegionStyle(j["Región"]);
-        const colorCompletitud = getCompletitudStyle(j["Completitud"]);
-
-        return `
-        <div class="card" style="position: relative; padding-bottom: 50px; display: flex; flex-direction: column;">
-            <div class="grade-badge" style="background-color: ${colorB}">${notaG}</div>
-    
-            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; padding-right: 35px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div class="platform-icon-card">${getPlatformIcon(j["Plataforma"])}</div>
-                    <span class="year-tag">${j["Año"] || ""}</span>
-                </div>
-                <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px; width: fit-content;">
-                    ${getFlag(j["Región"])} 
-                    <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
-                </div>
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; min-height: 110px;">
-                
-                <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; max-width: 85px;"> 
-                    <img src="${fotoUrl}" 
-                         style="
-                            max-width: 85px; 
-                            max-height: 110px; 
-                            width: auto; 
-                            height: auto; 
-                            object-fit: contain; 
-                            border-radius: 4px;
-                            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
-                         "
-                         onerror="if (this.src.indexOf('default.webp') === -1) { this.src='images/covers/default.webp'; } else { this.onerror=null; this.src=''; }">
-                </div>
-                
-                <div style="
-                    flex: 1; 
-                    display: flex; 
-                    align-items: center; 
-                    border-left: 2px solid #555; 
-                    padding-left: 15px; 
-                    min-height: 90px;
-                ">
-                    <span class="game-title" style="
-                        margin: 0; 
-                        line-height: 1.25; 
-                        font-family: 'Segoe UI', sans-serif; 
-                        font-weight: 700; 
-                        font-size: 1.1em; 
-                        color: #fff;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 4;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-                    ">
-                        ${j["Nombre Juego"]}
-                    </span>
-                </div>
-            </div>
-
-            ${isValid(j["Edición"]) && !["ESTÁNDAR", "ESTANDAR"].includes(j["Edición"].toUpperCase()) ? `
-                <div class="edition-text" style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; font-style: italic; color: #aaa; display: flex; align-items: center; gap: 4px; line-height: 1.2; min-height: 1.2em; margin-bottom: 15px;">
-                    <i class="fa-solid fa-star" style="color: #ffd700; font-size: 0.9em;"></i>
-                    ${j["Edición"]}
-                </div>` : `<div style="margin-bottom: 15px; height: 1.2em;"></div>`}
-
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; letter-spacing: 0.3px; line-height: 1.4; flex-grow: 1;">
-                ${isValid(j["Estado Caja"]) ? `<div><span style="color: #aaa;">📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
-                ${isValid(j["Estado Inserto"]) ? `<div><span style="color: #aaa;">📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
-                ${isValid(j["Estado Manual"]) ? `<div><span style="color: #aaa;">📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
-                ${isValid(j["Estado Juego"]) ? `<div><span style="color: #aaa;">💾Juego:</span> ${formatEstado(j["Estado Juego"])}</div>` : ''}
-                ${isValid(j["Estado Portada"]) ? `<div><span style="color: #aaa;">🖼️Port.:</span> ${formatEstado(j["Estado Portada"])}</div>` : ''}
-                ${isValid(j["Estado Spinecard"]) ? `<div><span style="color: #aaa;">🔖Obi:</span> ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
-                ${isValid(j["Estado Extras"]) ? `<div><span style="color: #aaa;">🎁Ext.:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
-            </div>
-
-            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: center;">
-                <div class="completitud-text" style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; text-transform: uppercase; font-weight: 800; display: flex; align-items: center; gap: 4px; color: ${colorCompletitud};">
-                    <span style="font-size: 1.1em;">●</span> ${j["Completitud"] || "DESCONOCIDO"}
-                </div>
-                <div class="price-tag" style="position: static; margin: 0; font-weight: bold;">
-                    ${j["Tasación Actual"] || "S/T"}
-                </div>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-function switchSection(sectionId, btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-
-    btn.classList.add('active');
-    document.getElementById('section-' + sectionId).classList.add('active');
-    
-    if(sectionId === 'videojuegos') {
-        renderGames(allGames); 
-    }
-}
-
-// --- Helpers (Filtros y Estilos se mantienen igual) ---
 function showBrand(brand, element) {
     document.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
     element.classList.add('active');
     document.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
-    if (brand === 'TODAS') { currentPlatform = "TODAS"; applyFilters(); }
-    else document.getElementById(`group-${brand}`)?.classList.add('show');
+    
+    if (brand === 'TODAS') { 
+        currentPlatform = "TODAS"; 
+        applyFilters(); 
+    } else {
+        document.getElementById(`group-${brand}`)?.classList.add('show');
+    }
 }
 
 function filterByPlatform(p, btn) {
@@ -212,36 +150,20 @@ function applyFilters() {
 
 function filterGames() { applyFilters(); }
 
+/**
+ * HELPERS COMPARTIDOS
+ * Funciones que utilizan tanto la Colección como los Deseados
+ */
 function getFlag(region) {
     if (!region) return '<span class="fi fi-xx"></span>';
-    const codes = { "ESP": "es", "JAP": "jp", "USA": "us", "EU": "eu", "UK": "gb", "ITA": "it", "GER": "de", "AUS": "au", "ASIA": "hk"};
+    const codes = { 
+        "ESP": "es", "JAP": "jp", "USA": "us", "EU": "eu", 
+        "UK": "gb", "ITA": "it", "GER": "de", "AUS": "au", "ASIA": "hk"
+    };
     const r = region.toUpperCase();
     let code = "xx";
     for (let key in codes) { if (r.includes(key)) code = codes[key]; }
     return `<span class="fi fi-${code}"></span>`;
-}
-
-function getColorForNota(valor) {
-    const n = parseFloat(valor);
-    if (isNaN(n)) return '#333';
-    let r = n < 5 ? 255 : Math.round(255 - ((n - 5) * 51));
-    let g = n < 5 ? Math.round(68 + (n * 37.4)) : 255;
-    return `rgb(${r}, ${g}, 68)`;
-}
-
-function formatEstado(valor) {
-    if (!valor || valor.toUpperCase() === "NA") return null;
-    const v = valor.toUpperCase().trim();
-    if (v === "FALTA") return `<span style="color: #ff4d4d; font-weight: bold;">FALTA</span>`;
-    if (v === "?" || v === "PEND") return `<span style="color: #ffff00; font-weight: bold;">?</span>`;
-    return `<span style="color: #00ff88; font-weight: bold;">${v}/10</span>`;
-}
-
-function getRegionStyle(region) {
-    if (!region) return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
-    const r = region.toUpperCase();
-    for (let key in REGION_COLORS) { if (r.includes(key)) return REGION_COLORS[key]; }
-    return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
 }
 
 function getPlatformIcon(platformName) {
@@ -252,16 +174,4 @@ function getPlatformIcon(platformName) {
         }
     }
     return `<span class="platform-tag">${platformName}</span>`;
-}
-
-function getCompletitudStyle(valor) {
-    if (!valor) return "#ccc";
-    const v = valor.toUpperCase();
-    if (v.includes("NUEVO")) return COMPLETITUD_COLORS["NUEVO"].color;
-    if (v.includes("CASI COMPLETO")) return COMPLETITUD_COLORS["CASI COMPLETO"].color;
-    if (v.includes("COMPLETO")) return COMPLETITUD_COLORS["COMPLETO"].color;
-    if (v.includes("INCOMPLETO")) return COMPLETITUD_COLORS["INCOMPLETO"].color;
-    if (v.includes("SUELTO") || v.includes("CARTUCHO")) return COMPLETITUD_COLORS["SUELTO"].color;
-    if (v.includes("REPRO")) return COMPLETITUD_COLORS["REPRO"].color;
-    return "#ccc";
 }
