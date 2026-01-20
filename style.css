@@ -78,11 +78,16 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 100px;
+    
+    /* CAMBIO AQUÍ: */
+    width: 100px; /* Ancho por defecto para PC */
+    max-width: 25%; /* Asegura que en móvil quepan al menos 4 por fila sin solaparse */
+    
     height: 85px;
     background: transparent !important;
     border: none;
     padding: 5px;
+    flex-shrink: 0; /* Evita que el navegador los deforme */
 }
 
 .brand-logo-img, .btn-console-icon {
