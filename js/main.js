@@ -120,16 +120,22 @@ function createFilters(games, containerId) {
     container.innerHTML = html;
 }
 
-function showBrand(brand, element) {
-    document.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
+function showBrand(brand, element, prefix) {
+    // Solo quita la clase active de los iconos del contenedor actual
+    element.parentElement.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
     element.classList.add('active');
-    document.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
+    
+    // Oculta todos los subgrupos de la sección actual
+    const container = element.closest('.filter-container');
+    container.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
     
     if (brand === 'TODAS') { 
         currentPlatform = "TODAS"; 
         applyFilters(); 
     } else {
-        document.getElementById(`group-${brand}`)?.classList.add('show');
+        // Busca el ID con el prefijo correcto
+        const targetGroup = document.getElementById(`group-${prefix}-${brand}`);
+        if (targetGroup) targetGroup.classList.add('show');
     }
 }
 
