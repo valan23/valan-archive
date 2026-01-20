@@ -2,10 +2,10 @@
 let allGames = [];
 let wishlistGames = [];
 let currentPlatform = "TODAS";
+let currentSection = 'videojuegos';
 
 /**
  * INICIALIZACIÓN
- * Carga los dos CSV (Juegos y Deseados) simultáneamente
  */
 async function init() {
     const loadCSV = (url) => {
@@ -22,66 +22,63 @@ async function init() {
     };
 
     try {
-        // Usamos las variables definidas en config.js
         const [dataJuegos, dataDeseados] = await Promise.all([
             loadCSV(CSV_URL_JUEGOS),
             loadCSV(CSV_URL_DESEADOS)
         ]);
 
-        // Limpieza de datos: eliminamos filas sin nombre
         allGames = dataJuegos.filter(j => j["Nombre Juego"] && j["Nombre Juego"].trim() !== "");
         wishlistGames = dataDeseados.filter(j => j["Nombre Juego"] && j["Nombre Juego"].trim() !== "");
 
-        // Renderizado inicial
-        createFilters(allGames);
-        renderGames(allGames); // Esta función debe estar en games.js
+        // Renderizado inicial: Indicamos el ID del contenedor de filtros
+        createFilters(allGames, 'platform-filters');
+        renderGames(allGames);
 
     } catch (error) {
         console.error("Error crítico al cargar las hojas de Google Sheets:", error);
     }
 }
 
-// Arrancar la aplicación
 init();
 
 /**
  * LÓGICA DE NAVEGACIÓN
- * Cambia entre la pestaña de Colección y Deseados
  */
 function switchSection(sectionId, btn) {
-    // Gestión de botones
+    currentSection = sectionId;
+    currentPlatform = "TODAS"; 
+
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    // Gestión de visibilidad de secciones
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     document.getElementById('section-' + sectionId).classList.add('active');
     
-    // Al cambiar, pintamos los datos correspondientes
+    // Al cambiar, generamos los filtros y renderizamos la lista correspondiente
     if(sectionId === 'videojuegos') {
+        createFilters(allGames, 'platform-filters');
         renderGames(allGames); 
     } else if(sectionId === 'deseados') {
-        renderWishlist(wishlistGames); // Esta función debe estar en wishlist_games.js
+        createFilters(wishlistGames, 'platform-filters-wishlist');
+        renderWishlist(wishlistGames); 
     }
 }
 
 /**
- * LÓGICA DE FILTRADO
- * Crea los iconos de marcas y botones de consolas
+ * LÓGICA DE FILTRADO (Dinamizada)
  */
-function createFilters(games) {
+function createFilters(games, containerId) {
     const counts = games.reduce((acc, game) => {
         const p = game["Plataforma"];
         if (p) acc[p] = (acc[p] || 0) + 1;
         return acc;
     }, {});
 
-    const container = document.getElementById('platform-filters');
+    const container = document.getElementById(containerId);
     if (!container) return;
     
     let html = `<div class="brand-selector" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">`;
 
-    // Botón Global "TODAS"
     html += `
         <div class="brand-icon active" onclick="showBrand('TODAS', this)" 
              style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px;">
@@ -89,20 +86,21 @@ function createFilters(games) {
             <span style="font-weight: 600; font-size: 1em;">TODAS</span>
         </div>`;
 
-    // Iconos de Marcas (Nintendo, Sega, etc.)
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
-        html += `
-            <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)" 
-                 style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px;">
-                <img src="${data.logo}" alt="" class="brand-logo-img" 
-                     style="height: 25px; width: auto; max-width: 100px; object-fit: contain;">
-                <span style="font-weight: 600; font-size: 1em;">${brandName}</span>
-            </div>`;
+        // Solo mostramos la marca si esa marca tiene juegos en la lista actual
+        const hasGamesInBrand = data.platforms.some(p => counts[p] > 0);
+        if (hasGamesInBrand) {
+            html += `
+                <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this)" 
+                     style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px;">
+                    <img src="${data.logo}" alt="" class="brand-logo-img" 
+                         style="height: 25px; width: auto; max-width: 100px; object-fit: contain;">
+                    <span style="font-weight: 600; font-size: 1em;">${brandName}</span>
+                </div>`;
+        }
     }
-    
     html += `</div>`; 
 
-    // Subgrupos de plataformas por marca
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
         html += `<div id="group-${brandName}" class="platform-subgroup">`;
         data.platforms.forEach(p => {
@@ -140,19 +138,24 @@ function filterByPlatform(p, btn) {
 
 function applyFilters() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allGames.filter(j => {
+    
+    // Seleccionamos qué datos usar y qué función de dibujo llamar según la pestaña activa
+    const targetData = (currentSection === 'videojuegos') ? allGames : wishlistGames;
+    const renderFunc = (currentSection === 'videojuegos') ? renderGames : renderWishlist;
+
+    const filtered = targetData.filter(j => {
         const matchesP = (currentPlatform === "TODAS" || j["Plataforma"] === currentPlatform);
         const matchesS = (j["Nombre Juego"] || "").toLowerCase().includes(q);
         return matchesP && matchesS;
     });
-    renderGames(filtered);
+
+    renderFunc(filtered);
 }
 
 function filterGames() { applyFilters(); }
 
 /**
  * HELPERS COMPARTIDOS
- * Funciones que utilizan tanto la Colección como los Deseados
  */
 function getFlag(region) {
     if (!region) return '<span class="fi fi-xx"></span>';
