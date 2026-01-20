@@ -1,5 +1,5 @@
 /**
- * wishlist_games.js - Renderizado con Región incluida
+ * wishlist_games.js - Renderizado idéntico a la colección con estilos de región
  */
 
 function renderWishlist(games) {
@@ -31,20 +31,22 @@ function renderWishlist(games) {
             ? `images/covers/${carpetaSistema}/${j["Portada"]}` 
             : `images/covers/default.webp`;
 
-        const wishColor = "#00f2ff"; 
+        // Estilo de Región (usando la función de games.js o main.js)
+        const style = getRegionStyle(j["Región"]);
+        const wishColor = "#00f2ff"; // Color Cyan para Deseados
 
         return `
-        <div class="card" style="position: relative; display: flex; flex-direction: column; min-height: 250px;">
+        <div class="card" style="position: relative; display: flex; flex-direction: column; min-height: 250px; padding-bottom: 20px;">
             
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                <div style="display: flex; flex-direction: column; gap: 6px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div class="platform-icon-card">${getPlatformIcon(j["Plataforma"])}</div>
-                        <span class="year-tag">${j["Año"] || ""}</span>
-                    </div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; padding-right: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="platform-icon-card">${getPlatformIcon(j["Plataforma"])}</div>
+                    <span class="year-tag">${j["Año"] || ""}</span>
                 </div>
-                <div style="font-size: 1.2em; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5));">
-                    ${getFlag(j["Región"])}
+                
+                <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px; width: fit-content;">
+                    ${getFlag(j["Región"])} 
+                    <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
                 </div>
             </div>
 
@@ -68,3 +70,6 @@ function renderWishlist(games) {
         </div>`;
     }).join('');
 }
+
+// Nota: Asegúrate de que las funciones auxiliares (getRegionStyle, etc.) 
+// estén en main.js para que ambos archivos puedan usarlas.
