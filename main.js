@@ -172,6 +172,18 @@ function renderGames(games) {
     }).join('');
 }
 
+function switchSection(sectionId, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+
+    btn.classList.add('active');
+    document.getElementById('section-' + sectionId).classList.add('active');
+    
+    if(sectionId === 'videojuegos') {
+        renderGames(allGames); 
+    }
+}
+
 // --- Helpers (Filtros y Estilos se mantienen igual) ---
 function showBrand(brand, element) {
     document.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
