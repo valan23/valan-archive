@@ -1,3 +1,13 @@
+/* --- CONFIGURACIÓN DE RUTAS --- */
+// Tu hoja principal (Videojuegos)
+const CSV_URL_JUEGOS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU7IaxX65IH0Ph-KEl06nrFvuyL2w6oBt7vxaJ96XDLjsO9CDpzYVwl3VDIvx5IG20KXSb6XhF7buX/pub?gid=600973717&single=true&output=csv";
+
+// TU NUEVA HOJA (Juegos Deseados)
+// Nota: He usado el ID de tu Google Sheets. 
+// IMPORTANTE: Asegúrate de que el gid=XXXXXXXX sea el que corresponde a la pestaña "DeseadosJuegos"
+const CSV_URL_DESEADOS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU7IaxX65IH0Ph-KEl06nrFvuyL2w6oBt7vxaJ96XDLjsO9CDpzYVwl3VDIvx5IG20KXSb6XhF7buX/pub?gid=1483244243&single=true&output=csv";
+
+/* --- CONFIGURACIÓN DE MARCAS Y PLATAFORMAS --- */
 const BRANDS_CONFIG = {
     "SEGA": { 
         logo: "images/icons/SEGA_logo.png", 
@@ -69,8 +79,7 @@ const BRANDS_CONFIG = {
     }
 };
 
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU7IaxX65IH0Ph-KEl06nrFvuyL2w6oBt7vxaJ96XDLjsO9CDpzYVwl3VDIvx5IG20KXSb6XhF7buX/pub?gid=600973717&single=true&output=csv";
-
+/* --- ESTILOS DE REGIÓN --- */
 const REGION_COLORS = {
     "JAP": { bg: "rgba(255, 0, 0, 0.2)", text: "#ffffff", border: "rgba(255, 0, 0, 0.5)" },
     "ESP": { bg: "rgba(255, 183, 0, 0.2)", text: "#ffffff", border: "rgba(255, 183, 0, 0.5)" },
@@ -83,11 +92,12 @@ const REGION_COLORS = {
     "ASIA": { bg: "rgba(255, 255, 0, 0.2)", text: "#ffffff", border: "rgba(255, 255, 0, 0.5)" }
 };
 
+/* --- ESTILOS DE COMPLETITUD --- */
 const COMPLETITUD_COLORS = {
-    "NUEVO": { color: "#bf00ff", label: "NUEVO" },           // Púrpura
-    "COMPLETO": { color: "#00ff88", label: "COMPLETO" },    // Verde
-    "CASI COMPLETO": { color: "#ffff00", label: "CASI COMPLETO" }, // Verde claro (GreenYellow)
-    "INCOMPLETO": { color: "#ffaa00", label: "INCOMPLETO" }, // Naranja
-    "SUELTO": { color: "#ff4d4d", label: "SUELTO" },        // Rojo
-    "REPRO": { color: "#bbbbbb", label: "REPRO" }           // Gris claro
+    "NUEVO": { color: "#bf00ff", label: "NUEVO" },
+    "COMPLETO": { color: "#00ff88", label: "COMPLETO" },
+    "CASI COMPLETO": { color: "#ffff00", label: "CASI COMPLETO" },
+    "INCOMPLETO": { color: "#ffaa00", label: "INCOMPLETO" },
+    "SUELTO": { color: "#ff4d4d", label: "SUELTO" },
+    "REPRO": { color: "#bbbbbb", label: "REPRO" }
 };
