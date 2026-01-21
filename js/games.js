@@ -16,13 +16,8 @@ function renderGames(games) {
     container.innerHTML = games.map(j => {
         // Mapeo para las carpetas de imágenes de portadas
         const platformMap = {
-            "NES": "fc",
-            "FAMICOM": "fc",
-            "NINTENDO": "fc",
-            "FAMICOM DISK SYSTEM": "fds",
-            "FAMICOM DISK": "fds",
-            "FDS": "fds",
-            "SUPER NINTENDO": "sfc",
+            "Famicom": "fc",
+            "Famicom Disk System": "fds",
             "SNES": "sfc"
         };
         
