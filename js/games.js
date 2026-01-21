@@ -31,21 +31,22 @@ function renderGames(games) {
             ? `images/covers/${carpetaSistema}/${nombrePortada}` 
             : `images/covers/default.webp`;
 
-        // 1. EL BADGE SUPERIOR AHORA USA EL COLOR DE COMPLETITUD
+        // Colores y textos
         const colorCompletitud = getCompletitudStyle(j["Completitud"]);
-        // Extraemos las iniciales o una versión corta para que quepa bien
         const textoBadgeCompletitud = (j["Completitud"] || "???").toUpperCase();
-        
         const style = getRegionStyle(j["Región"]);
 
         return `
-        <div class="card" style="position: relative; padding-bottom: 50px; display: flex; flex-direction: column;">
+        <div class="card" style="position: relative; padding-bottom: 50px; display: flex; flex-direction: column; overflow: hidden;">
             
-            <div class="grade-badge" style="background-color: ${colorCompletitud}; font-size: 0.6em; line-height: 1.1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4px;">
+            <div style="position: absolute; top: 0; right: 0; background-color: ${colorCompletitud}; 
+                        color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; 
+                        border-bottom-left-radius: 8px; box-shadow: -2px 2px 5px rgba(0,0,0,0.3); 
+                        z-index: 10; white-space: nowrap; min-width: 60px; text-align: center;">
                 ${textoBadgeCompletitud}
             </div>
     
-            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; padding-right: 35px;">
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; padding-right: 80px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <div class="platform-icon-card">${getPlatformIcon(j["Plataforma"])}</div>
                     <span class="year-tag">${j["Año"] || ""}</span>
@@ -92,11 +93,9 @@ function renderGames(games) {
             </div>
 
             <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: center;">
-                
                 <div class="completitud-text" style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; text-transform: uppercase; font-weight: 800; display: flex; align-items: center; gap: 4px; color: ${getColorForNota(j["Estado General"])};">
                     <span style="font-size: 1.1em;">★</span> ESTADO: ${formatEstado(j["Estado General"]) || "?"}
                 </div>
-
                 <div class="price-tag" style="position: static; margin: 0; font-weight: bold;">
                     ${j["Tasación Actual"] || "S/T"}
                 </div>
