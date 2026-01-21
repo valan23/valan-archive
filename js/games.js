@@ -37,7 +37,7 @@ function renderGames(games) {
         const style = getRegionStyle(j["Región"]);
 
         return `
-        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 450px;">
+        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
             
             <div style="position: absolute; top: 0; right: 0; background-color: ${colorCompletitud}; 
                         color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; 
@@ -46,7 +46,7 @@ function renderGames(games) {
                 ${textoBadgeCompletitud}
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; padding-left: 5px;">
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 5px;">
                 <div class="platform-icon-card" style="font-size: 1.2em;">
                     ${getPlatformIcon(j["Plataforma"])}
                 </div>
@@ -71,18 +71,18 @@ function renderGames(games) {
                      onerror="if (this.src.indexOf('default.webp') === -1) { this.src='images/covers/default.webp'; } else { this.onerror=null; this.src=''; }">
             </div>
 
-            <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 15px; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-                <div class="game-title" style="margin: 0; line-height: 1.2; font-family: 'Segoe UI', sans-serif; font-weight: 800; font-size: 1.1em; color: #fff;">
+            <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 12px; min-height: 55px; display: flex; flex-direction: column; justify-content: center;">
+                <div class="game-title" style="margin: 0; line-height: 1.25; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #fff; letter-spacing: 0.2px;">
                     ${j["Nombre Juego"]}
                 </div>
                 ${isValid(j["Nombre Japones"]) ? `
-                    <div style="font-family: 'MS Mincho', 'Sawarabi Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 4px; line-height: 1.1;">
+                    <div style="font-family: 'MS Mincho', 'Sawarabi Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 4px; line-height: 1.1; font-weight: 400;">
                         ${j["Nombre Japones"]}
                     </div>
                 ` : ''}
             </div>
 
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.5; min-height: 125px; align-content: start;">
+            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.4; min-height: 95px; align-content: start; letter-spacing: 0.2px;">
                 ${isValid(j["Estado Caja"]) ? `<div><span style="color: #aaa;">📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
                 ${isValid(j["Estado Inserto"]) ? `<div><span style="color: #aaa;">📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
                 ${isValid(j["Estado Manual"]) ? `<div><span style="color: #aaa;">📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
