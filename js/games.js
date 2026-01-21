@@ -46,14 +46,22 @@ function renderGames(games) {
                 ${textoBadgeCompletitud}
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-right: 90px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div class="platform-icon-card">${getPlatformIcon(j["Plataforma"])}</div>
-                    <span class="year-tag">${j["Año"] || ""}</span>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; padding-left: 5px;">
+                <div class="platform-icon-card" style="font-size: 1.2em;">
+                    ${getPlatformIcon(j["Plataforma"])}
                 </div>
-                <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
-                    ${getFlag(j["Región"])} 
-                    <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="year-tag" style="margin: 0; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7em;">
+                        ${j["Año"] || "????"}
+                    </span>
+                    
+                    <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
+                        ${getFlag(j["Región"])} 
+                        <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">
+                            ${j["Región"] || "N/A"}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -82,8 +90,12 @@ function renderGames(games) {
 
             <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.4; flex-grow: 1;">
                 ${isValid(j["Estado Caja"]) ? `<div><span style="color: #aaa;">📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
+                ${isValid(j["Estado Inserto"]) ? `<div><span style="color: #aaa;">📥Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
+                ${isValid(j["Estado Portada"]) ? `<div><span style="color: #aaa;">🖼️Portada:</span> ${formatEstado(j["Estado Portada"])}</div>` : ''}
                 ${isValid(j["Estado Manual"]) ? `<div><span style="color: #aaa;">📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
                 ${isValid(j["Estado Juego"]) ? `<div><span style="color: #aaa;">💾Juego:</span> ${formatEstado(j["Estado Juego"])}</div>` : ''}
+                ${isValid(j["Estado Spinecard"]) ? `<div><span style="color: #aaa;">🔖Obi:</span> ${formatEstado(j["Estado Spinecard"])}</div>` : ''}
+                ${isValid(j["Estado Extras"]) ? `<div><span style="color: #aaa;">🎁Extras:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
                 </div>
 
             <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
