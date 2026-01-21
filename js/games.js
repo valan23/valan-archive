@@ -14,18 +14,27 @@ function renderGames(games) {
     const isValid = (val) => val && val.trim() !== "" && val.toUpperCase() !== "NA";
 
     container.innerHTML = games.map(j => {
-        // Mapeo para las carpetas de imágenes de portadas
+        // 1. Mapeo con nombres tal cual los piensas, pero buscaremos en él sin importar mayúsculas
         const platformMap = {
             "Famicom": "fc",
             "Famicom Disk System": "fds",
-            "SNES": "sfc"
+            "Super Famicom": "sfc",
         };
         
-        const plataformaCSV = j["Plataforma"] ? j["Plataforma"].toUpperCase() : "";
-        const carpetaSistema = platformMap[plataformaCSV] || plataformaCSV.toLowerCase().replace(/\s+/g, '');
+        // 2. Cogemos el valor del Excel y lo limpiamos
+        const valorExcel = j["Plataforma"] ? j["Plataforma"].trim() : "";
+        
+        // 3. BUSCADOR INTELIGENTE: 
+        // Buscamos en el mapa si existe una llave que, en mayúsculas, coincida con el Excel en mayúsculas
+        const carpetaSistema = Object.keys(platformMap).find(
+            key => key.toUpperCase() === valorExcel.toUpperCase()
+        ) ? platformMap[Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase())] 
+          : valorExcel.toLowerCase().replace(/\s+/g, '');
 
-        const fotoUrl = isValid(j["Portada"]) 
-            ? `images/covers/${carpetaSistema}/${j["Portada"]}` 
+        // 4. Construcción de la URL
+        const nombrePortada = j["Portada"] ? j["Portada"].trim() : "";
+        const fotoUrl = isValid(nombrePortada) 
+            ? `images/covers/${carpetaSistema}/${nombrePortada}` 
             : `images/covers/default.webp`;
 
         const colorB = getColorForNota(j["Estado General"]);
