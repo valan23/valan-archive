@@ -72,11 +72,12 @@ function renderGames(games) {
             </div>
 
             <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 12px; min-height: 55px; display: flex; flex-direction: column; justify-content: center;">
-                <div class="game-title" style="margin: 0; line-height: 1.25; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #fff; letter-spacing: 0.2px;">
+                <div class="game-title" style="margin: 0; line-height: 1.3; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #F7E2B7; letter-spacing: 0.2px;">
                     ${j["Nombre Juego"]}
                 </div>
+                
                 ${isValid(j["Nombre Japones"]) ? `
-                    <div style="font-family: 'MS Mincho', 'Sawarabi Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 4px; line-height: 1.1; font-weight: 400;">
+                    <div style="font-family: 'MS Mincho', 'Sawarabi Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px; line-height: 1.1; font-weight: 400; opacity: 0.9;">
                         ${j["Nombre Japones"]}
                     </div>
                 ` : ''}
