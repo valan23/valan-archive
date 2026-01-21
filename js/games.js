@@ -93,10 +93,10 @@ function renderGames(games) {
             </div>
 
             <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
-    
+                
                 <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1;">
                     <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; text-transform: uppercase; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 4px;">
-                        <span style="font-size: 1.1em;">💎</span> 
+                        <span style="font-size: 1.1em;">❤️‍🩹</span> 
                         <span>ESTADO:</span>
                         <span style="color: ${getColorForNota(j["Estado General"])};">
                             ${(j["Estado General"] && j["Estado General"] !== "PEND") ? j["Estado General"] + "/10" : "?"}
@@ -109,11 +109,6 @@ function renderGames(games) {
                         </div>
                     ` : ''}
                 </div>
-
-                <div class="price-tag" style="position: static; margin: 0; font-weight: bold;">
-                    ${j["Tasación Actual"] || "S/T"}
-                </div>
-            </div>
 
                 <div class="price-tag" style="position: static; margin: 0; font-weight: bold;">
                     ${j["Tasación Actual"] || "S/T"}
