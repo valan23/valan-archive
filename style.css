@@ -80,28 +80,28 @@ margin-bottom: 25px;
 
 /* --- SELECTOR DE MARCAS (ARRIBA) --- */
 .brand-selector {
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-gap: 15px;
-width: 100%;
-padding-bottom: 10px; /* Espacio antes de la línea */
+    display: flex;
+    flex-wrap: nowrap; /* CAMBIO: De wrap a nowrap para evitar que se amontonen */
+    justify-content: flex-start; /* CAMBIO: Alineación a la izquierda para el scroll */
+    gap: 15px;
+    width: 100%;
+    padding-bottom: 10px;
+    overflow-x: auto; /* NUEVO: Permite deslizar si no caben */
+    scrollbar-width: none; /* Opcional: oculta la barra en Firefox */
 }
 
 /* --- SUBGRUPO DE CONSOLAS (ABAJO) CON LÍNEA DIVISORA --- */
 .platform-subgroup {
 display: none; 
 flex-direction: row; 
-justify-content: center;
+justify-content: center; /* CAMBIO: Alineación para scroll */
 flex-wrap: wrap; 
 gap: 10px;
 width: 100%;
-
 /* ESTA ES LA LÍNEA DIVISORA */
 margin-top: 10px;
 padding-top: 20px;
 border-top: 2px solid rgba(255, 255, 255, 0.1); /* Línea sutil y elegante */
-
 animation: fadeIn 0.4s ease;
 }
 
@@ -119,14 +119,15 @@ cursor: pointer;
 transition: all 0.3s ease;
 
 /* CAMBIO AQUÍ: */
-width: 100px; /* Ancho por defecto para PC */
-max-width: 25%; /* Asegura que en móvil quepan al menos 4 por fila sin solaparse */
+width: 90px; /* Ancho por defecto para PC */
+max-width: none; /* Asegura que en móvil quepan al menos 4 por fila sin solaparse */
 
 height: 85px;
 background: transparent !important;
 border: none;
 padding: 5px;
 flex-shrink: 0; /* Evita que el navegador los deforme */
+flex: 0 0 auto; /* NUEVO: Crucial. Impide que el botón se encoja o se solape */
 }
 
 .brand-logo-img, .btn-console-icon {
