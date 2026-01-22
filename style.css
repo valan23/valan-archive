@@ -319,7 +319,24 @@ from { opacity: 0; transform: translateY(-5px); }
 to { opacity: 1; transform: translateY(0); }
 }
 
+/* AJUSTE PARA MÓVIL: Reducimos el ancho para ganar separación horizontal */
 @media (max-width: 600px) {
-.brand-icon, .filter-btn { width: 75px; height: 75px; }
-.brand-logo-img, .btn-console-icon { height: 28px; }
+    .brand-icon, .filter-btn { 
+        width: 65px;  /* Antes 75px/90px. Al ser más estrecho, hay más hueco entre ellos */
+        height: 70px; 
+        padding: 2px;
+    }
+    
+    .brand-logo-img, .btn-console-icon { 
+        height: 22px; /* Logos un poco más pequeños para evitar solape visual */
+    }
+
+    .brand-icon span, .filter-btn span {
+        font-size: 8px; /* Texto un poco más pequeño para que no desborde el botón */
+    }
+
+    /* Aseguramos que el gap sea generoso para que no se peguen */
+    .brand-selector, .platform-subgroup {
+        gap: 15px !important; 
+    }
 }
