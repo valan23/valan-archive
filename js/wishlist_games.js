@@ -49,11 +49,13 @@ function renderWishlist(games) {
                 ${(j["Prioridad"] || "MEDIA").toUpperCase()}
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 0;">
-                <div class="platform-icon-card" style="font-size: 1.2em; padding-left: 5px;">${getPlatformIcon(j["Plataforma"])}</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 5px;">
+                <div class="platform-icon-card" style="font-size: 1.2em;">
+                    ${getPlatformIcon(j["Plataforma"])}
+                </div>
                 
-                <div style="display: flex; align-items: center; gap: 8px; padding-left: 0;">
-                    <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="year-tag" style="margin: 0; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500;">
                         ${j["Año"] || "????"}
                     </span>
                     <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
