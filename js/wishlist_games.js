@@ -70,23 +70,25 @@ function renderWishlist(games) {
                 ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px;">${j["Nombre Japones"]}</div>` : ''}
             </div>
 
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.6; min-height: 110px; align-content: start; background: transparent !important; border: none !important;">
+            <div class="wishlist-prices-table" style="width: 100%; margin-top: 5px; font-family: 'Segoe UI', sans-serif; font-size: 0.75em; min-height: 110px; display: flex; flex-direction: column; gap: 2px;">
                 ${preciosValidos.map(p => {
                     const esElMasBarato = p.eur === precioMinimoEur && p.eur !== Infinity;
-                    const colorDestaque = "#FFD700"; // Amarillo oro sólido
+                    const colorDestaque = "#FFD700"; // Amarillo oro
 
                     return `
-                    <div style="display: flex; justify-content: space-between; align-items: center; 
-                                padding: 2px 0; border-left: ${esElMasBarato ? `3px solid ${colorDestaque}` : '3px solid transparent'}; 
-                                padding-left: ${esElMasBarato ? '8px' : '8px'};
-                                margin-left: -8px;">
+                    <div style="display: grid; grid-template-columns: 20px 1fr 85px; align-items: center; 
+                                padding: 4px 0; border-left: ${esElMasBarato ? `3px solid ${colorDestaque}` : '3px solid transparent'}; 
+                                padding-left: 8px; transition: none;">
                         
-                        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-                            ${esElMasBarato ? `<span style="color: ${colorDestaque}; font-size: 0.9em; width: 12px;">❗</span>` : '<span style="width: 12px;"></span>'}
-                            <span style="color: ${p.color}; font-weight: bold;">${p.nombre}:</span>
+                        <div style="display: flex; justify-content: center; align-items: center; color: ${colorDestaque};">
+                            ${esElMasBarato ? '❗' : ''}
                         </div>
 
-                        <div style="color: ${esElMasBarato ? colorDestaque : '#eee'}; font-weight: ${esElMasBarato ? '900' : '500'}; text-align: right; flex-grow: 1; padding-left: 10px; font-size: ${esElMasBarato ? '1.1em' : '1em'};">
+                        <div style="color: ${p.color}; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 5px;">
+                            ${p.nombre}:
+                        </div>
+
+                        <div style="color: ${esElMasBarato ? colorDestaque : '#eee'}; font-weight: ${esElMasBarato ? '900' : '500'}; text-align: right; white-space: nowrap; font-size: ${esElMasBarato ? '1.1em' : '1em'};">
                             ${p.valor}
                         </div>
                     </div>`;
