@@ -1,14 +1,13 @@
 /**
- * wishlist_games.js - Versión Corregida: Ratio 180 y Sin Solapamientos
+ * wishlist_games.js - Estructura de Tabla Indestructible
  */
 
 function obtenerValorEnEuros(precioStr) {
     if (!precioStr) return Infinity;
-    // Limpiamos el string: quitamos todo lo que no sea número, coma o punto
     const num = parseFloat(precioStr.replace(/[^0-9.,]/g, '').replace(',', '.'));
     if (isNaN(num)) return Infinity;
     
-    // Ratio actualizado a 1€ ≈ 180¥
+    // Ratio actualizado a 180
     if (precioStr.includes('¥') || precioStr.toLowerCase().includes('surugaya') || precioStr.toLowerCase().includes('mercari')) {
         return num / 180; 
     }
@@ -30,9 +29,9 @@ function renderWishlist(games) {
         const style = getRegionStyle(j["Región"]);
         const colorPrioridad = getColorForPrioridad(j["Prioridad"]);
 
-        // --- LÓGICA DE PRECIOS ---
+        // --- LÓGICA DE PRECIOS ACTUALIZADA ---
         const listaPrecios = [
-            { nombre: 'Nuevo', valor: j["Precio Oficial"], eur: obtenerValorEnEuros(j["Precio Oficial"]), color: '#D4BD66' },
+            { nombre: 'Nuevo', valor: j["Precio Nuevo"], eur: obtenerValorEnEuros(j["Precio Nuevo"]), color: '#D4BD66' },
             { nombre: 'Wallapop', valor: j["Precio Wallapop"], eur: obtenerValorEnEuros(j["Precio Wallapop"]), color: '#2E9E7F' },
             { nombre: 'eBay', valor: j["Precio Ebay"], eur: obtenerValorEnEuros(j["Precio Ebay"]), color: '#e53238' },
             { nombre: 'Surugaya', valor: j["Precio Surugaya"], eur: obtenerValorEnEuros(j["Precio Surugaya"]), color: '#5da9ff' },
@@ -43,7 +42,7 @@ function renderWishlist(games) {
         const precioMinimoEur = Math.min(...preciosValidos.map(p => p.eur));
 
         return `
-        <div class="card" style="position: relative; padding-bottom: 50px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
+        <div class="card" style="position: relative; padding-bottom: 50px; display: flex; flex-direction: column; overflow: hidden; min-height: 440px;">
             
             <div style="position: absolute; top: 0; right: 0; background-color: ${colorPrioridad}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10;">
                 ${(j["Prioridad"] || "MEDIA").toUpperCase()}
@@ -63,28 +62,32 @@ function renderWishlist(games) {
                 <img src="${fotoUrl}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px; filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.6));">
             </div>
 
-            <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 12px; min-height: 55px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 15px; min-height: 55px;">
                 <div class="game-title" style="line-height: 1.3; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #F7E2B7;">
                     ${j["Nombre Juego"]}
                 </div>
                 ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px;">${j["Nombre Japones"]}</div>` : ''}
             </div>
 
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.6; min-height: 100px; align-content: start;">
+            <div style="width: calc(100% + 10px); margin: 0 -5px; font-family: 'Segoe UI', sans-serif; font-size: 0.75em; min-height: 110px;">
                 ${preciosValidos.map(p => {
                     const esElMasBarato = p.eur === precioMinimoEur && p.eur !== Infinity;
+                    // Color de resaltado: Amarillo suave para el fondo, amarillo brillante para el texto
+                    const bgHighlight = esElMasBarato ? 'rgba(212, 189, 102, 0.15)' : 'transparent';
+                    const textPriceColor = esElMasBarato ? '#FFD700' : '#eee';
+
                     return `
-                    <div style="display: flex; justify-content: space-between; align-items: center; 
-                                padding: 2px 8px; margin: 1px -8px; border-radius: 4px;
-                                background: ${esElMasBarato ? 'rgba(0, 255, 136, 0.12)' : 'transparent'};
-                                min-height: 24px;">
+                    <div style="display: grid; grid-template-columns: 20px 1fr 80px; align-items: center; padding: 3px 5px; background: ${bgHighlight}; border-radius: 3px; margin-bottom: 1px;">
                         
-                        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-                            ${esElMasBarato ? '<span style="color: #00ff88; font-size: 0.9em; width: 12px;">❗</span>' : '<span style="width: 12px;"></span>'}
-                            <span style="color: ${p.color}; font-weight: bold;">${p.nombre}:</span>
+                        <div style="color: #FFD700; font-size: 0.8em; display: flex; justify-content: center;">
+                            ${esElMasBarato ? '❗' : ''}
                         </div>
 
-                        <div style="color: ${esElMasBarato ? '#00ff88' : '#eee'}; font-weight: ${esElMasBarato ? '800' : '500'}; text-align: right; flex-grow: 1; padding-left: 10px;">
+                        <div style="color: ${p.color}; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 5px;">
+                            ${p.nombre}:
+                        </div>
+
+                        <div style="color: ${textPriceColor}; font-weight: ${esElMasBarato ? '800' : '500'}; text-align: right; white-space: nowrap;">
                             ${p.valor}
                         </div>
                     </div>`;
