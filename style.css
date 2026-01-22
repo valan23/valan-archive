@@ -68,14 +68,18 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
 /* --- CONTENEDOR DE ICONOS (EL ESTANTE) --- */
 .filter-container {
     display: flex;
-    flex-direction: column; 
-    align-items: center;
-    width: 100%;
-    background: #353540; /* Gris que hace resaltar los iconos negros */
-    padding: 15px;
-    border-radius: 20px;
-    border: 1px solid #3d3d4a; 
-    margin-bottom: 25px;
+    gap: 12px;
+    padding: 10px 5px;
+    justify-content: center; /* Centrado en PC */
+    flex-wrap: nowrap;      /* Evita que se amontonen en varias filas */
+    overflow-x: auto;       /* Activa el scroll horizontal si no caben */
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+    scrollbar-width: none;  /* Oculta scrollbar en Firefox */
+}
+
+/* Ocultar scrollbar en Chrome/Safari */
+.filter-container::-webkit-scrollbar {
+    display: none;
 }
 
 /* --- SELECTOR DE MARCAS (ARRIBA) --- */
@@ -317,7 +321,16 @@ border: 1px solid #333; background: #1a1a20; color: white; display: block; margi
     to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 600px) {
-    .brand-icon, .filter-btn { width: 75px; height: 75px; }
-    .brand-logo-img, .btn-console-icon { height: 28px; }
+/* Ajuste específico para Móviles */
+@media (max-width: 768px) {
+    .filter-container {
+        justify-content: flex-start; /* Alinea a la izquierda para poder deslizar */
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .filter-btn {
+        flex: 0 0 auto; /* Evita que los botones se encojan */
+        min-width: 50px; /* Asegura un área de toque cómoda */
+    }
 }
