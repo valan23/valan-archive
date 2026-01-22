@@ -68,17 +68,30 @@ function renderWishlist(games) {
                 ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px;">${j["Nombre Japones"]}</div>` : ''}
             </div>
 
-            <div class="wishlist-prices-table" style="width: 100%; font-family: 'Segoe UI', sans-serif; font-size: 0.75em; min-height: 110px; display: block !important;">
+            <div class="wishlist-prices-table" style="width: 100%; margin-top: 5px; font-family: 'Segoe UI', sans-serif; font-size: 0.75em; min-height: 110px; display: block !important;">
                 ${preciosValidos.map(p => {
                     const esElMasBarato = p.eur === precioMinimoEur && p.eur !== Infinity;
-                    const bgHighlight = esElMasBarato ? 'rgba(255, 215, 0, 0.15)' : 'transparent';
-                    const textPriceColor = esElMasBarato ? '#FFD700' : '#eee';
+                    
+                    // Colores de destaque
+                    const colorTextoPrecio = esElMasBarato ? '#FFD700' : '#eee'; // Amarillo brillante vs Blanco
+                    const bordeIzquierdo = esElMasBarato ? `3px solid #FFD700` : '3px solid transparent';
 
                     return `
-                    <div style="display: grid !important; grid-template-columns: 20px 1fr 85px !important; align-items: center; padding: 4px 8px; background: ${bgHighlight}; border-radius: 4px; margin-bottom: 2px; pointer-events: none;">
-                        <div style="display: flex; justify-content: center; align-items: center;">${esElMasBarato ? '❗' : ''}</div>
-                        <div style="color: ${p.color}; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.nombre}</div>
-                        <div style="color: ${textPriceColor}; font-weight: ${esElMasBarato ? '800' : '500'}; text-align: right; white-space: nowrap;">${p.valor}</div>
+                    <div style="display: grid !important; grid-template-columns: 20px 1fr 85px !important; align-items: center; 
+                                padding: 4px 0; margin-bottom: 2px; border-left: ${bordeIzquierdo}; padding-left: 8px;
+                                pointer-events: none; transition: none;">
+                        
+                        <div style="display: flex; justify-content: center; align-items: center; font-size: 0.9em;">
+                            ${esElMasBarato ? '❗' : ''}
+                        </div>
+
+                        <div style="color: ${p.color}; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${p.nombre}
+                        </div>
+
+                        <div style="color: ${colorTextoPrecio}; font-weight: ${esElMasBarato ? '900' : '500'}; text-align: right; white-space: nowrap; font-size: ${esElMasBarato ? '1.1em' : '1em'};">
+                            ${p.valor}
+                        </div>
                     </div>`;
                 }).join('')}
             </div>
