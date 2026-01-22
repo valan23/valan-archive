@@ -53,7 +53,6 @@ function renderWishlist(games) {
                 <div class="platform-icon-card" style="font-size: 1.2em; height: 24px; display: flex; align-items: center; margin: 0; padding: 0;">
                     ${getPlatformIcon(j["Plataforma"])}
                 </div>
-                
                 <div style="display: flex; align-items: center; gap: 8px; height: 22px; margin: 0; padding: 0;">
                     <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500; margin: 0; line-height: 1;">
                         ${j["Año"] || "????"}
@@ -77,15 +76,14 @@ function renderWishlist(games) {
                 </div>
                 ${isValid(j["Nombre Japones"]) ? 
                     `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 4px; opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${j["Nombre Japones"]}</div>` 
-                    : `<div style="height: 14px;"></div>` // Espacio fantasma si no hay nombre japonés
+                    : `<div style="height: 14px;"></div>`
                 }
             </div>
 
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.4; flex-grow: 1; align-content: start; letter-spacing: 0.2px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;">
-            ${preciosValidos.map(p => {
+            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.5; height: 140px; align-content: start; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; display: flex !important; flex-direction: column; gap: 2px; overflow: hidden;">
+                ${preciosValidos.map(p => {
                     const esElMasBarato = p.eur === precioMinimoEur && p.eur !== Infinity;
                     const accentColor = "#9500ff";
-
                     return `
                     <div style="display: grid; grid-template-columns: 18px 1fr 75px; align-items: center; width: 100%; border-left: ${esElMasBarato ? `3px solid ${accentColor}` : '3px solid transparent'}; padding-left: 6px; margin-left: -4px;">
                         <div style="color: ${accentColor}; font-size: 0.9em; display: flex; justify-content: center;">
@@ -101,12 +99,11 @@ function renderWishlist(games) {
                 }).join('')}
             </div>
 
-            <div style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+            <div style="position: absolute; bottom: 12px; left: 15px; right: 15px; height: 45px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
                 <div style="font-size: 0.65em; color: #777; font-style: italic; display: flex; align-items: center; gap: 4px;">
                     <i class="fa-regular fa-calendar-check" style="opacity: 0.6;"></i>
                     ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : 'Sin fecha'}
                 </div>
-                
                 ${isValid(j["Link"]) ? `
                     <a href="${j["Link"].trim()}" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 6px; background: rgba(149, 0, 255, 0.2); border: 1px solid #9500ff; padding: 5px 12px; border-radius: 20px; color: #fff; font-size: 0.7em; font-weight: bold; transition: all 0.2s ease;">
                         <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.9em;"></i> MEJOR PRECIO
