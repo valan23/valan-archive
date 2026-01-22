@@ -46,12 +46,12 @@ function renderGames(games) {
                 ${textoBadgeCompletitud}
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 5px;">
-                <div class="platform-icon-card" style="font-size: 1.2em;">
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 0;">
+                <div class="platform-icon-card" style="font-size: 1.2em; padding-left: 5px;">
                     ${getPlatformIcon(j["Plataforma"])}
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px; padding-left: 0;">
                     <span class="year-tag" style="margin: 0; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500;">
                         ${j["Año"] || "????"}
                     </span>
@@ -83,7 +83,7 @@ function renderGames(games) {
                 ` : ''}
             </div>
 
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.4; min-height: 95px; align-content: start; letter-spacing: 0.2px;">
+            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.4; flex-grow: 1; align-content: start; letter-spacing: 0.2px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;">
                 ${isValid(j["Estado Caja"]) ? `<div><span style="color: #aaa;">📦Caja:</span> ${formatEstado(j["Estado Caja"])}</div>` : ''}
                 ${isValid(j["Estado Inserto"]) ? `<div><span style="color: #aaa;">📂Inserto:</span> ${formatEstado(j["Estado Inserto"])}</div>` : ''}
                 ${isValid(j["Estado Manual"]) ? `<div><span style="color: #aaa;">📖Manual:</span> ${formatEstado(j["Estado Manual"])}</div>` : ''}
@@ -93,7 +93,7 @@ function renderGames(games) {
                 ${isValid(j["Estado Extras"]) ? `<div><span style="color: #aaa;">🎁Ext.:</span> ${formatEstado(j["Estado Extras"])}</div>` : ''}
             </div>
 
-            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; text-transform: uppercase; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 4px;">
                         <span style="font-size: 1.1em;">❤️‍🩹</span> 
@@ -113,7 +113,6 @@ function renderGames(games) {
         </div>`;
     }).join('');
 }
-
 /**
  * HELPERS ESPECÍFICOS DE RENDERIZADO
  */
