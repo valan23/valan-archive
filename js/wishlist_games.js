@@ -30,10 +30,9 @@ function renderWishlist(games) {
         const style = getRegionStyle(j["Región"]);
         const colorPrioridad = getColorForPrioridad(j["Prioridad"]);
 
-        // --- LÓGICA DE PRECIOS INCLUYENDO CEX ---
         const listaPrecios = [
             { nombre: 'Nuevo', valor: j["Precio Nuevo"], eur: obtenerValorEnEuros(j["Precio Nuevo"]), color: '#D4BD66' },
-            { nombre: 'CeX', valor: j["Precio Cex"], eur: obtenerValorEnEuros(j["Precio Cex"]), color: '#ff0000' }, // Rojo corporativo CeX
+            { nombre: 'CeX', valor: j["Precio Cex"], eur: obtenerValorEnEuros(j["Precio Cex"]), color: '#ff0000' }, 
             { nombre: 'Wallapop', valor: j["Precio Wallapop"], eur: obtenerValorEnEuros(j["Precio Wallapop"]), color: '#2E9E7F' },
             { nombre: 'eBay', valor: j["Precio Ebay"], eur: obtenerValorEnEuros(j["Precio Ebay"]), color: '#0064d2' },
             { nombre: 'Surugaya', valor: j["Precio Surugaya"], eur: obtenerValorEnEuros(j["Precio Surugaya"]), color: '#5da9ff' },
@@ -44,16 +43,19 @@ function renderWishlist(games) {
         const precioMinimoEur = Math.min(...preciosValidos.map(p => p.eur));
 
         return `
-        <div class="card" style="position: relative; padding-bottom: 65px; display: flex; flex-direction: column; overflow: hidden; min-height: 460px;">
+        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
             
             <div style="position: absolute; top: 0; right: 0; background-color: ${colorPrioridad}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10;">
                 ${(j["Prioridad"] || "MEDIA").toUpperCase()}
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 5px;">
-                <div class="platform-icon-card" style="font-size: 1.2em;">${getPlatformIcon(j["Plataforma"])}</div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee;">${j["Año"] || "????"}</span>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 0;">
+                <div class="platform-icon-card" style="font-size: 1.2em; padding-left: 5px;">${getPlatformIcon(j["Plataforma"])}</div>
+                
+                <div style="display: flex; align-items: center; gap: 8px; padding-left: 0;">
+                    <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500;">
+                        ${j["Año"] || "????"}
+                    </span>
                     <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
                         ${getFlag(j["Región"])} <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
                     </div>
@@ -71,7 +73,7 @@ function renderWishlist(games) {
                 ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px; opacity: 0.9;">${j["Nombre Japones"]}</div>` : ''}
             </div>
 
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.6; min-height: 120px; align-content: start; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; display: flex !important; flex-direction: column; gap: 2px; letter-spacing: 0.2px;">
+            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.6; margin-bottom: 0; flex-grow: 1; align-content: start; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; display: flex !important; flex-direction: column; gap: 2px;">
                 ${preciosValidos.map(p => {
                     const esElMasBarato = p.eur === precioMinimoEur && p.eur !== Infinity;
                     const accentColor = "#9500ff";
