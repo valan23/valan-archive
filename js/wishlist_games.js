@@ -1,17 +1,25 @@
 /**
- * wishlist_games.js - Renderizado con Badge de Prioridad
+ * wishlist_games.js - Renderizado Optimizado con Comparador de Precios
  */
+
+function obtenerValorEnEuros(precioStr) {
+    if (!precioStr) return Infinity;
+    const num = parseFloat(precioStr.replace(/[^0-9.,]/g, '').replace(',', '.'));
+    if (isNaN(num)) return Infinity;
+    
+    // Conversión aproximada (1€ ≈ 160¥) para comparar monedas distintas
+    if (precioStr.includes('¥') || precioStr.toLowerCase().includes('surugaya') || precioStr.toLowerCase().includes('mercari')) {
+        return num / 160; 
+    }
+    return num;
+}
 
 function renderWishlist(games) {
     const container = document.getElementById('wishlist-grid');
     if (!container) return;
 
     if (games.length === 0) {
-        container.innerHTML = `
-            <div style="grid-column: 1/-1; text-align:center; padding: 50px; color: #888;">
-                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 3em; margin-bottom: 15px; opacity: 0.3;"></i>
-                <p>No hay juegos en tu lista de deseos con estos filtros.</p>
-            </div>`;
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 50px; color: #888;">...</div>`;
         return;
     }
 
@@ -20,39 +28,38 @@ function renderWishlist(games) {
     container.innerHTML = games.map(j => {
         const platformMap = { "Famicom": "fc", "Famicom Disk System": "fds", "Super Famicom": "sfc" };
         const valorExcel = j["Plataforma"] ? j["Plataforma"].trim() : "";
-        const carpetaSistema = Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase()) 
-            ? platformMap[Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase())] 
-            : valorExcel.toLowerCase().replace(/\s+/g, '');
-
-        const nombrePortada = j["Portada"] ? j["Portada"].trim() : "";
-        const fotoUrl = isValid(nombrePortada) ? `images/covers/${carpetaSistema}/${nombrePortada}` : `images/covers/default.webp`;
+        const carpetaSistema = platformMap[valorExcel] || valorExcel.toLowerCase().replace(/\s+/g, '');
+        const fotoUrl = isValid(j["Portada"]) ? `images/covers/${carpetaSistema}/${j["Portada"].trim()}` : `images/covers/default.webp`;
         
         const style = getRegionStyle(j["Región"]);
-        const wishColor = "#00f2ff"; 
         const colorPrioridad = getColorForPrioridad(j["Prioridad"]);
-        const textoPrioridad = (j["Prioridad"] || "MEDIA").toUpperCase();
+
+        // --- LÓGICA DE PRECIOS (Dentro del map para cada juego) ---
+        const listaPrecios = [
+            { nombre: 'Nuevo', valor: j["Precio Oficial"], eur: obtenerValorEnEuros(j["Precio Oficial"]), color: '#D4BD66' },
+            { nombre: 'Wallapop', valor: j["Precio Wallapop"], eur: obtenerValorEnEuros(j["Precio Wallapop"]), color: '#2E9E7F' },
+            { nombre: 'eBay', valor: j["Precio Ebay"], eur: obtenerValorEnEuros(j["Precio Ebay"]), color: '#e53238' },
+            { nombre: 'Surugaya', valor: j["Precio Surugaya"], eur: obtenerValorEnEuros(j["Precio Surugaya"]), color: '#5da9ff' },
+            { nombre: 'Mercari', valor: j["Precio Mercari"], eur: obtenerValorEnEuros(j["Precio Mercari"]), color: '#59C0C2' }
+        ];
+
+        // Filtramos solo los que tienen valor y buscamos el mínimo
+        const preciosValidos = listaPrecios.filter(p => isValid(p.valor));
+        const precioMinimoEur = Math.min(...preciosValidos.map(p => p.eur));
 
         return `
         <div class="card" style="position: relative; padding-bottom: 50px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
             
-            <div style="position: absolute; top: 0; right: 0; background-color: ${colorPrioridad}; 
-                        color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; 
-                        border-bottom-left-radius: 8px; box-shadow: -2px 2px 5px rgba(0,0,0,0.3); 
-                        z-index: 10; white-space: nowrap;">
-                ${textoPrioridad}
+            <div style="position: absolute; top: 0; right: 0; background-color: ${colorPrioridad}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10;">
+                ${(j["Prioridad"] || "MEDIA").toUpperCase()}
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 5px;">
-                <div class="platform-icon-card" style="font-size: 1.2em;">
-                    ${getPlatformIcon(j["Plataforma"])}
-                </div>
+                <div class="platform-icon-card" style="font-size: 1.2em;">${getPlatformIcon(j["Plataforma"])}</div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="year-tag" style="margin: 0; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500;">
-                        ${j["Año"] || "????"}
-                    </span>
+                    <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee;">${j["Año"] || "????"}</span>
                     <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
-                        ${getFlag(j["Región"])} 
-                        <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
+                        ${getFlag(j["Región"])} <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
                     </div>
                 </div>
             </div>
@@ -62,50 +69,29 @@ function renderWishlist(games) {
             </div>
 
             <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 12px; min-height: 55px; display: flex; flex-direction: column; justify-content: center;">
-                <div class="game-title" style="margin: 0; line-height: 1.3; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #F7E2B7;">
+                <div class="game-title" style="line-height: 1.3; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #F7E2B7;">
                     ${j["Nombre Juego"]}
                 </div>
-                ${isValid(j["Nombre Japones"]) ? `
-                    <div style="font-family: 'MS Mincho', 'Sawarabi Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px; line-height: 1.1;">
-                        ${j["Nombre Japones"]}
-                    </div>
-                ` : ''}
+                ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px;">${j["Nombre Japones"]}</div>` : ''}
             </div>
 
             <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.6; min-height: 100px; align-content: start;">
-                ${isValid(j["Precio Oficial"]) ? `
-                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                        <span style="color: #ADADAD; font-weight: 500;">Oficial:</span> 
-                        <span style="color: #eee; font-weight: 500;">${j["Precio Oficial"]}</span>
-                    </div>` : ''}
-                
-                ${isValid(j["Precio Wallapop"]) ? `
-                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                        <span style="color: #2E9E7F; font-weight: bold;">Wallapop:</span> 
-                        <span style="color: #eee; font-weight: 500;">${j["Precio Wallapop"]}</span>
-                    </div>` : ''}
-                
-                ${isValid(j["Precio Ebay"]) ? `
-                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                        <span style="color: #e53238; font-weight: bold;">eBay:</span> 
-                        <span style="color: #eee; font-weight: 500;">${j["Precio Ebay"]}</span>
-                    </div>` : ''}
-                
-                ${isValid(j["Precio Surugaya"]) ? `
-                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                        <span style="color: #5da9ff; font-weight: bold;">Surugaya:</span> 
-                        <span style="color: #eee; font-weight: 500;">${j["Precio Surugaya"]}</span>
-                    </div>` : ''}
-                
-                ${isValid(j["Precio Mercari"]) ? `
-                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                        <span style="color: #59C0C2; font-weight: bold;">Mercari:</span> 
-                        <span style="color: #eee; font-weight: 500;">${j["Precio Mercari"]}</span>
-                    </div>` : ''}
+                ${preciosValidos.map(p => {
+                    const esElMasBarato = p.eur === precioMinimoEur && p.eur !== Infinity;
+                    return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 6px; margin: 0 -6px; border-radius: 4px; background: ${esElMasBarato ? 'rgba(0, 255, 136, 0.08)' : 'transparent'};">
+                        <span style="color: ${p.color}; font-weight: bold; display: flex; align-items: center; gap: 4px;">
+                            ${esElMasBarato ? '<i class="fa-solid fa-tag" style="font-size: 0.8em;"></i>' : ''} ${p.nombre}:
+                        </span> 
+                        <span style="color: ${esElMasBarato ? '#00ff88' : '#eee'}; font-weight: ${esElMasBarato ? '700' : '500'};">
+                            ${p.valor}
+                        </span>
+                    </div>`;
+                }).join('')}
             </div>
 
             <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: flex-end; position: absolute; bottom: 12px; left: 15px; right: 15px;">
-                <i class="fa-solid fa-heart" style="color: ${wishColor}; font-size: 0.9em; opacity: 0.6;"></i>
+                <i class="fa-solid fa-heart" style="color: #00f2ff; font-size: 0.9em; opacity: 0.6;"></i>
             </div>
         </div>`;
     }).join('');
