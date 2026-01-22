@@ -18,74 +18,69 @@ function renderWishlist(games) {
     const isValid = (val) => val && val.trim() !== "" && val.toUpperCase() !== "NA";
 
     container.innerHTML = games.map(j => {
-        // 1. Mapeo
-        const platformMap = {
-            "Famicom": "fc",
-            "Famicom Disk System": "fds",
-            "Super Famicom": "sfc",
-        };
-        
+        const platformMap = { "Famicom": "fc", "Famicom Disk System": "fds", "Super Famicom": "sfc" };
         const valorExcel = j["Plataforma"] ? j["Plataforma"].trim() : "";
-        const carpetaSistema = Object.keys(platformMap).find(
-            key => key.toUpperCase() === valorExcel.toUpperCase()
-        ) ? platformMap[Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase())] 
-          : valorExcel.toLowerCase().replace(/\s+/g, '');
+        const carpetaSistema = Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase()) 
+            ? platformMap[Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase())] 
+            : valorExcel.toLowerCase().replace(/\s+/g, '');
 
         const nombrePortada = j["Portada"] ? j["Portada"].trim() : "";
-        const fotoUrl = isValid(nombrePortada) 
-            ? `images/covers/${carpetaSistema}/${nombrePortada}` 
-            : `images/covers/default.webp`;
-
+        const fotoUrl = isValid(nombrePortada) ? `images/covers/${carpetaSistema}/${nombrePortada}` : `images/covers/default.webp`;
+        
         const style = getRegionStyle(j["Región"]);
         const wishColor = "#00f2ff"; 
-        
-        // Lógica de Prioridad
         const colorPrioridad = getColorForPrioridad(j["Prioridad"]);
         const textoPrioridad = (j["Prioridad"] || "MEDIA").toUpperCase();
 
         return `
-        <div class="card" style="position: relative; display: flex; flex-direction: column; min-height: 250px; padding-bottom: 20px; overflow: hidden;">
+        <div class="card" style="position: relative; padding-bottom: 50px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
             
             <div style="position: absolute; top: 0; right: 0; background-color: ${colorPrioridad}; 
                         color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; 
                         border-bottom-left-radius: 8px; box-shadow: -2px 2px 5px rgba(0,0,0,0.3); 
-                        z-index: 10; white-space: nowrap; min-width: 60px; text-align: center;">
+                        z-index: 10; white-space: nowrap;">
                 ${textoPrioridad}
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; padding-right: 80px;">
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 5px;">
+                <div class="platform-icon-card" style="font-size: 1.2em;">
+                    ${getPlatformIcon(j["Plataforma"])}
+                </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <div class="platform-icon-card">${getPlatformIcon(j["Plataforma"])}</div>
-                    <span class="year-tag">${j["Año"] || ""}</span>
-                </div>
-                
-                <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px; width: fit-content;">
-                    ${getFlag(j["Región"])} 
-                    <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
-                </div>
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-grow: 1;">
-                <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; max-width: 85px;"> 
-                    <img src="${fotoUrl}" 
-                         style="max-width: 85px; max-height: 110px; width: auto; height: auto; object-fit: contain; border-radius: 4px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));"
-                         onerror="if (this.src.indexOf('default.webp') === -1) { this.src='images/covers/default.webp'; } else { this.onerror=null; this.src=''; }">
-                </div>
-                
-                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; border-left: 2px solid #555; padding-left: 15px; min-height: 90px;">
-                    <span class="game-title" style="margin: 0; line-height: 1.2; font-family: 'Segoe UI', sans-serif; font-weight: 700; font-size: 1.1em; color: #fff; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                        ${j["Nombre Juego"]}
+                    <span class="year-tag" style="margin: 0; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500;">
+                        ${j["Año"] || "????"}
                     </span>
-                    
-                    ${isValid(j["Nombre Japones"]) ? `
-                        <span style="display: block; font-family: 'MS Mincho', 'Sawarabi Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 4px;">
-                            ${j["Nombre Japones"]}
-                        </span>
-                    ` : ''}
+                    <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
+                        ${getFlag(j["Región"])} 
+                        <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
+                    </div>
                 </div>
             </div>
 
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: flex-end;">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 160px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 15px; padding: 10px;"> 
+                <img src="${fotoUrl}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px; filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.6));">
+            </div>
+
+            <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 12px; min-height: 55px; display: flex; flex-direction: column; justify-content: center;">
+                <div class="game-title" style="margin: 0; line-height: 1.3; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #F7E2B7;">
+                    ${j["Nombre Juego"]}
+                </div>
+                ${isValid(j["Nombre Japones"]) ? `
+                    <div style="font-family: 'MS Mincho', 'Sawarabi Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 8px; line-height: 1.1;">
+                        ${j["Nombre Japones"]}
+                    </div>
+                ` : ''}
+            </div>
+
+            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.8em; line-height: 1.5; min-height: 95px; align-content: start; color: #fff;">
+                ${isValid(j["Precio Oficial"]) ? `<div><span style="color: #aaa;">🏪 Oficial:</span> <span style="font-weight: bold; color: #00ff88;">${j["Precio Oficial"]}</span></div>` : ''}
+                ${isValid(j["Precio Wallapop"]) ? `<div><span style="color: #aaa;">📦 Wallapop:</span> <span style="font-weight: bold; color: #00ff88;">${j["Precio Wallapop"]}</span></div>` : ''}
+                ${isValid(j["Precio Ebay"]) ? `<div><span style="color: #aaa;">🌎 Ebay:</span> <span style="font-weight: bold; color: #00ff88;">${j["Precio Ebay"]}</span></div>` : ''}
+                ${isValid(j["Precio Surugaya"]) ? `<div><span style="color: #aaa;">🇯🇵 Surugaya:</span> <span style="font-weight: bold; color: #00ff88;">${j["Precio Surugaya"]}</span></div>` : ''}
+                ${isValid(j["Precio Mercari"]) ? `<div><span style="color: #aaa;">📦 Mercari:</span> <span style="font-weight: bold; color: #00ff88;">${j["Precio Mercari"]}</span></div>` : ''}
+            </div>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: flex-end; position: absolute; bottom: 12px; left: 15px; right: 15px;">
                 <i class="fa-solid fa-heart" style="color: ${wishColor}; font-size: 0.9em; opacity: 0.6;"></i>
             </div>
         </div>`;
