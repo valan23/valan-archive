@@ -76,31 +76,31 @@ function renderWishlist(games) {
                 ${isValid(j["Precio Oficial"]) ? `
                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
                         <span style="color: #ADADAD; font-weight: 500;">Oficial:</span> 
-                        <span style="font-weight: bold; color: #00ff88;">${j["Precio Oficial"]}</span>
+                        <span style="color: #eee; font-weight: 500;">${j["Precio Oficial"]}</span>
                     </div>` : ''}
-    
+                
                 ${isValid(j["Precio Wallapop"]) ? `
                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                        <span style="color: #61cec2; font-weight: bold;">Wallapop:</span> 
-                        <span style="font-weight: bold; color: #00ff88;">${j["Precio Wallapop"]}</span>
+                        <span style="color: #2E9E7F; font-weight: bold;">Wallapop:</span> 
+                        <span style="color: #eee; font-weight: 500;">${j["Precio Wallapop"]}</span>
                     </div>` : ''}
-    
+                
                 ${isValid(j["Precio Ebay"]) ? `
                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
                         <span style="color: #e53238; font-weight: bold;">eBay:</span> 
-                        <span style="font-weight: bold; color: #00ff88;">${j["Precio Ebay"]}</span>
+                        <span style="color: #eee; font-weight: 500;">${j["Precio Ebay"]}</span>
                     </div>` : ''}
-    
+                
                 ${isValid(j["Precio Surugaya"]) ? `
                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
                         <span style="color: #5da9ff; font-weight: bold;">Surugaya:</span> 
-                        <span style="font-weight: bold; color: #00ff88;">${j["Precio Surugaya"]}</span>
+                        <span style="color: #eee; font-weight: 500;">${j["Precio Surugaya"]}</span>
                     </div>` : ''}
-    
+                
                 ${isValid(j["Precio Mercari"]) ? `
                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                        <span style="color: #ff4a4a; font-weight: bold;">Mercari:</span> 
-            <span style="font-weight: bold; color: #00ff88;">${j["Precio Mercari"]}</span>
+                        <span style="color: #59C0C2; font-weight: bold;">Mercari:</span> 
+                        <span style="color: #eee; font-weight: 500;">${j["Precio Mercari"]}</span>
                     </div>` : ''}
             </div>
 
