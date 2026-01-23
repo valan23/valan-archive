@@ -85,27 +85,48 @@ header { width: 100%; text-align: center; }
 
 /* --- MEDIA QUERY: CORRECCIÓN MÓVIL --- */
 @media (max-width: 600px) {
-    /* Forzamos a que no se solapen y se oculten si no hay clase show */
-    .platform-subgroup:not(.show) { display: none !important; }
-
-    .brand-icon, .filter-btn {
-        width: 70px !important; /* Reducimos ancho para que no se toquen */
-        height: 70px !important;
-        flex: 0 0 auto !important; /* Impide que se aplasten */
+    /* 1. Aseguramos que los contenedores permitan varias filas sin excepciones */
+    .brand-selector, 
+    .platform-subgroup.show {
+        display: flex !important;
+        flex-wrap: wrap !important; 
+        justify-content: center !important;
+        gap: 15px 10px !important; /* 15px de separación vertical entre filas */
+        width: 100% !important;
+        overflow: visible !important;
     }
 
+    .platform-subgroup:not(.show) { 
+        display: none !important; 
+    }
+
+    /* 2. El Botón: Forzamos un ancho que deje aire */
+    .brand-icon, .filter-btn {
+        width: 65px !important;     /* Ancho fijo pequeño para que no se toquen */
+        height: 70px !important;
+        flex: 0 0 65px !important;   /* Prohibimos que crezcan o se encojan */
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important; /* Si algo sobra, se corta antes de pisar al vecino */
+    }
+
+    /* 3. El Logo: Reducido para que sobre espacio negro alrededor */
     .brand-logo-img, .btn-console-icon {
-        height: 22px !important; /* Logos más pequeños */
+        height: 20px !important;
+        width: auto !important;
+        max-width: 50px !important;
         margin-bottom: 4px !important;
     }
 
+    /* 4. El Texto: EL CULPABLE. Lo obligamos a ser diminuto y no empujar */
     .brand-icon span, .filter-btn span {
-        font-size: 8px !important;
-        white-space: nowrap !important;
-    }
-
-    .brand-selector, .platform-subgroup.show {
-        gap: 12px 8px !important; /* Espacio horizontal y vertical entre iconos */
+        font-size: 7px !important;
+        line-height: 1 !important;
+        display: block !important;
+        width: 100% !important;
+        white-space: normal !important; /* Si el nombre es largo, que baje de línea en vez de estirar el botón */
+        text-align: center !important;
+        overflow-wrap: break-word !important;
     }
 }
 
