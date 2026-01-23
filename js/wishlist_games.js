@@ -44,23 +44,23 @@ function renderWishlist(games) {
 
         return `
         <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 480px; background: #1e1e24; border: 1px solid #3d3d4a;">
-    
+            
+            <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10; background: transparent; width: auto; height: 28px; display: flex; align-items: center;">
+                ${getPlatformIcon(j["Plataforma"])}
+            </div>
+
             <div style="position: absolute; top: 0; right: 0; background-color: ${colorPrioridad}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10;">
                 ${(j["Prioridad"] || "MEDIA").toUpperCase()}
             </div>
 
-            <div style="display: flex; align-items: center; width: 100%; margin-bottom: 10px; padding: 10px 12px 0 12px;">
-                <div class="platform-icon-card">
-                    ${getPlatformIcon(j["Plataforma"])}
-                </div>
-            </div>
+            <div style="margin-top: 45px;"></div>
 
             <div style="display: flex; align-items: center; width: 100%; gap: 10px; margin-bottom: 15px; padding: 0 12px;">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                    <span class="year-tag" style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 600;">
+                    <span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 600;">
                         ${j["Año"] || "????"}
                     </span>
-                    <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
+                    <div style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
                         ${getFlag(j["Región"])} 
                         <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
                     </div>
