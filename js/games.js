@@ -104,7 +104,8 @@ function renderGames(games) {
 
                 <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
                     <span style="font-size: 0.55em; font-weight: 800; color: #666; letter-spacing: 0.5px; text-transform: uppercase;">Tasación</span>
-                    <div class="price-tag" style="margin: 0; min-width: 60px; text-align: center;">
+                    <div class="price-tag">
+                        <i class="fa-solid fa-tag" style="font-size: 0.8em; margin-right: 4px; opacity: 0.7;"></i>
                         ${j["Tasación Actual"] || "S/T"}
                     </div>
                 </div>
