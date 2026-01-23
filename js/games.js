@@ -83,7 +83,7 @@ function renderGames(games) {
                     { label: '📖Manual', val: j["Estado Manual"] },
                     { label: '💾Juego', val: j["Estado Juego"] },
                     { label: '🖼️Portada', val: j["Estado Portada"] },
-                    { label: '🔖Obi', val: j["Estado Spinecard"] };
+                    { label: '🔖Obi', val: j["Estado Spinecard"] },
                     { label: '🎁Extras', val: j["Estado Extras"] }
                 ].filter(item => isValid(item.val)).map(item => `
                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05);">
