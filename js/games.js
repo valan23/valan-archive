@@ -1,6 +1,6 @@
 /**
-* games.js - Especialista en renderizar la colección actual
-*/
+ * games.js - Especialista en renderizar la colección actual
+ */
 
 function renderGames(games) {
     const container = document.getElementById('game-grid');
@@ -29,7 +29,7 @@ function renderGames(games) {
 
         return `
         <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
-    
+            
             <div style="position: absolute; top: 0; right: 0; background-color: ${colorCompletitud}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10; white-space: nowrap;">
                 ${textoBadgeCompletitud}
             </div>
@@ -106,45 +106,46 @@ function renderGames(games) {
                 </div>
             </div>
         </div>`;
+    }).join(''); // <--- AQUÍ ESTABA EL ERROR (Faltaba cerrar el map)
+}
 
 /**
 * HELPERS ESPECÍFICOS DE RENDERIZADO
 */
 
 function getColorForNota(valor) {
-const n = parseFloat(valor);
-if (isNaN(n)) return '#333';
-let r = n < 5 ? 255 : Math.round(255 - ((n - 5) * 51));
-let g = n < 5 ? Math.round(68 + (n * 37.4)) : 255;
-return `rgb(${r}, ${g}, 68)`;
+    const n = parseFloat(valor);
+    if (isNaN(n)) return '#333';
+    let r = n < 5 ? 255 : Math.round(255 - ((n - 5) * 51));
+    let g = n < 5 ? Math.round(68 + (n * 37.4)) : 255;
+    return `rgb(${r}, ${g}, 68)`;
 }
 
 function formatEstado(valor) {
-if (!valor || valor.toUpperCase() === "NA") return null;
-const v = valor.toUpperCase().trim();
-if (v === "FALTA") return `<span style="color: #ff4d4d; font-weight: bold;">FALTA</span>`;
-if (v === "?" || v === "PEND") return `<span style="color: #ffff00; font-weight: bold;">?</span>`;
-// Si es un número, usamos la escala de colores dinámica
-const num = parseFloat(v);
-const colorDinamico = !isNaN(num) ? getColorForNota(num) : "#00ff88"; // Fallback a verde si no es número
-return `<span style="color: ${colorDinamico}; font-weight: bold;">${v}/10</span>`;
+    if (!valor || valor.toUpperCase() === "NA") return null;
+    const v = valor.toUpperCase().trim();
+    if (v === "FALTA") return `<span style="color: #ff4d4d; font-weight: bold;">FALTA</span>`;
+    if (v === "?" || v === "PEND") return `<span style="color: #ffff00; font-weight: bold;">?</span>`;
+    const num = parseFloat(v);
+    const colorDinamico = !isNaN(num) ? getColorForNota(num) : "#00ff88"; 
+    return `<span style="color: ${colorDinamico}; font-weight: bold;">${v}/10</span>`;
 }
 
 function getRegionStyle(region) {
-if (!region) return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
-const r = region.toUpperCase();
-for (let key in REGION_COLORS) { if (r.includes(key)) return REGION_COLORS[key]; }
-return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
+    if (!region) return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
+    const r = region.toUpperCase();
+    for (let key in REGION_COLORS) { if (r.includes(key)) return REGION_COLORS[key]; }
+    return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
 }
 
 function getCompletitudStyle(valor) {
-if (!valor) return "#ccc";
-const v = valor.toUpperCase();
-if (v.includes("NUEVO")) return COMPLETITUD_COLORS["NUEVO"].color;
-if (v.includes("CASI COMPLETO")) return COMPLETITUD_COLORS["CASI COMPLETO"].color;
-if (v.includes("COMPLETO")) return COMPLETITUD_COLORS["COMPLETO"].color;
-if (v.includes("INCOMPLETO")) return COMPLETITUD_COLORS["INCOMPLETO"].color;
-if (v.includes("SUELTO") || v.includes("CARTUCHO")) return COMPLETITUD_COLORS["SUELTO"].color;
-if (v.includes("REPRO")) return COMPLETITUD_COLORS["REPRO"].color;
-return "#ccc";
+    if (!valor) return "#ccc";
+    const v = valor.toUpperCase();
+    if (v.includes("NUEVO")) return COMPLETITUD_COLORS["NUEVO"].color;
+    if (v.includes("CASI COMPLETO")) return COMPLETITUD_COLORS["CASI COMPLETO"].color;
+    if (v.includes("COMPLETO")) return COMPLETITUD_COLORS["COMPLETO"].color;
+    if (v.includes("INCOMPLETO")) return COMPLETITUD_COLORS["INCOMPLETO"].color;
+    if (v.includes("SUELTO") || v.includes("CARTUCHO")) return COMPLETITUD_COLORS["SUELTO"].color;
+    if (v.includes("REPRO")) return COMPLETITUD_COLORS["REPRO"].color;
+    return "#ccc";
 }
