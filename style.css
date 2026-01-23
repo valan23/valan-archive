@@ -167,22 +167,23 @@ header { width: 100%; text-align: center; }
     display: flex; justify-content: space-between; align-items: center;
 }
 
-/* Contenedor fijo para el icono dentro de la tarjeta */
-.platform-icon-wrapper {
-    width: 80px;  /* Ancho máximo para logos largos */
-    height: 25px; /* Altura fija para que todos alineen igual */
+/* Este contenedor obliga al icono a tener un tamaño físico real */
+.platform-icon-card {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Alineado a la izquierda */
+    justify-content: flex-start;
+    width: 90px;      /* Ancho fijo para que el logo tenga espacio */
+    height: 30px;     /* Altura fija para todos */
+    overflow: hidden;
 }
 
-/* Fuerza al SVG o Imagen a respetar el contenedor sin deformarse */
-.platform-icon-wrapper img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Mantiene la proporción original */
-    width: auto;
-    height: auto;
+/* Forzamos a la imagen a ser protagonista */
+.platform-icon-card img {
+    height: 100% !important; /* Obligamos a que use los 30px de alto */
+    width: auto !important;   /* Que el ancho se ajuste solo para no deformar */
+    max-width: 90px;          /* Que no se pase del contenedor */
+    object-fit: contain;
+    filter: brightness(1.1);  /* Opcional: para que resalten más */
 }
 
 .game-title {
