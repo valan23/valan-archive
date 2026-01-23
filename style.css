@@ -167,6 +167,24 @@ header { width: 100%; text-align: center; }
     display: flex; justify-content: space-between; align-items: center;
 }
 
+/* Contenedor fijo para el icono dentro de la tarjeta */
+.platform-icon-wrapper {
+    width: 80px;  /* Ancho máximo para logos largos */
+    height: 25px; /* Altura fija para que todos alineen igual */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alineado a la izquierda */
+}
+
+/* Fuerza al SVG o Imagen a respetar el contenedor sin deformarse */
+.platform-icon-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Mantiene la proporción original */
+    width: auto;
+    height: auto;
+}
+
 .game-title {
     font-family: 'Segoe UI', sans-serif; font-weight: 700;
     text-transform: uppercase; color: #fff;
