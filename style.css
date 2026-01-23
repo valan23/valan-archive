@@ -50,7 +50,11 @@ header { width: 100%; text-align: center; }
 
 /* --- SELECTOR DE MARCAS Y CONSOLAS (GENERAL PC) --- */
 .brand-selector, .platform-subgroup {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 25px 30px; /* Aumentamos el espacio: 25px arriba/abajo, 30px a los lados */
+    width: 100%;
 }
 
 .platform-subgroup {
@@ -62,10 +66,19 @@ header { width: 100%; text-align: center; }
 
 /* --- ESTILO DE BOTONES (GENERAL) --- */
 .brand-icon, .filter-btn {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    cursor: pointer; transition: all 0.3s ease;
-    width: 100px; height: 85px; /* Tamaño PC */
-    background: transparent !important; border: none; padding: 5px;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    
+    width: 80px;  /* Reducimos un poco de 100px a 80px para ganar espacio exterior */
+    height: 85px; 
+    background: transparent !important; 
+    border: none; 
+    padding: 5px;
+    flex: 0 0 auto; /* Evita que se deformen */
 }
 
 .brand-logo-img, .btn-console-icon {
@@ -85,48 +98,31 @@ header { width: 100%; text-align: center; }
 
 /* --- MEDIA QUERY: CORRECCIÓN MÓVIL --- */
 @media (max-width: 600px) {
-    /* 1. Aseguramos que los contenedores permitan varias filas sin excepciones */
-    .brand-selector, 
-    .platform-subgroup.show {
-        display: flex !important;
-        flex-wrap: wrap !important; 
-        justify-content: center !important;
-        gap: 15px 10px !important; /* 15px de separación vertical entre filas */
-        width: 100% !important;
-        overflow: visible !important;
+    .platform-subgroup:not(.show) { display: none !important; }
+
+    /* Forzamos una rejilla con mucho espacio */
+    .brand-selector, .platform-subgroup.show {
+        gap: 30px 20px !important; /* 30px de separación entre filas para que no se pisen verticalmente */
+        padding: 10px !important;
     }
 
-    .platform-subgroup:not(.show) { 
-        display: none !important; 
-    }
-
-    /* 2. El Botón: Forzamos un ancho que deje aire */
     .brand-icon, .filter-btn {
-        width: 65px !important;     /* Ancho fijo pequeño para que no se toquen */
+        width: 60px !important;    /* Botón más estrecho */
         height: 70px !important;
-        flex: 0 0 65px !important;   /* Prohibimos que crezcan o se encojan */
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: hidden !important; /* Si algo sobra, se corta antes de pisar al vecino */
+        flex: 0 0 60px !important;  /* Bloqueamos el tamaño para que no crezca */
+        margin: 0 5px !important;   /* Margen extra de seguridad */
     }
 
-    /* 3. El Logo: Reducido para que sobre espacio negro alrededor */
     .brand-logo-img, .btn-console-icon {
-        height: 20px !important;
-        width: auto !important;
-        max-width: 50px !important;
-        margin-bottom: 4px !important;
+        height: 18px !important;   /* Logo más pequeño para que sobre "aire" alrededor */
+        margin-bottom: 6px !important;
     }
 
-    /* 4. El Texto: EL CULPABLE. Lo obligamos a ser diminuto y no empujar */
     .brand-icon span, .filter-btn span {
         font-size: 7px !important;
-        line-height: 1 !important;
-        display: block !important;
-        width: 100% !important;
-        white-space: normal !important; /* Si el nombre es largo, que baje de línea en vez de estirar el botón */
+        line-height: 1.1 !important;
+        white-space: normal !important; /* Si el nombre es largo, salta de línea */
         text-align: center !important;
-        overflow-wrap: break-word !important;
     }
 }
 
