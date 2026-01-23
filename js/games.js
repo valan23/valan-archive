@@ -39,7 +39,7 @@ function renderGames(games) {
                     ${getPlatformIcon(j["Plataforma"])}
                 </div>
         
-                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; width: 100%; gap: 10px;">
                     <div style="display: flex; align-items: center; gap: 8px; height: 22px;">
                         <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500; line-height: 1;">
                             ${j["Año"] || "????"}
@@ -52,13 +52,15 @@ function renderGames(games) {
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 2px; min-width: 70px;">
+                    <div style="flex-grow: 1;"></div>
+
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 65px;">
                         <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.65em; text-transform: uppercase; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 3px;">
                             <span style="color: ${getColorForNota(j["Estado General"])};">
                                 ${(j["Estado General"] && j["Estado General"] !== "PEND") ? j["Estado General"] + "/10" : "?"}
                             </span>
                         </div>
-                        <div style="width: 100%; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                        <div style="width: 60px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
                             <div style="width: ${j["Estado General"] * 10}%; height: 100%; background-color: ${getColorForNota(j["Estado General"])};"></div>
                         </div>
                     </div>
