@@ -96,11 +96,18 @@ function renderGames(games) {
                 `).join('')}
             </div>
 
-            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                <div style="font-size: 0.65em; color: #666; font-style: italic;">
+            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; align-items: flex-end;">
+    
+                <div style="font-size: 0.65em; color: #666; font-style: italic; padding-bottom: 5px;">
                     <i class="fa-regular fa-calendar-check"></i> ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : 'Sin fecha'}
                 </div>
-                <div class="price-tag">${j["Tasación Actual"] || "S/T"}</div>
+
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                    <span style="font-size: 0.55em; font-weight: 800; color: #666; letter-spacing: 0.5px; text-transform: uppercase;">Tasación</span>
+                    <div class="price-tag" style="margin: 0; min-width: 60px; text-align: center;">
+                        ${j["Tasación Actual"] || "S/T"}
+                    </div>
+                </div>
             </div>
         </div>`;
     }).join(''); // <--- AQUÍ ESTABA EL ERROR (Faltaba cerrar el map)
