@@ -29,7 +29,7 @@ function renderGames(games) {
 
         return `
         <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
-            
+    
             <div style="position: absolute; top: 0; right: 0; background-color: ${colorCompletitud}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10; white-space: nowrap;">
                 ${textoBadgeCompletitud}
             </div>
@@ -38,15 +38,29 @@ function renderGames(games) {
                 <div class="platform-icon-card" style="font-size: 1.2em; height: 24px; display: flex; align-items: center; margin: 0; padding: 0;">
                     ${getPlatformIcon(j["Plataforma"])}
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px; height: 22px; margin: 0; padding: 0;">
-                    <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500; margin: 0; line-height: 1;">
-                        ${j["Año"] || "????"}
-                    </span>
-                    <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px; margin: 0; line-height: 1;">
-                        ${getFlag(j["Región"])} 
-                        <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">
-                            ${j["Región"] || "N/A"}
+        
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 8px; height: 22px;">
+                        <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500; line-height: 1;">
+                            ${j["Año"] || "????"}
                         </span>
+                        <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px; line-height: 1;">
+                            ${getFlag(j["Región"])} 
+                            <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">
+                                ${j["Región"] || "N/A"}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 2px; min-width: 70px;">
+                        <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.65em; text-transform: uppercase; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 3px;">
+                            <span style="color: ${getColorForNota(j["Estado General"])};">
+                                ${(j["Estado General"] && j["Estado General"] !== "PEND") ? j["Estado General"] + "/10" : "?"}
+                            </span>
+                        </div>
+                        <div style="width: 100%; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                            <div style="width: ${j["Estado General"] * 10}%; height: 100%; background-color: ${getColorForNota(j["Estado General"])};"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,7 +78,7 @@ function renderGames(games) {
                     : `<div style="height: 14px;"></div>`
                 }
             </div>
-            
+    
             <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.72em; line-height: 1.5; height: 80px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px 10px; display: grid !important; grid-template-columns: 1fr 1fr; gap: 4px 10px; align-content: start; overflow: hidden;">
                 ${[
                     { label: '📦Caja', val: j["Estado Caja"] },
@@ -82,26 +96,16 @@ function renderGames(games) {
                 `).join('')}
             </div>
 
-            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; height: 45px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; text-transform: uppercase; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 4px;">
-                        <span style="font-size: 1.1em;">❤️‍🩹</span> 
-                        <span>ESTADO:</span>
-                        <span style="color: ${getColorForNota(j["Estado General"])};">
-                            ${(j["Estado General"] && j["Estado General"] !== "PEND") ? j["Estado General"] + "/10" : "?"}
-                        </span>
-                    </div>
-                    <div style="width: 60px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
-                        <div style="width: ${j["Estado General"] * 10}%; height: 100%; background-color: ${getColorForNota(j["Estado General"])};"></div>
-                    </div>
+            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; height: 45px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                <div style="font-size: 0.65em; color: #777; font-style: italic; display: flex; align-items: center; gap: 4px;">
+                    <i class="fa-regular fa-calendar-check" style="opacity: 0.6;"></i>
+                    ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : 'Sin fecha'}
                 </div>
                 <div class="price-tag" style="font-weight: bold; color: #fff; margin: 0;">
                     ${j["Tasación Actual"] || "S/T"}
                 </div>
             </div>
         </div>`;
-    }).join('');
-}
 
 /**
 * HELPERS ESPECÍFICOS DE RENDERIZADO
