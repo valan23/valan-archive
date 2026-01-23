@@ -321,37 +321,49 @@ to { opacity: 1; transform: translateY(0); }
 
 /* --- AJUSTE DEFINITIVO PARA MÓVIL (RESET DE FLUJO) --- */
 @media (max-width: 600px) {
-    /* 1. Forzamos al contenedor a que deje que los iconos respiren y bajen de fila */
-    .brand-selector, 
-    .platform-subgroup {
+    /* 1. Solo las marcas (que siempre están visibles) */
+    .brand-selector {
         display: flex !important;
-        flex-wrap: wrap !important; /* Permite que bajen si no caben */
+        flex-wrap: wrap !important;
         justify-content: center !important;
-        gap: 20px 15px !important; /* Mucho espacio: 20px vertical, 15px horizontal */
+        gap: 15px 12px !important;
         width: 100% !important;
-        overflow: visible !important; /* Evita que se corten o solapen internamente */
     }
 
-    /* 2. El botón: quitamos anchos fijos problemáticos y dejamos que el contenido mande */
+    /* 2. Los sistemas SOLAMENTE cuando tengan la clase .show */
+    .platform-subgroup.show {
+        display: flex !important; /* El JS añade .show, y aquí le damos el estilo flex */
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 12px 10px !important;
+        width: 100% !important;
+        margin-top: 10px !important;
+        padding-top: 15px !important;
+    }
+
+    /* 3. Aseguramos que si NO tiene la clase .show, siga oculto */
+    .platform-subgroup:not(.show) {
+        display: none !important;
+    }
+
+    /* 4. Los botones con el tamaño que ya nos funcionaba */
     .brand-icon, .filter-btn {
-        width: auto !important;      /* Que el ancho lo dicte el logo pequeño */
-        min-width: 60px !important;  /* Pero con un mínimo para que el texto no rompa */
-        max-width: 80px !important;
+        width: auto !important;
+        min-width: 60px !important;
+        max-width: 85px !important;
         height: auto !important;
-        flex: 0 1 auto !important;   /* Permitimos que se ajusten pero no que se pisen */
+        flex: 0 1 auto !important;
         padding: 5px !important;
-        margin: 0 !important;
     }
 
-    /* 3. Reducimos el logo para ganar el aire que necesitas */
     .brand-logo-img, .btn-console-icon {
-        height: 20px !important;    /* Muy bajitos para dejar aire arriba y abajo */
+        height: 20px !important;
         width: auto !important;
-        margin-bottom: 5px !important;
+        margin-bottom: 4px !important;
     }
 
     .brand-icon span, .filter-btn span {
         font-size: 8px !important;
-        white-space: nowrap !important; /* Evita que el texto se parta en dos líneas y pise al de abajo */
+        white-space: nowrap !important;
     }
 }
