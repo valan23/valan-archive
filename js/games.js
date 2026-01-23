@@ -28,17 +28,19 @@ function renderGames(games) {
         const style = getRegionStyle(j["Región"]);
 
         return `
-        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 440px; background: #1e1e24; border: 1px solid #3d3d4a;">
-    
-            <div style="position: absolute; top: 0; right: 0; background-color: ${colorCompletitud}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10;">
-                ${textoBadgeCompletitud}
+        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 460px; background: #1e1e24; border: 1px solid #3d3d4a;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                <div class="platform-icon-card" style="font-size: 1.3em; padding: 10px 0 0 12px; opacity: 0.9;">
+                    ${getPlatformIcon(j["Plataforma"])}
+                </div>
+                <div style="background-color: ${colorCompletitud}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px;">
+                    ${textoBadgeCompletitud}
+                </div>
             </div>
 
-            <div style="display: flex; align-items: center; width: 100%; gap: 10px; margin-bottom: 12px; padding: 2px 0;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div class="platform-icon-card" style="font-size: 1.1em; opacity: 0.9;">
-                        ${getPlatformIcon(j["Plataforma"])}
-                    </div>
+            <div style="display: flex; align-items: center; width: 100%; gap: 10px; margin-bottom: 15px; padding: 0 12px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
                     <span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 600;">
                         ${j["Año"] || "????"}
                     </span>
@@ -63,7 +65,7 @@ function renderGames(games) {
                 </div>
             </div>
 
-            <div style="margin-bottom: 12px; padding: 5px 0; border-left: 3px solid ${colorCompletitud}; padding-left: 10px;">
+            <div style="margin-bottom: 12px; padding: 5px 0 5px 12px; border-left: 3px solid ${colorCompletitud};">
                 <div class="game-title" style="font-size: 1.15em; color: #EFC36C; font-weight: 700; line-height: 1.2; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                     ${j["Nombre Juego"]}
                 </div>
@@ -72,11 +74,11 @@ function renderGames(games) {
                     : ''}
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 170px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
+            <div style="display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 170px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
                 <img src="${fotoUrl}" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5));">
             </div>
 
-            <div class="details-grid" style="background: rgba(0,0,0,0.25); border-radius: 6px; padding: 10px; font-size: 0.72em; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <div class="details-grid" style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 10px; font-size: 0.72em; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
                 ${[
                     { label: '📦Caja', val: j["Estado Caja"] },
                     { label: '📂Inserto', val: j["Estado Inserto"] },
