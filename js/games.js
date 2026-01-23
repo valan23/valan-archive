@@ -28,85 +28,76 @@ function renderGames(games) {
         const style = getRegionStyle(j["Región"]);
 
         return `
-        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 420px;">
-            
-            <div style="position: absolute; top: 0; right: 0; background-color: ${colorCompletitud}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10; white-space: nowrap;">
+        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 440px; background: #1e1e24; border: 1px solid #3d3d4a;">
+    
+            <div style="position: absolute; top: 0; right: 0; background-color: ${colorCompletitud}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 12px; border-bottom-left-radius: 8px; z-index: 10;">
                 ${textoBadgeCompletitud}
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-left: 0;">
-                <div class="platform-icon-card" style="font-size: 1.2em; height: 24px; display: flex; align-items: center; margin: 0; padding: 0;">
-                    ${getPlatformIcon(j["Plataforma"])}
+            <div style="display: flex; align-items: center; width: 100%; gap: 10px; margin-bottom: 12px; padding: 2px 0;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="platform-icon-card" style="font-size: 1.1em; opacity: 0.9;">
+                        ${getPlatformIcon(j["Plataforma"])}
+                    </div>
+                    <span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 600;">
+                        ${j["Año"] || "????"}
+                    </span>
+                    <div style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px;">
+                        ${getFlag(j["Región"])} 
+                        <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">${j["Región"] || "N/A"}</span>
+                    </div>
                 </div>
-        
-                <div style="display: flex; align-items: center; width: 100%; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 8px; height: 22px;">
-                        <span class="year-tag" style="background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.7em; color: #eee; font-weight: 500; line-height: 1;">
-                            ${j["Año"] || "????"}
+
+                <div style="flex-grow: 1;"></div>
+
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 80px;">
+                    <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.62em; text-transform: uppercase; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 4px;">
+                        <span style="opacity: 0.8;">❤️‍🩹 ESTADO</span>
+                        <span style="color: ${getColorForNota(j["Estado General"])}; font-size: 1.1em;">
+                            ${(j["Estado General"] && j["Estado General"] !== "PEND") ? j["Estado General"] + "/10" : "?"}
                         </span>
-                        <div class="region-badge-container" style="display: inline-flex; align-items: center; gap: 4px; background: ${style.bg}; border: 1px solid ${style.border}; padding: 2px 6px; border-radius: 4px; line-height: 1;">
-                            ${getFlag(j["Región"])} 
-                            <span style="font-size: 0.7em; font-weight: bold; color: ${style.text};">
-                                ${j["Región"] || "N/A"}
-                            </span>
-                        </div>
                     </div>
-
-                    <div style="flex-grow: 1;"></div>
-
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 80px;">
-                        <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.62em; text-transform: uppercase; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 4px;">
-                            <span style="opacity: 0.9;">❤️‍🩹 ESTADO</span>
-                            <span style="color: ${getColorForNota(j["Estado General"])}; font-size: 1.1em;">
-                                ${(j["Estado General"] && j["Estado General"] !== "PEND") ? j["Estado General"] + "/10" : "?"}
-                            </span>
-                        </div>
-                        <div style="width: 75px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
-                            <div style="width: ${j["Estado General"] * 10}%; height: 100%; background-color: ${getColorForNota(j["Estado General"])};"></div>
-                        </div>
+                    <div style="width: 75px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                        <div style="width: ${j["Estado General"] * 10}%; height: 100%; background-color: ${getColorForNota(j["Estado General"])};"></div>
                     </div>
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 160px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 15px; padding: 10px;"> 
-                <img src="${fotoUrl}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px; filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.6));">
-            </div>
-
-            <div style="border-left: 3px solid #555; padding-left: 12px; margin-bottom: 12px; height: 65px; display: flex; flex-direction: column; justify-content: center; overflow: hidden;">
-                <div class="game-title" style="margin: 0; line-height: 1.2; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 1.1em; color: #EFC36C; letter-spacing: 0.2px;">
+            <div style="margin-bottom: 12px; padding: 5px 0; border-left: 3px solid ${colorCompletitud}; padding-left: 10px;">
+                <div class="game-title" style="font-size: 1.15em; color: #EFC36C; font-weight: 700; line-height: 1.2; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                     ${j["Nombre Juego"]}
                 </div>
                 ${isValid(j["Nombre Japones"]) ? 
-                    `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #aaa; margin-top: 4px; opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${j["Nombre Japones"]}</div>` 
-                    : `<div style="height: 14px;"></div>`
-                }
+                    `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #888; margin-top: 2px;">${j["Nombre Japones"]}</div>` 
+                    : ''}
             </div>
-    
-            <div class="details-grid" style="font-family: 'Segoe UI', sans-serif; font-size: 0.72em; line-height: 1.5; height: 80px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px 10px; display: grid !important; grid-template-columns: 1fr 1fr; gap: 4px 10px; align-content: start; overflow: hidden;">
+
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 170px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
+                <img src="${fotoUrl}" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5));">
+            </div>
+
+            <div class="details-grid" style="background: rgba(0,0,0,0.25); border-radius: 6px; padding: 10px; font-size: 0.72em; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
                 ${[
                     { label: '📦Caja', val: j["Estado Caja"] },
                     { label: '📂Inserto', val: j["Estado Inserto"] },
                     { label: '📖Manual', val: j["Estado Manual"] },
                     { label: '💾Juego', val: j["Estado Juego"] },
                     { label: '🖼️Portada', val: j["Estado Portada"] },
-                    { label: '🔖Obi', val: j["Estado Spinecard"] },
-                    { label: '🎁Extra', val: j["Estado Extras"] }
-                ].filter(item => isValid(item.val)).slice(0, 6).map(item => `
-                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1px;">
-                        <span style="color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.label}:</span>
-                        <span style="font-weight: bold; margin-left: 4px;">${formatEstado(item.val)}</span>
+                    { label: '🔖Obi', val: j["Estado Spinecard"] }
+                    { label: '🎁Extras', val: j["Estado Extras"] }
+                ].filter(item => isValid(item.val)).map(item => `
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <span style="color: #999;">${item.label}:</span>
+                        <span style="font-weight: bold;">${formatEstado(item.val)}</span>
                     </div>
                 `).join('')}
             </div>
 
-            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; height: 45px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                <div style="font-size: 0.65em; color: #777; font-style: italic; display: flex; align-items: center; gap: 4px;">
-                    <i class="fa-regular fa-calendar-check" style="opacity: 0.6;"></i>
-                    ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : 'Sin fecha'}
+            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                <div style="font-size: 0.65em; color: #666; font-style: italic;">
+                    <i class="fa-regular fa-calendar-check"></i> ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : 'Sin fecha'}
                 </div>
-                <div class="price-tag" style="font-weight: bold; color: #fff; margin: 0;">
-                    ${j["Tasación Actual"] || "S/T"}
-                </div>
+                <div class="price-tag">${j["Tasación Actual"] || "S/T"}</div>
             </div>
         </div>`;
     }).join(''); // <--- AQUÍ ESTABA EL ERROR (Faltaba cerrar el map)
