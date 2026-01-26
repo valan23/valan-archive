@@ -7,6 +7,8 @@ const CSV_URL_JUEGOS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU7IaxX
 // IMPORTANTE: Asegúrate de que el gid=XXXXXXXX sea el que corresponde a la pestaña "DeseadosJuegos"
 const CSV_URL_DESEADOS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU7IaxX65IH0Ph-KEl06nrFvuyL2w6oBt7vxaJ96XDLjsO9CDpzYVwl3VDIvx5IG20KXSb6XhF7buX/pub?gid=1483244243&single=true&output=csv";
 
+const CSV_URL_JUGADOS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRU7IaxX65IH0Ph-KEl06nrFvuyL2w6oBt7vxaJ96XDLjsO9CDpzYVwl3VDIvx5IG20KXSb6XhF7buX/pub?gid=827817762&single=true&output=csv';
+
 /* --- CONFIGURACIÓN DE MARCAS Y PLATAFORMAS --- */
 const BRANDS_CONFIG = {
     "SEGA": { 
