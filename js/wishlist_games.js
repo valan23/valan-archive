@@ -121,7 +121,7 @@ function renderWishlist(games) {
                     ` : ''}
 
                     ${isValid(j["Nombre Japones"]) ? 
-                        `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #888; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${j["Nombre Japones"]}</div>` 
+                        `<div style="font-family: 'MS Mincho', serif; font-size: 0.65em; color: #888; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${j["Nombre Japones"]}</div>` 
                         : ''}
                 </div>
 
