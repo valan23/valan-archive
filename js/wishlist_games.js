@@ -1,14 +1,13 @@
 /**
- * wishlist_games.js - Versión Corregida: Ratio 180 y Sin Solapamientos
+ * wishlist_games.js - Versión Final Optimizada
  */
 
 function obtenerValorEnEuros(precioStr) {
     if (!precioStr) return Infinity;
-    // Limpiamos el string: quitamos todo lo que no sea número, coma o punto
     const num = parseFloat(precioStr.replace(/[^0-9.,]/g, '').replace(',', '.'));
     if (isNaN(num)) return Infinity;
     
-    // Ratio actualizado a 1€ ≈ 180¥
+    // Ratio 1€ ≈ 180¥
     if (precioStr.includes('¥') || precioStr.toLowerCase().includes('surugaya') || precioStr.toLowerCase().includes('mercari')) {
         return num / 180; 
     }
@@ -17,7 +16,6 @@ function obtenerValorEnEuros(precioStr) {
 
 function getColorForPrioridad(prioridad) {
     const p = prioridad ? prioridad.toUpperCase() : "";
-    // Usamos includes para que si el CSV tiene "🏆TOP", detecte "TOP"
     if (p.includes("TOP")) return "#FF4500";       
     if (p.includes("PREFERIDO")) return "#FFD700"; 
     if (p.includes("DESEADO")) return "#00D4FF";   
@@ -26,11 +24,11 @@ function getColorForPrioridad(prioridad) {
 
 function getColorForRareza(rareza) {
     const r = rareza ? rareza.toUpperCase() : "";
-    if (r.includes("LEGENDARIO")) return "#EFC36C"; // Dorado Legendario
-    if (r.includes("ÉPICO"))      return "#A335EE"; // Morado Épico
-    if (r.includes("RARO"))       return "#0070DD"; // Azul Raro
-    if (r.includes("INUSUAL"))    return "#1EFF00"; // Verde Inusual
-    if (r.includes("COMÚN"))      return "#FFFFFF"; // Blanco Común
+    if (r.includes("LEGENDARIO")) return "#EFC36C"; 
+    if (r.includes("ÉPICO"))      return "#A335EE"; 
+    if (r.includes("RARO"))       return "#0070DD"; 
+    if (r.includes("INUSUAL"))    return "#1EFF00"; 
+    if (r.includes("COMÚN"))      return "#FFFFFF"; 
     return "#888";
 }
 
@@ -47,8 +45,8 @@ function renderWishlist(games) {
         const fotoUrl = isValid(j["Portada"]) ? `images/covers/${carpetaSistema}/${j["Portada"].trim()}` : `images/covers/default.webp`;
 
         const style = getRegionStyle(j["Región"]);
-        const colorPrioridad = getColorForPrioridad(j["Prioridad"]);
-
+        
+        // --- CÁLCULO DE PRECIOS ---
         const listaPrecios = [
             { nombre: 'Nuevo', valor: j["Precio Nuevo"], eur: obtenerValorEnEuros(j["Precio Nuevo"]), color: '#D4BD66' },
             { nombre: 'CeX', valor: j["Precio Cex"], eur: obtenerValorEnEuros(j["Precio Cex"]), color: '#ff0000' }, 
@@ -59,12 +57,10 @@ function renderWishlist(games) {
         ];
 
         const preciosValidos = listaPrecios.filter(p => isValid(p.valor));
-        const precioMinimoEur = Math.min(...preciosValidos.map(p => p.eur));
+        const precioMinimoEur = preciosValidos.length > 0 ? Math.min(...preciosValidos.map(p => p.eur)) : Infinity;
 
-        // 1. Pegatina de Prioridad (Corregida)
+        // --- LÓGICA DE ESTADOS (Corregido: una sola declaración) ---
         const colorPrioridad = getColorForPrioridad(j["Prioridad"]);
-
-        // 2. Bloque de Rareza (Simplificado sin la palabra RAREZA)
         const rarezaMap = { "LEGENDARIO": 100, "ÉPICO": 80, "RARO": 60, "INUSUAL": 40, "COMÚN": 20 };
         const rarezaTexto = (j["Rareza"] || "COMÚN").toUpperCase();
         const rarezaPorcentaje = rarezaMap[rarezaTexto] || 20;
@@ -97,11 +93,12 @@ function renderWishlist(games) {
 
                 <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 80px;">
                      <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; font-weight: 800; color: ${getColorForRareza(rarezaTexto)}; display: flex; align-items: center; gap: 4px;">
-                     <span style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">💎</span>
-                     <span style="letter-spacing: 0.5px;">${rarezaTexto}</span>
-                </div>
-                <div style="width: 75px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
-                     <div style="width: ${rarezaPorcentaje}%; height: 100%; background-color: ${getColorForRareza(rarezaTexto)}; box-shadow: 0 0 8px ${getColorForRareza(rarezaTexto)}cc;"></div>
+                        <span style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">💎</span>
+                        <span style="letter-spacing: 0.5px;">${rarezaTexto}</span>
+                    </div>
+                    <div style="width: 75px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                         <div style="width: ${rarezaPorcentaje}%; height: 100%; background-color: ${getColorForRareza(rarezaTexto)}; box-shadow: 0 0 8px ${getColorForRareza(rarezaTexto)}cc;"></div>
+                    </div>
                 </div>
             </div>
 
@@ -121,7 +118,6 @@ function renderWishlist(games) {
             <div class="details-grid" style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 6px; font-size: 0.75em; display: flex; flex-direction: column; gap: 2px;">
                ${preciosValidos.slice(0, 6).map(p => {
                    const esElMasBarato = p.eur === precioMinimoEur && p.eur !== Infinity;
-       
                    const bgStyle = esElMasBarato 
                        ? `background: linear-gradient(90deg, rgba(149, 0, 255, 0.3) 0%, rgba(149, 0, 255, 0.05) 100%); 
                           border: 1px solid rgba(149, 0, 255, 0.5); 
