@@ -108,20 +108,22 @@ function renderPlayed(games) {
                 <div style="margin: 0 12px 12px 12px; background: rgba(255,255,255,0.03); border-radius: 6px; padding: 10px; flex-grow: 1;">
                     <div style="font-size: 0.6em; color: #666; text-transform: uppercase; margin-bottom: 4px; font-weight: bold;">Reseña Personal</div>
                     <div style="font-size: 0.78em; color: #ddd; line-height: 1.4; font-style: italic;">
-                        "${j["Comentarios"] || "Sin comentarios registrados."}"
+                        "${j["Comentarios"] || "Sin comentarios."}"
                     </div>
                 </div>
 
                 <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; flex-direction: column; gap: 2px;">
-                        <div style="font-size: 0.6em; color: #666;">
-                            <i class="fa-regular fa-calendar"></i> ${j["Primera Fecha"] || "—"}
+                        <div style="font-size: 0.65em; color: #aaa; display: flex; align-items: center; gap: 5px;">
+                            <i class="fa-regular fa-calendar" style="color: #666; width: 12px;"></i> 
+                            <span>${j["Primera Fecha"] || j["Primera fecha"] || "—"}</span>
                         </div>
-                        <div style="font-size: 0.6em; color: #888; font-weight: bold;">
-                            <i class="fa-solid fa-flag-checkered"></i> ${j["Ultima Fecha"] || "—"}
+                        <div style="font-size: 0.65em; color: #eee; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                            <i class="fa-solid fa-flag-checkered" style="color: #00ff88; width: 12px;"></i> 
+                            <span>${j["Ultima Fecha"] || j["Ultima fecha"] || "—"}</span>
                         </div>
                     </div>
-                    
+    
                     <div style="background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
                         <i class="fa-regular fa-clock" style="color: #00ff88; font-size: 0.8em;"></i>
                         <span style="color: #fff; font-size: 0.85em; font-weight: 900;">${j["Duración"] || "0"}h</span>
