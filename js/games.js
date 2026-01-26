@@ -89,7 +89,7 @@ function renderGames(games) {
                         </div>
                     ` : ''}
 
-                    ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #888; margin-top: 4px;">${j["Nombre Japones"]}</div>` : ''}
+                    ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.65em; color: #888; margin-top: 4px;">${j["Nombre Japones"]}</div>` : ''}
                 </div>
 
                 <div style="position: relative; display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 170px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
