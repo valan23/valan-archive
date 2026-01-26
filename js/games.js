@@ -38,6 +38,10 @@ function renderGames(games) {
             const campoFormato = j["Formato"] || "Físico"; 
             const esDigital = campoFormato.toString().toUpperCase().includes("DIGITAL");
 
+            // --- NUEVA LÓGICA DE EDICIÓN ---
+            const edicionRaw = j["Edición"] || "";
+            const esEdicionEspecial = isValid(edicionRaw) && edicionRaw.toUpperCase() !== "ESTÁNDAR";
+
             return `
             <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 460px; background: #1e1e24; border: 1px solid #3d3d4a;">
         
@@ -77,6 +81,14 @@ function renderGames(games) {
                     <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2;">
                         ${j["Nombre Juego"]}
                     </div>
+                    
+                    ${esEdicionEspecial ? `
+                        <div style="font-size: 0.75em; color: #aaa; margin-top: 4px; display: flex; align-items: center; gap: 4px;">
+                            <i class="fa-solid fa-star" style="color: #EFC36C; font-size: 0.8em;"></i>
+                            <span style="text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">${edicionRaw}</span>
+                        </div>
+                    ` : ''}
+
                     ${isValid(j["Nombre Japones"]) ? `<div style="font-family: 'MS Mincho', serif; font-size: 0.85em; color: #888; margin-top: 4px;">${j["Nombre Japones"]}</div>` : ''}
                 </div>
 
