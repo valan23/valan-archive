@@ -12,23 +12,28 @@ function obtenerValorEnEuros(precioStr) {
     return num;
 }
 
-// Función de color de prioridad (Sin emojis)
+// Función de color de prioridad (Ultra compatible)
 function getColorForPrioridad(prioridad) {
-    // Trim quita espacios en blanco accidentales del CSV
-    const p = prioridad ? prioridad.trim().toUpperCase() : "";
-    if (p === "IMPRESCINDIBLE")       return "#FF4500"; // Naranja rojizo
-    if (p === "PREFERIDO") return "#FFD700"; // Dorado
-    if (p === "DESEADO")   return "#00D4FF"; // Cian
-    return "#555"; // Gris si no coincide nada
+    const p = prioridad ? prioridad.toString().toUpperCase() : "";
+    
+    // Usamos .includes para ignorar caracteres invisibles o saltos de línea (\r)
+    if (p.includes("IMPRESCINDIBLE")) return "#FF4500"; // Naranja rojizo
+    if (p.includes("PREFERIDO"))      return "#FFD700"; // Dorado
+    if (p.includes("DESEADO"))         return "#00D4FF"; // Cian
+    
+    return "#555"; // Gris si no encuentra la palabra clave
 }
 
+// Función de color de rareza (Ultra compatible)
 function getColorForRareza(rareza) {
-    const r = rareza ? rareza.trim().toUpperCase() : "";
-    if (r === "LEGENDARIO") return "#EFC36C"; 
-    if (r === "ÉPICO")      return "#A335EE"; 
-    if (r === "RARO")       return "#0070DD"; 
-    if (r === "INUSUAL")    return "#1EFF00"; 
-    if (r === "COMÚN")      return "#FFFFFF"; 
+    const r = rareza ? rareza.toString().toUpperCase() : "";
+    
+    if (r.includes("LEGENDARIO")) return "#EFC36C"; 
+    if (r.includes("ÉPICO"))      return "#A335EE"; 
+    if (r.includes("RARO"))       return "#0070DD"; 
+    if (r.includes("INUSUAL"))    return "#1EFF00"; 
+    if (r.includes("COMÚN"))      return "#FFFFFF"; 
+    
     return "#888";
 }
 
