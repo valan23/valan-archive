@@ -103,19 +103,25 @@ header { width: 100%; text-align: center; }
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     
-    /* Quitamos el ancho fijo limitante */
     min-width: 100px; 
     width: auto; 
-    height: 70px; /* Un poco más bajitos y estilizados */
+    height: 70px;
     
-    background: #1c1c21 !important; /* Gris muy oscuro, casi negro */
-    border: 1px solid #333;
+    /* Estado NORMAL: Un gradiente casi invisible pero que da profundidad */
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
-    padding: 10px 15px; /* Más aire a los lados */
+    padding: 10px 15px;
     margin: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Estado HOVER (Al pasar el ratón) */
+.brand-icon:hover, .filter-btn:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
 /* FORZAMOS EL AJUSTE DE LA IMAGEN */
@@ -141,26 +147,28 @@ header { width: 100%; text-align: center; }
     text-align: center;
 }
 
-/* ESTADO ACTIVO: Elegante, sin estridencias */
+/* Estado SELECCIONADO (ACTIVO): Aquí aplicamos el estilo de "Mejor Precio" */
 .brand-icon.active, .filter-btn.active {
-    background: #2a2a32 !important;
-    border-color: #EFC36C; /* Tu dorado */
-    box-shadow: 0 0 10px rgba(239, 195, 108, 0.2);
+    /* Gradiente basado en tu color --accent (morado) */
+    background: linear-gradient(135deg, rgba(149, 0, 255, 0.25) 0%, rgba(149, 0, 255, 0.05) 100%) !important;
+    
+    /* Borde resaltado como en tu código de wishlist */
+    border: 1px solid rgba(149, 0, 255, 0.5) !important;
+    
+    /* Un brillo extra para que destaque en el estante */
+    box-shadow: 0 4px 15px rgba(149, 0, 255, 0.15);
+    transform: scale(1.02);
 }
 
-.brand-icon:hover {
-    border-color: #666;
-    background: #25252b !important;
-}
-
+/* Ajuste del texto cuando está activo */
 .brand-icon.active span, .filter-btn.active span {
     color: #fff;
+    text-shadow: 0 0 8px rgba(149, 0, 255, 0.6);
 }
 
-.brand-icon.active, .filter-btn.active {
-    background: transparent !important; /* Quitamos el fondo morado */
-    box-shadow: none !important;        /* Quitamos la sombra interna morada */
-    outline: none !important;           /* Quitamos el recuadro de enfoque del navegador */
+/* Ajuste del logo cuando está activo */
+.brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon {
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(149, 0, 255, 0.3));
 }
 
 /* Para evitar el recuadro morado al hacer clic (focus) */
@@ -190,24 +198,23 @@ header { width: 100%; text-align: center; }
     }
 
     .brand-icon, .filter-btn {
-        width: 55px !important;    
-        height: 65px !important;
-        flex: 0 0 55px !important;  
-        margin: 0 !important;      
+        /* Cambiamos el width fijo de 55px por un min-width menor */
+        min-width: 70px !important; 
+        width: auto !important;
+        height: 55px !important; /* Un poco más bajitos en móvil */
+        flex: 0 1 auto !important; /* Permitimos que se ajusten */
+        margin: 4px !important;
+        padding: 5px 10px !important;
     }
 
     .brand-logo-img, .btn-console-icon {
-        height: 18px !important;   
-        margin-bottom: 8px !important;
+        height: 16px !important; /* Logos más pequeñitos */
+        margin-bottom: 4px !important;
     }
 
     .brand-icon span, .filter-btn span {
         font-size: 7px !important;
-        line-height: 1 !important;
-        display: block !important;
-        width: 100% !important;
-        white-space: normal !important; 
-        text-align: center !important;
+        white-space: nowrap !important; /* Que sigan sin cortarse */
     }
 }
 
