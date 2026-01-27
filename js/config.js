@@ -11,20 +11,6 @@ const CSV_URL_JUGADOS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRU7Iax
 
 /* --- CONFIGURACIÓN DE MARCAS Y PLATAFORMAS --- */
 const BRANDS_CONFIG = {
-    "SEGA": { 
-        logo: "images/icons/SEGA_logo.png", 
-        class: "sega", 
-        platforms: ["Master System", "Mega Drive", "Game Gear", "Mega CD", "Saturn", "32X", "Dreamcast"],
-        icons: {
-            "Master System": "images/icons/sms.png",
-            "Mega Drive": "images/icons/smd.png",
-            "Game Gear": "images/icons/gg.png",
-            "Mega CD": "images/icons/mcd.png",
-            "Saturn": "images/icons/ss.png",
-            "32X": "images/icons/32x.png",
-            "Dreamcast": "images/icons/dc.png"
-        }
-    },
     "NINTENDO": { 
         logo: "images/icons/NINTENDO_logo.png", 
         class: "nintendo", 
@@ -47,6 +33,20 @@ const BRANDS_CONFIG = {
             "Switch 2": "images/icons/switch2.png"
         }
     },
+    "SEGA": { 
+        logo: "images/icons/SEGA_logo.png", 
+        class: "sega", 
+        platforms: ["Master System", "Mega Drive", "Game Gear", "Mega CD", "Saturn", "32X", "Dreamcast"],
+        icons: {
+            "Master System": "images/icons/sms.png",
+            "Mega Drive": "images/icons/smd.png",
+            "Game Gear": "images/icons/gg.png",
+            "Mega CD": "images/icons/mcd.png",
+            "Saturn": "images/icons/ss.png",
+            "32X": "images/icons/32x.png",
+            "Dreamcast": "images/icons/dc.png"
+        }
+    },
     "SONY": { 
         logo: "images/icons/PLAYSTATION_logo.png", 
         class: "sony", 
@@ -60,15 +60,28 @@ const BRANDS_CONFIG = {
         }
     },
     "MICROSOFT": { 
-        logo: "images/icons/MICROSOFT_logo.png", 
-        class: "microsoft", 
+        logo: "images/icons/XBOX_logo.png", 
+        class: "xbox", 
         platforms: ["Xbox 360", "Xbox One", "Xbox Series X/S"],
         icons: {
             "Xbox 360": "images/icons/x360.png",
             "Xbox One": "images/icons/xone.png",
             "Xbox Series X/S": "images/icons/xsx.png",
         }
-    },
+    },,
+    "PC": { 
+        logo: "images/icons/PC_logo.png", 
+        class: "pc", 
+        platforms: ["Windows", "MS-DOS", "Steam", "GOG.com", "Battle.net", "Epic Games"],
+        icons: {
+            "Windows": "images/icons/windows.png",
+            "MS-DOS": "images/icons/msdos.png",
+            "Steam": "images/icons/steam.png",
+            "GOG.com": "images/icons/gogcom.png",
+            "Battle.net": "images/icons/battlenet.png",
+            "Epic Games": "images/icons/epicgames.png",
+        }
+    }
     "OTROS": { 
         logo: "images/icons/OTROS_logo.png", 
         class: "otros", 
