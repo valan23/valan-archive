@@ -96,7 +96,7 @@ header { width: 100%; text-align: center; }
 
 .platform-subgroup.show { display: flex; }
 
-/* --- BOTONES ESTILO ECO-SISTEMA (DINÁMICOS) --- */
+/* --- BOTONES ESTILO DORADO (MÁXIMO CONTRASTE) --- */
 .brand-icon, .filter-btn {
     display: flex;
     flex-direction: column;
@@ -107,68 +107,61 @@ header { width: 100%; text-align: center; }
     
     min-width: 100px; 
     width: auto; 
-    height: 70px;
+    height: 75px;
     
-    /* Estado NORMAL: Un gradiente casi invisible pero que da profundidad */
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Fondo claro estático (Dorado suave/Crema) */
+    background: linear-gradient(145deg, #e6c68a 0%, #c4a468 100%) !important;
+    border: 1px solid #b38f4d;
     border-radius: 8px;
     padding: 10px 15px;
     margin: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* Estado HOVER (Al pasar el ratón) */
-.brand-icon:hover, .filter-btn:hover {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-/* FORZAMOS EL AJUSTE DE LA IMAGEN */
-/* EL LOGO: Nunca recortado */
+/* Logos: Ahora resaltan perfectamente al ser oscuros sobre fondo claro */
 .brand-logo-img, .btn-console-icon {
-    height: 25px;      /* Altura controlada */
-    width: auto;       /* El ancho es libre para no recortar */
-    max-width: 80px;   /* Pero con un límite para que no sea gigante */
-    object-fit: contain; 
+    height: 28px; 
+    width: auto; 
+    max-width: 75px; 
+    object-fit: contain;
     margin-bottom: 6px;
-    filter: none !important; 
+    /* Un ligero sombreado para dar profundidad al logo sobre el dorado */
+    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.1)); 
 }
 
-/* AJUSTE PARA EL TEXTO */
-/* EL TEXTO: Siempre entero */
+/* Texto: Lo ponemos en un color oscuro para que se lea sobre el dorado */
 .brand-icon span, .filter-btn span {
-    font-size: 10px; 
-    font-weight: 700; 
-    color: #eee; /* Texto más claro para leerlo bien */
+    font-size: 9.5px; 
+    font-weight: 800; 
+    color: #4a3a1a; /* Marrón muy oscuro/negro para contraste */
     text-transform: uppercase;
-    white-space: nowrap; /* No lo corta */
-    display: block;
-    text-align: center;
+    white-space: nowrap;
 }
 
-/* Estado SELECCIONADO (ACTIVO): Aquí aplicamos el estilo de "Mejor Precio" */
+/* ESTADO SELECCIONADO (ACTIVO) */
 .brand-icon.active, .filter-btn.active {
-    /* Gradiente basado en tu color --accent (morado) */
-    background: linear-gradient(135deg, rgba(149, 0, 255, 0.25) 0%, rgba(149, 0, 255, 0.05) 100%) !important;
-    
-    /* Borde resaltado como en tu código de wishlist */
-    border: 1px solid rgba(149, 0, 255, 0.5) !important;
-    
-    /* Un brillo extra para que destaque en el estante */
-    box-shadow: 0 4px 15px rgba(149, 0, 255, 0.15);
-    transform: scale(1.02);
+    /* Un dorado más brillante y saturado */
+    background: linear-gradient(145deg, #ffdb99 0%, #efc36c 100%) !important;
+    border: 2px solid #fff; /* Borde blanco para que "salte" a la vista */
+    box-shadow: 0 0 15px rgba(239, 195, 108, 0.5);
+    transform: scale(1.05) translateY(-2px);
 }
 
-/* Ajuste del texto cuando está activo */
 .brand-icon.active span, .filter-btn.active span {
-    color: #fff;
-    text-shadow: 0 0 8px rgba(149, 0, 255, 0.6);
+    color: #000; /* Negro puro al estar seleccionado */
+}
+
+
+/* Hover sutil */
+.brand-icon:hover:not(.active), .filter-btn:hover:not(.active) {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
 }
 
 /* Ajuste del logo cuando está activo */
 .brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon {
-    filter: brightness(1.2) drop-shadow(0 0 5px rgba(149, 0, 255, 0.3));
+    filter: brightness(1.1) drop-shadow(0 0 3px rgba(0, 0, 0, 0.2));
+    /* Eliminamos el morado para que el logo destaque por su propio color */
 }
 
 /* Para evitar el recuadro morado al hacer clic (focus) */
