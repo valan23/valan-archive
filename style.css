@@ -96,76 +96,74 @@ header { width: 100%; text-align: center; }
 
 .platform-subgroup.show { display: flex; }
 
-/* --- BOTONES ESTILO DORADO CON TRANSPARENCIA (MÁS LIMPIO) --- */
+/* --- BOTONES CON TRANSPARENCIA SELECTIVA --- */
 .brand-icon, .filter-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
     min-width: 100px; 
     width: auto; 
     height: 70px;
     
-    /* Estado NORMAL: Dorado muy transparente y desaturado */
-    background: linear-gradient(145deg, rgba(230, 198, 138, 0.05) 0%, rgba(196, 164, 104, 0.02) 100%) !important;
-    border: 1px solid rgba(179, 143, 77, 0.15);
+    /* Estado NORMAL: Muy opaco/oscuro para que no distraiga */
+    background: rgba(20, 20, 25, 0.8) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     padding: 10px 15px;
     margin: 5px;
 }
 
-/* Logos en reposo: Un poco más tenues para no distraer */
+/* Logos y Texto en reposo: Apagados */
 .brand-logo-img, .btn-console-icon {
-    height: 25px; 
-    width: auto; 
-    max-width: 75px; 
-    object-fit: contain;
+    height: 25px; width: auto; max-width: 75px; object-fit: contain;
     margin-bottom: 6px;
-    opacity: 0.5; /* Se ven, pero no brillan */
-    filter: grayscale(0.3); /* Un toque sutil de gris para unificar */
+    opacity: 0.3; /* Muy tenue */
+    filter: grayscale(1);
     transition: all 0.3s ease;
 }
 
 /* Texto en reposo: Color apagado */
 .brand-icon span, .filter-btn span {
-    font-size: 9.5px; 
-    font-weight: 700; 
-    color: #666; /* Gris oscuro para que no resalte */
-    text-transform: uppercase;
-    white-space: nowrap;
-    transition: all 0.3s ease;
+    font-size: 9.5px; font-weight: 700; color: #555;
+    text-transform: uppercase; transition: all 0.3s ease;
 }
 
-/* HOVER: El botón empieza a cobrar vida */
+/* HOVER (Ratón encima): Se aclara un poco */
 .brand-icon:hover:not(.active), .filter-btn:hover:not(.active) {
-    background: rgba(230, 198, 138, 0.15) !important;
-    border-color: rgba(230, 198, 138, 0.4);
-    transform: translateY(-2px);
+    background: rgba(230, 198, 138, 0.1) !important;
+    border-color: rgba(230, 198, 138, 0.3);
 }
 .brand-icon:hover .brand-logo-img, .filter-btn:hover .btn-console-icon {
-    opacity: 0.8;
-    filter: grayscale(0);
+    opacity: 0.6;
+    filter: grayscale(0.5);
 }
 
-/* ESTADO SELECCIONADO (ACTIVO): Mantenemos solo esta versión */
+/* ESTADO SELECCIONADO (ACTIVO): Transparente pero vibrante */
 .brand-icon.active, .filter-btn.active {
-    background: linear-gradient(145deg, #e6c68a 0%, #c4a468 100%) !important;
-    border: 1px solid #fff;
-    box-shadow: 0 0 15px rgba(230, 198, 138, 0.3);
+    /* Fondo más transparente que el resto */
+    background: rgba(230, 198, 138, 0.15) !important; 
+    
+    /* Borde sólido y brillante para que destaque */
+    border: 2px solid #efc36c !important;
+    
+    /* Resplandor externo (Glow) */
+    box-shadow: 0 0 20px rgba(239, 195, 108, 0.25);
     transform: scale(1.05);
 }
 
 .brand-icon.active span, .filter-btn.active span {
-    color: #2a1f0a; 
+    color: #efc36c; /* El texto brilla en dorado */
     opacity: 1;
+    text-shadow: 0 0 10px rgba(239, 195, 108, 0.4);
 }
 
 .brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon {
-    opacity: 1;
-    filter: grayscale(0) drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+    opacity: 1; /* Logo al 100% */
+    filter: grayscale(0) drop-shadow(0 0 8px rgba(239, 195, 108, 0.5));
 }
 
 /* Para evitar el recuadro morado al hacer clic (focus) */
