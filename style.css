@@ -96,7 +96,7 @@ header { width: 100%; text-align: center; }
 
 .platform-subgroup.show { display: flex; }
 
-/* --- BOTONES ESTILO DORADO (MÁXIMO CONTRASTE) --- */
+/* --- BOTONES ESTILO DORADO CON TRANSPARENCIA (MÁS LIMPIO) --- */
 .brand-icon, .filter-btn {
     display: flex;
     flex-direction: column;
@@ -107,61 +107,65 @@ header { width: 100%; text-align: center; }
     
     min-width: 100px; 
     width: auto; 
-    height: 75px;
+    height: 70px;
     
-    /* Fondo claro estático (Dorado suave/Crema) */
-    background: linear-gradient(145deg, #e6c68a 0%, #c4a468 100%) !important;
-    border: 1px solid #b38f4d;
+    /* Estado NORMAL: Dorado muy transparente y desaturado */
+    background: linear-gradient(145deg, rgba(230, 198, 138, 0.05) 0%, rgba(196, 164, 104, 0.02) 100%) !important;
+    border: 1px solid rgba(179, 143, 77, 0.15);
     border-radius: 8px;
     padding: 10px 15px;
     margin: 5px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* Logos: Ahora resaltan perfectamente al ser oscuros sobre fondo claro */
+/* Logos en reposo: Un poco más tenues para no distraer */
 .brand-logo-img, .btn-console-icon {
-    height: 28px; 
+    height: 25px; 
     width: auto; 
     max-width: 75px; 
     object-fit: contain;
     margin-bottom: 6px;
-    /* Un ligero sombreado para dar profundidad al logo sobre el dorado */
-    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.1)); 
+    opacity: 0.5; /* Se ven, pero no brillan */
+    filter: grayscale(0.3); /* Un toque sutil de gris para unificar */
+    transition: all 0.3s ease;
 }
 
-/* Texto: Lo ponemos en un color oscuro para que se lea sobre el dorado */
+/* Texto en reposo: Color apagado */
 .brand-icon span, .filter-btn span {
     font-size: 9.5px; 
-    font-weight: 800; 
-    color: #4a3a1a; /* Marrón muy oscuro/negro para contraste */
+    font-weight: 700; 
+    color: #666; /* Gris oscuro para que no resalte */
     text-transform: uppercase;
     white-space: nowrap;
+    transition: all 0.3s ease;
 }
 
-/* ESTADO SELECCIONADO (ACTIVO) */
+/* HOVER: El botón empieza a cobrar vida */
+.brand-icon:hover:not(.active), .filter-btn:hover:not(.active) {
+    background: rgba(230, 198, 138, 0.15) !important;
+    border-color: rgba(230, 198, 138, 0.4);
+    transform: translateY(-2px);
+}
+.brand-icon:hover .brand-logo-img, .filter-btn:hover .btn-console-icon {
+    opacity: 0.8;
+    filter: grayscale(0);
+}
+
+/* ESTADO SELECCIONADO (ACTIVO): Mantenemos solo esta versión */
 .brand-icon.active, .filter-btn.active {
-    /* Un dorado más brillante y saturado */
-    background: linear-gradient(145deg, #ffdb99 0%, #efc36c 100%) !important;
-    border: 2px solid #fff; /* Borde blanco para que "salte" a la vista */
-    box-shadow: 0 0 15px rgba(239, 195, 108, 0.5);
-    transform: scale(1.05) translateY(-2px);
+    background: linear-gradient(145deg, #e6c68a 0%, #c4a468 100%) !important;
+    border: 1px solid #fff;
+    box-shadow: 0 0 15px rgba(230, 198, 138, 0.3);
+    transform: scale(1.05);
 }
 
 .brand-icon.active span, .filter-btn.active span {
-    color: #000; /* Negro puro al estar seleccionado */
+    color: #2a1f0a; 
+    opacity: 1;
 }
 
-
-/* Hover sutil */
-.brand-icon:hover:not(.active), .filter-btn:hover:not(.active) {
-    filter: brightness(1.1);
-    transform: translateY(-1px);
-}
-
-/* Ajuste del logo cuando está activo */
 .brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon {
-    filter: brightness(1.1) drop-shadow(0 0 3px rgba(0, 0, 0, 0.2));
-    /* Eliminamos el morado para que el logo destaque por su propio color */
+    opacity: 1;
+    filter: grayscale(0) drop-shadow(0 2px 3px rgba(0,0,0,0.2));
 }
 
 /* Para evitar el recuadro morado al hacer clic (focus) */
