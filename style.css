@@ -19,11 +19,22 @@ body {
 header { width: 100%; text-align: center; }
 
 .logo-container { width: 100%; max-width: 450px; margin: 0 auto 20px auto; }
-.main-logo { width: 100%; height: auto; filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.4)); }
+
+.main-logo { 
+    width: 100%; 
+    height: auto; 
+    filter: drop-shadow(0 0 12px rgba(239, 195, 108, 0.2)); 
+}
 
 #searchInput { 
     width: 100%; max-width: 500px; padding: 12px 20px; border-radius: 25px; 
     border: 1px solid #333; background: #1a1a20; color: white; display: block; margin: 15px auto;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: #efc36c;
+    box-shadow: 0 0 15px rgba(239, 195, 108, 0.2);
 }
 
 /* --- SECCIONES PRINCIPALES (TABS) --- */
@@ -210,6 +221,15 @@ header { width: 100%; text-align: center; }
 .grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px; margin-top: 30px;
+}
+
+/* Asegura que el grid del diario sea igual al de videojuegos */
+#played-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+    width: 100%;
 }
 
 .card { 
