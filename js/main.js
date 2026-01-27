@@ -246,3 +246,49 @@ function getPlatformIcon(platformName) {
     }
     return `<span class="platform-tag">${platformName}</span>`;
 }
+
+function renderFormatFilters(games, containerId, sectionPrefix) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const counts = {
+        all: games.length,
+        fisico: games.filter(g => !String(g["Formato"]).toUpperCase().includes("DIGITAL")).length,
+        digital: games.filter(g => String(g["Formato"]).toUpperCase().includes("DIGITAL")).length
+    };
+
+    container.innerHTML = `
+        <button class="format-btn active" data-format="all">
+            <i class="fa-solid fa-layer-group"></i> Todos (${counts.all})
+        </button>
+        <button class="format-btn" data-format="fisico">
+            <i class="fa-solid fa-disc-drive"></i> Físico (${counts.fisico})
+        </button>
+        <button class="format-btn" data-format="digital">
+            <i class="fa-solid fa-cloud-download"></i> Digital (${counts.digital})
+        </button>
+    `;
+
+    // Añadir el evento de click
+    container.querySelectorAll('.format-btn').forEach(btn => {
+        btn.onclick = () => {
+            container.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterByFormat(btn.dataset.format, sectionPrefix);
+        };
+    });
+}
+
+function filterByFormat(format, sectionPrefix) {
+    const cards = document.querySelectorAll(`#${sectionPrefix}-grid .card`);
+    cards.forEach(card => {
+        const isDigital = card.innerText.toUpperCase().includes("DIGITAL");
+        if (format === 'all') {
+            card.style.display = 'flex';
+        } else if (format === 'digital') {
+            card.style.display = isDigital ? 'flex' : 'none';
+        } else {
+            card.style.display = isDigital ? 'none' : 'flex';
+        }
+    });
+}
