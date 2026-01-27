@@ -171,48 +171,6 @@ header { width: 100%; text-align: center; }
     outline: none !important;
 }
 
-/* --- MEDIA QUERY: CORRECCIÓN MÓVIL (No cambia nada) --- */
-@media (max-width: 600px) {
-    .main-tabs {
-        gap: 8px;
-        padding: 0 10px;
-        justify-content: center; /* Los centra si hay hueco */
-    }
-
-    .tab-btn {
-        padding: 8px 15px; /* Más pequeños aún en móvil */
-        font-size: 0.75em;
-        flex: 1 1 auto;    /* Permite que crezcan para rellenar el ancho si quieres */
-        justify-content: center;
-    }
-    .brand-selector, 
-    .platform-subgroup.show {
-        gap: 40px 25px !important; 
-        padding: 20px 10px !important;
-        justify-content: center !important;
-    }
-
-    .brand-icon, .filter-btn {
-        /* Cambiamos el width fijo de 55px por un min-width menor */
-        min-width: 70px !important; 
-        width: auto !important;
-        height: 55px !important; /* Un poco más bajitos en móvil */
-        flex: 0 1 auto !important; /* Permitimos que se ajusten */
-        margin: 4px !important;
-        padding: 5px 10px !important;
-    }
-
-    .brand-logo-img, .btn-console-icon {
-        height: 16px !important; /* Logos más pequeñitos */
-        margin-bottom: 4px !important;
-    }
-
-    .brand-icon span, .filter-btn span {
-        font-size: 7px !important;
-        white-space: nowrap !important; /* Que sigan sin cortarse */
-    }
-}
-
 /* --- GRID DE JUEGOS --- */
 .grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -263,6 +221,110 @@ header { width: 100%; text-align: center; }
 .price-tag { 
     text-align: right; font-size: 0.9em; font-weight: 800; color: #00ff88;
     background: rgba(0, 255, 136, 0.1); padding: 5px 10px; border-radius: 6px;
+}
+
+/* --- FILTROS POR AÑO (DIARIO) --- */
+.year-filter-container {
+    margin: 25px 0 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 15px;
+}
+
+.year-label {
+    font-size: 0.75em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.year-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.year-btn {
+    background: rgba(20, 20, 25, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #555;
+    padding: 8px 18px;
+    border-radius: 25px; /* Estilo pastilla */
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.year-btn:hover:not(.active) {
+    background: rgba(230, 198, 138, 0.1);
+    color: #aaa;
+    border-color: rgba(230, 198, 138, 0.3);
+}
+
+/* Estado ACTIVO: Cristal Dorado Transparente */
+.year-btn.active {
+    background: rgba(230, 198, 138, 0.15) !important;
+    border: 2px solid #efc36c !important;
+    color: #efc36c;
+    box-shadow: 0 0 15px rgba(239, 195, 108, 0.25);
+    transform: translateY(-2px);
+}
+
+
+/* --- MEDIA QUERY: CORRECCIÓN MÓVIL (No cambia nada) --- */
+@media (max-width: 600px) {
+    .main-tabs {
+        gap: 8px;
+        padding: 0 10px;
+        justify-content: center; /* Los centra si hay hueco */
+    }
+
+    .tab-btn {
+        padding: 8px 15px; /* Más pequeños aún en móvil */
+        font-size: 0.75em;
+        flex: 1 1 auto;    /* Permite que crezcan para rellenar el ancho si quieres */
+        justify-content: center;
+    }
+    .brand-selector, 
+    .platform-subgroup.show {
+        gap: 40px 25px !important; 
+        padding: 20px 10px !important;
+        justify-content: center !important;
+    }
+
+    .brand-icon, .filter-btn {
+        /* Cambiamos el width fijo de 55px por un min-width menor */
+        min-width: 70px !important; 
+        width: auto !important;
+        height: 55px !important; /* Un poco más bajitos en móvil */
+        flex: 0 1 auto !important; /* Permitimos que se ajusten */
+        margin: 4px !important;
+        padding: 5px 10px !important;
+    }
+
+    .brand-logo-img, .btn-console-icon {
+        height: 16px !important; /* Logos más pequeñitos */
+        margin-bottom: 4px !important;
+    }
+
+    .brand-icon span, .filter-btn span {
+        font-size: 7px !important;
+        white-space: nowrap !important; /* Que sigan sin cortarse */
+    }
+    .year-btn {
+        padding: 6px 12px;
+        font-size: 0.75em;
+    }
+    .year-buttons {
+        gap: 6px;
+    }
 }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; } }
