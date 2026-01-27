@@ -36,26 +36,27 @@ header { width: 100%; text-align: center; }
 }
 
 .tab-btn {
-    background: #1a1a20; 
-    border: 1px solid #333; 
-    color: #888;
-    padding: 10px 20px; /* Reducimos el padding lateral para que sean más compactos */
-    border-radius: 30px; 
-    cursor: pointer;
-    font-weight: 800; 
-    text-transform: uppercase; 
-    transition: all 0.3s ease;
-    display: flex; 
-    align-items: center; 
-    gap: 8px;
-    font-size: 0.85em;  /* Un pelín más pequeña la fuente para ganar espacio */
-    white-space: nowrap; /* Evita que el texto del botón se parta en dos líneas */
+    background: transparent; /* Fondo transparente por defecto */
+    border: none;
+    border-bottom: 2px solid transparent; /* Línea invisible */
+    border-radius: 0; /* Sin bordes redondeados */
+    color: #666;
+    padding: 10px 15px;
+    font-size: 0.9em;
 }
 
 .tab-btn.active {
-    background: var(--accent); color: white; border-color: var(--accent);
-    box-shadow: 0 0 15px rgba(149, 0, 255, 0.4);
+    background: transparent; /* Seguimos sin fondo */
+    color: var(--accent); /* El texto brilla con tu color actual */
+    border-bottom: 2px solid var(--accent); /* Aparece la línea indicadora */
+    box-shadow: none; /* Quitamos sombras pesadas */
 }
+
+.tab-btn i {
+    font-size: 1.1em; /* Icono un pelín más grande que el texto */
+    margin-bottom: 2px;
+}
+
 .section-content { display: none; }
 .section-content.active { display: block; }
 
