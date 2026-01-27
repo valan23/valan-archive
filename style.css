@@ -94,56 +94,61 @@ header { width: 100%; text-align: center; }
 
 .platform-subgroup.show { display: flex; }
 
-/* --- ESTILO DE FICHAS UNIFICADO --- */
+/* --- BOTONES ESTILO ECO-SISTEMA (DINÁMICOS) --- */
 .brand-icon, .filter-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease;
     
-    width: 85px; 
-    height: 85px;
-    background: #25252d !important; 
-    border: 1px solid #3d3d4a;
-    border-radius: 12px;
-    padding: 12px; /* Aumentamos el margen interno para proteger el logo */
-    margin: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    overflow: hidden; /* Evita que cualquier cosa sobresalga */
+    /* Quitamos el ancho fijo limitante */
+    min-width: 100px; 
+    width: auto; 
+    height: 70px; /* Un poco más bajitos y estilizados */
+    
+    background: #1c1c21 !important; /* Gris muy oscuro, casi negro */
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px 15px; /* Más aire a los lados */
+    margin: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 /* FORZAMOS EL AJUSTE DE LA IMAGEN */
+/* EL LOGO: Nunca recortado */
 .brand-logo-img, .btn-console-icon {
-    width: 100%;       /* Ocupa el ancho disponible de la ficha (menos el padding) */
-    height: 30px;      /* Altura fija para que todos estén alineados */
-    max-width: 65px;   /* Evita que logos muy anchos toquen los bordes */
-    object-fit: contain; /* Encaja la imagen sin deformarla y sin salirse */
-    margin-bottom: 8px;
+    height: 25px;      /* Altura controlada */
+    width: auto;       /* El ancho es libre para no recortar */
+    max-width: 80px;   /* Pero con un límite para que no sea gigante */
+    object-fit: contain; 
+    margin-bottom: 6px;
     filter: none !important; 
 }
 
 /* AJUSTE PARA EL TEXTO */
+/* EL TEXTO: Siempre entero */
 .brand-icon span, .filter-btn span {
-    font-size: 8.5px; 
-    font-weight: 800; 
-    color: #aaa; 
+    font-size: 10px; 
+    font-weight: 700; 
+    color: #eee; /* Texto más claro para leerlo bien */
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    white-space: nowrap; /* No lo corta */
+    display: block;
     text-align: center;
-    width: 100%;
-    white-space: nowrap; /* Evita que el texto largo rompa la ficha */
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-/* ESTADO ACTIVO/HOVER */
-.brand-icon.active, .filter-btn.active,
-.brand-icon:hover, .filter-btn:hover {
-    background: #353540 !important;
-    border-color: #EFC36C; /* He puesto el dorado para que combine */
-    transform: translateY(-3px);
+/* ESTADO ACTIVO: Elegante, sin estridencias */
+.brand-icon.active, .filter-btn.active {
+    background: #2a2a32 !important;
+    border-color: #EFC36C; /* Tu dorado */
+    box-shadow: 0 0 10px rgba(239, 195, 108, 0.2);
+}
+
+.brand-icon:hover {
+    border-color: #666;
+    background: #25252b !important;
 }
 
 .brand-icon.active span, .filter-btn.active span {
