@@ -1,16 +1,13 @@
 /**
- * games.js - Renderizado optimizado con carga progresiva (Batch Rendering)
+ * games.js - Renderizado optimizado con carga progresiva y Gradientes Dinámicos
  */
 
 function renderGames(games) {
     const container = document.getElementById('game-grid');
     if (!container) return;
 
-    // --- 1. LLAMADA AL FILTRO DE FORMATO (Añadido aquí) ---
-    // Esto calculará los contadores sobre la lista completa de juegos
     renderFormatFilters(games, 'format-buttons-container-games', 'game');
 
-    // Limpieza total antes de empezar
     container.innerHTML = "";
 
     if (games.length === 0) {
@@ -18,12 +15,10 @@ function renderGames(games) {
         return;
     }
 
-    // 1. Renderizamos el primer lote inmediatamente (24 juegos)
     const firstBatch = games.slice(0, 24);
     const firstHtml = firstBatch.map(j => createCardHTML(j)).join('');
     container.innerHTML = firstHtml;
 
-    // 2. El resto se renderiza progresivamente
     if (games.length > 24) {
         setTimeout(() => {
             const remainingBatch = games.slice(24);
@@ -33,38 +28,39 @@ function renderGames(games) {
     }
 }
 
-/**
- * Función que genera el HTML de una sola tarjeta
- * Movida aquí para poder llamarla por lotes
- */
 function createCardHTML(j) {
     try {
         const isValid = (val) => val && val.trim() !== "" && val.toUpperCase() !== "NA";
+        
+        // --- 1. Lógica de Carpetas e Imágenes ---
         const platformMap = { "Famicom": "fc", "Famicom Disk System": "fds", "Super Famicom": "sfc" };
         const valorExcel = j["Plataforma"] ? j["Plataforma"].trim() : "";
-        
         const keyMatch = Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase());
         const carpetaSistema = keyMatch ? platformMap[keyMatch] : valorExcel.toLowerCase().replace(/\s+/g, '');
 
         const nombrePortada = j["Portada"] ? j["Portada"].trim() : "";
         const fotoUrl = isValid(nombrePortada) ? `images/covers/${carpetaSistema}/${nombrePortada}` : `images/covers/default.webp`;
 
+        // --- 2. Lógica de Marcas y Formato (Llamada a main.js) ---
+        const brandClass = getBrandClass(valorExcel); // Función global en main.js
+        const campoFormato = j["Formato"] || "Físico"; 
+        const esDigital = campoFormato.toString().toUpperCase().includes("DIGITAL");
+
+        // --- 3. Estilos de UI ---
         const colorCompletitud = getCompletitudStyle(j["Completitud"]);
         const textoBadgeCompletitud = (j["Completitud"] || "???").toUpperCase();
         const style = getRegionStyle(j["Región"]);
-        
         const rarezaMap = { "LEGENDARIO": 100, "ÉPICO": 80, "RARO": 60, "INUSUAL": 40, "COMÚN": 20 };
         const rarezaTexto = (j["Rareza"] || "COMÚN").toString().toUpperCase().trim();
         const rarezaPorcentaje = rarezaMap[rarezaTexto] || 20;
         const colorRareza = getColorForRareza(rarezaTexto);
-
-        const campoFormato = j["Formato"] || "Físico"; 
-        const esDigital = campoFormato.toString().toUpperCase().includes("DIGITAL");
         const edicionRaw = j["Edición"] || "";
         const esEdicionEspecial = isValid(edicionRaw) && edicionRaw.toUpperCase() !== "ESTÁNDAR";
 
+        // NOTA: Hemos eliminado los estilos inline de 'background' y 'border' 
+        // para que las clases .nintendo, .sega, etc. del CSS funcionen.
         return `
-        <div class="card" style="position: relative; padding-bottom: 55px; display: flex; flex-direction: column; overflow: hidden; min-height: 460px; background: #1e1e24; border: 1px solid #3d3d4a;">
+        <div class="card ${brandClass} ${esDigital ? 'digital-variant' : ''}">
             <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10; background: transparent; width: auto; height: 28px; display: flex; align-items: center;">
                 ${getPlatformIcon(j["Plataforma"])}
             </div>
@@ -97,7 +93,7 @@ function createCardHTML(j) {
                 </div>
             </div>
 
-            <div style="margin-bottom: 12px; padding: 5px 0 5px 12px; border-left: 2px solid ${esDigital ? '#00d4ff' : '#555'}; margin-right: 12px;">
+            <div style="margin-bottom: 12px; padding: 5px 0 5px 12px; border-left: 3px solid ${esDigital ? '#00d4ff' : 'rgba(255,255,255,0.1)'}; margin-right: 12px;">
                 <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2;">
                     ${j["Nombre Juego"]}
                 </div>
@@ -114,10 +110,10 @@ function createCardHTML(j) {
 
             ${esDigital ? `
                 <div style="margin: 0 12px; background: rgba(0, 212, 255, 0.05); border: 1px dashed rgba(0, 212, 255, 0.2); border-radius: 6px; padding: 15px; text-align: center; color: #00d4ff; font-size: 0.7em; font-weight: bold;">
-                   BIBLIOTECA VIRTUAL
+                    BIBLIOTECA VIRTUAL
                 </div>
             ` : `
-                <div class="details-grid" style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 10px; font-size: 0.72em; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                <div class="details-grid">
                     ${[
                         { label: '📦Caja', val: j["Estado Caja"] },
                         { label: '📂Inserto', val: j["Estado Inserto"] },
@@ -135,21 +131,21 @@ function createCardHTML(j) {
                 </div>
             `}
 
-            <div class="card-footer" style="position: absolute; bottom: 12px; left: 15px; right: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="card-footer">
                 <div style="font-size: 0.65em; color: #666; font-style: italic;">
                     <i class="fa-regular fa-calendar-check"></i> ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : 'Sin fecha'}
                 </div>
-                <div class="price-tag" style="display: flex; align-items: center; gap: 4px; padding: 5px 10px;">
+                <div class="price-tag">
                     <span style="font-size: 1.1em;">💸</span>
                     <span>${j["Tasación Actual"] || "S/T"}</span>
                 </div>
             </div>
         </div>`;
     } catch (e) {
+        console.error("Error renderizando card:", e);
         return "";
     }
 }
-
 /**
 * HELPERS DE RENDERIZADO
 */
