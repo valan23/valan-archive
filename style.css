@@ -2,11 +2,8 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', sans-serif; 
-    background: #0b0b0e; 
-    color: #e0e0e0; 
-    padding: 10px;
-    overflow-x: hidden;
+    background: radial-gradient(circle at center, #1a1a1d 0%, #0f0f12 100%);
+    color: #d1d1d1; /* Un blanco roto, menos agresivo que el puro */
 }
 
 :root { 
@@ -142,30 +139,15 @@ header { width: 100%; text-align: center; }
 
 .platform-subgroup.show { display: flex; }
 
-/* --- BOTONES CON TRANSPARENCIA SELECTIVA --- */
+/* --- NUEVA ESTRUCTURA DE BOTONES INTEGRADOS --- */
 .brand-icon, .filter-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    min-width: 100px; 
-    width: auto; 
-    height: 70px;
-    
-    /* FONDO BASE: El mismo gradiente que las tarjetas */
-    background: linear-gradient(115deg, 
-        rgba(101, 101, 105, 0.7) 0%,  
-        rgba(40, 40, 45, 0.9) 100%
-    ) !important; 
-    
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    padding: 10px 15px;
-    margin: 5px;
-    backdrop-filter: blur(5px);
+    /* Fondo que nace del mismo color del body para integrarse */
+    background: rgba(255, 255, 255, 0.03) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 
+                0 4px 6px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
 }
 
 /* Logos y Texto en reposo: Apagados */
@@ -204,18 +186,13 @@ header { width: 100%; text-align: center; }
     filter: none; /* Eliminado el drop-shadow */
 }
 
-/* ESTADO SELECCIONADO (ACTIVO): Transparente pero vibrante */
+/* ESTADO ACTIVO: En lugar de un recuadro amarillo grueso, 
+   usamos un sutil relieve de luz y el texto dorado */
 .brand-icon.active, .filter-btn.active {
-    /* Gradiente un poco más claro (subimos la opacidad y el brillo del gris) */
-    background: linear-gradient(115deg, 
-        rgba(140, 140, 145, 0.8) 0%,  
-        rgba(60, 60, 65, 0.9) 45%, 
-        rgba(20, 20, 25, 1) 100%
-    ) !important; 
-    
-    border: 2px solid #efc36c !important;
-    box-shadow: 0 0 20px rgba(239, 195, 108, 0.25);
-    transform: scale(1.05);
+    background: rgba(239, 195, 108, 0.08) !important;
+    border: 1px solid rgba(239, 195, 108, 0.3) !important;
+    box-shadow: inset 0 0 12px rgba(239, 195, 108, 0.05);
+    transform: translateY(1px); /* Efecto de pulsado */
 }
 
 /* ESTADO SELECCIONADO (ACTIVO): Color vibrante y resplandor dorado */
@@ -258,14 +235,10 @@ header { width: 100%; text-align: center; }
     flex-direction: column;
     overflow: hidden;
     min-height: 480px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
 
-    /* GRADIENTE: Ahora con el color 220, 220, 225 solicitado */
-    background: linear-gradient(115deg, 
-        rgba(101, 101, 105, 0.7) 0%,  
-        rgba(40, 40, 45, 0.9) 45%, 
-        rgba(11, 11, 14, 1) 100%
-    );
+    background: linear-gradient(145deg, rgba(40, 40, 45, 0.4) 0%, rgba(20, 20, 25, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     
     backdrop-filter: blur(5px);
 }
