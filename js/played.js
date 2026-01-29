@@ -93,8 +93,8 @@ function renderPlayed(games) {
 
                 <div style="position: relative; display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 160px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px;"> 
                     
-                    <div style="position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 4px; font-size: 0.6em; font-weight: 800; text-transform: uppercase; z-index: 5; background: ${esDigital ? 'rgba(0, 212, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)'}; color: ${esDigital ? '#00d4ff' : '#aaa'}; border: 1px solid ${esDigital ? '#00d4ff' : 'rgba(255,255,255,0.2)'};">
-                        ${esDigital ? '<i class="fa-solid fa-cloud" style="margin-right: 3px;"></i> Digital' : '<i class="fa-solid fa-compact-disc" style="margin-right: 3px;"></i> Físico'}
+                    <div style="position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 4px; font-size: 0.55em; font-weight: 900; text-transform: uppercase; z-index: 5; background: ${esDigital ? 'rgba(0, 212, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)'}; color: ${esDigital ? '#00d4ff' : '#aaa'}; border: 1px solid ${esDigital ? '#00d4ff' : 'rgba(255,255,255,0.2)'};">
+                        ${esDigital ? '<i class="fa-solid fa-cloud" style="margin-right: 3px;"></i> Digital' : '<i class="fa-solid fa-floppy-disk" style="margin-right: 3px;"></i> Físico'}
                     </div>
 
                     <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0px 5px 15px rgba(0,0,0,0.5));">
