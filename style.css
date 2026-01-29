@@ -155,19 +155,25 @@ header { width: 100%; text-align: center; }
     width: auto; 
     height: 70px;
     
-    /* Estado NORMAL: Muy opaco/oscuro para que no distraiga */
-    background: rgba(20, 20, 25, 0.8) !important; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Aplicamos exactamente el mismo fondo que las tarjetas */
+    background: linear-gradient(115deg, 
+        rgba(101, 101, 105, 0.7) 0%,  
+        rgba(40, 40, 45, 0.9) 45%, 
+        rgba(11, 11, 14, 1) 100%
+    ) !important; 
+    
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borde igual a las cards */
     border-radius: 8px;
     padding: 10px 15px;
     margin: 5px;
+    backdrop-filter: blur(5px); /* Mismo efecto de desenfoque */
 }
 
 /* Logos y Texto en reposo: Apagados */
 .brand-logo-img, .btn-console-icon {
     height: 25px; width: auto; max-width: 75px; object-fit: contain;
     margin-bottom: 6px;
-    opacity: 0.3; /* Muy tenue */
+    opacity: 0.5; 
     filter: grayscale(1);
     transition: all 0.3s ease;
 }
@@ -184,19 +190,13 @@ header { width: 100%; text-align: center; }
     border-color: rgba(230, 198, 138, 0.3);
 }
 .brand-icon:hover .brand-logo-img, .filter-btn:hover .btn-console-icon {
-    opacity: 0.6;
+    opacity: 0.75;
     filter: grayscale(0.5);
 }
 
 /* ESTADO SELECCIONADO (ACTIVO): Transparente pero vibrante */
 .brand-icon.active, .filter-btn.active {
-    /* Fondo más transparente que el resto */
-    background: rgba(230, 198, 138, 0.15) !important; 
-    
-    /* Borde sólido y brillante para que destaque */
     border: 2px solid #efc36c !important;
-    
-    /* Resplandor externo (Glow) */
     box-shadow: 0 0 20px rgba(239, 195, 108, 0.25);
     transform: scale(1.05);
 }
