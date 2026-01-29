@@ -155,25 +155,25 @@ header { width: 100%; text-align: center; }
     width: auto; 
     height: 70px;
     
-    /* Aplicamos exactamente el mismo fondo que las tarjetas */
+    /* FONDO BASE: El mismo gradiente que las tarjetas */
     background: linear-gradient(115deg, 
         rgba(101, 101, 105, 0.7) 0%,  
         rgba(40, 40, 45, 0.9) 45%, 
         rgba(11, 11, 14, 1) 100%
     ) !important; 
     
-    border: 1px solid rgba(255, 255, 255, 0.08); /* Borde igual a las cards */
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     padding: 10px 15px;
     margin: 5px;
-    backdrop-filter: blur(5px); /* Mismo efecto de desenfoque */
+    backdrop-filter: blur(5px);
 }
 
 /* Logos y Texto en reposo: Apagados */
 .brand-logo-img, .btn-console-icon {
     height: 25px; width: auto; max-width: 75px; object-fit: contain;
     margin-bottom: 6px;
-    opacity: 0.5; 
+    opacity: 0.4; 
     filter: grayscale(1);
     transition: all 0.3s ease;
 }
@@ -184,18 +184,25 @@ header { width: 100%; text-align: center; }
     text-transform: uppercase; transition: all 0.3s ease;
 }
 
-/* HOVER (Ratón encima): Se aclara un poco */
 .brand-icon:hover:not(.active), .filter-btn:hover:not(.active) {
-    background: rgba(230, 198, 138, 0.1) !important;
-    border-color: rgba(230, 198, 138, 0.3);
+    border-color: rgba(239, 195, 108, 0.4); /* Iluminamos el borde en dorado suave */
+    /* No cambiamos el background aquí para que sea igual al reposo */
 }
+
 .brand-icon:hover .brand-logo-img, .filter-btn:hover .btn-console-icon {
-    opacity: 0.75;
-    filter: grayscale(0.5);
+    opacity: 0.8;
+    filter: grayscale(0.3);
 }
 
 /* ESTADO SELECCIONADO (ACTIVO): Transparente pero vibrante */
 .brand-icon.active, .filter-btn.active {
+    /* Gradiente un poco más claro (subimos la opacidad y el brillo del gris) */
+    background: linear-gradient(115deg, 
+        rgba(140, 140, 145, 0.8) 0%,  
+        rgba(60, 60, 65, 0.9) 45%, 
+        rgba(20, 20, 25, 1) 100%
+    ) !important; 
+    
     border: 2px solid #efc36c !important;
     box-shadow: 0 0 20px rgba(239, 195, 108, 0.25);
     transform: scale(1.05);
@@ -208,7 +215,7 @@ header { width: 100%; text-align: center; }
 }
 
 .brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon {
-    opacity: 1; /* Logo al 100% */
+    opacity: 1;
     filter: grayscale(0) drop-shadow(0 0 8px rgba(239, 195, 108, 0.5));
 }
 
