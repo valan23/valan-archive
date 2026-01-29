@@ -132,8 +132,8 @@ function renderWishlist(games) {
 
                 <div style="position: relative; display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 160px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
                     
-                    <div style="position: absolute; top: 8px; right: 8px; background: ${esDigital ? '#00d4ff' : '#555'}; color: ${esDigital ? '#000' : '#fff'}; font-size: 0.55em; font-weight: 900; padding: 2px 6px; border-radius: 4px; z-index: 5; letter-spacing: 0.5px;">
-                        ${esDigital ? '<i class="fa-solid fa-cloud"></i> DIGITAL' : '<i class="fa-solid fa-compact-disc"></i> FÍSICO'}
+                    <div style="position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 4px; font-size: 0.55em; font-weight: 900; text-transform: uppercase; z-index: 5; background: ${esDigital ? 'rgba(0, 212, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)'}; color: ${esDigital ? '#00d4ff' : '#aaa'}; border: 1px solid ${esDigital ? '#00d4ff' : 'rgba(255,255,255,0.2)'};">
+                        ${esDigital ? '<i class="fa-solid fa-cloud" style="margin-right: 3px;"></i> Digital' : '<i class="fa-solid fa-floppy-disk" style="margin-right: 3px;"></i> Físico'}
                     </div>
 
                     <img src="${fotoUrl}" loading="lazy" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5)); ${esDigital ? 'opacity: 0.7;' : ''}">
