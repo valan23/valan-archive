@@ -113,7 +113,14 @@ function renderWishlist(games) {
                     <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2;">
                         ${j["Nombre Juego"]}
                     </div>
-                    ${esEdicionEspecial ? `<div style="font-size: 0.7em; color: #aaa; margin-top: 4px;"><i class="fa-solid fa-star" style="color: #EFC36C;"></i> ${edicionRaw}</div>` : ''}
+                    
+                    ${isValid(j["Nombre Japones"]) ? `
+                        <div style="font-size: 0.65em; color: #444; margin-top: 3px; font-family: 'Noto Sans JP', sans-serif; font-weight: 700; text-shadow: 1px 1px 0px rgba(255,255,255,0.5);">
+                            ${j["Nombre Japones"]}
+                        </div>
+                    ` : ''}
+
+                    ${esEdicionEspecial ? `<div style="font-size: 0.7em; color: #555; margin-top: 4px; font-weight: 600; text-shadow: 1px 1px 0px rgba(255,255,255,0.3);"><i class="fa-solid fa-star" style="color: #EFC36C;"></i> ${edicionRaw}</div>` : ''}
                 </div>
 
                 <div style="position: relative; display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 150px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px;"> 
@@ -136,7 +143,7 @@ function renderWishlist(games) {
                 </div>
 
                 <div style="padding: 12px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-                    <div style="font-size: 0.6em; color: #555;">
+                    <div style="font-size: 0.6em; color: #222;">
                         REV: ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : '--/--'}
                     </div>
                     ${isValid(j["Link"]) ? `
