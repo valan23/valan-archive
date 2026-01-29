@@ -85,7 +85,7 @@ function createCardHTML(j) {
                 </div>
             </div>
 
-            <div style="margin-bottom: 12px; padding: 0 12px; margin-right: 12px;">
+            <div style="margin-bottom: 12px; padding: 0 12px;">
                 <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2;">
                     ${j["Nombre Juego"]}
                 </div>
@@ -97,34 +97,36 @@ function createCardHTML(j) {
                 <img src="${fotoUrl}" loading="lazy" decoding="async" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5));">
             </div>
 
-            <div class="details-grid" style="margin: 0 12px; flex-grow: 1;">
+            <div style="flex-grow: 1;">
                 ${esDigital ? `
                     <div style="margin: 0 12px; background: rgba(0, 212, 255, 0.05); border: 1px dashed rgba(0, 212, 255, 0.2); border-radius: 6px; padding: 15px; text-align: center; color: #00d4ff; font-size: 0.7em; font-weight: bold; letter-spacing: 1px;">
                         CONTENIDO DIGITAL
                     </div>
                 ` : `
-                    ${[
-                        { label: '📦Caja', val: j["Estado Caja"] },
-                        { label: '📂Inserto', val: j["Estado Inserto"] },
-                        { label: '📖Manual', val: j["Estado Manual"] },
-                        { label: '💾Juego', val: j["Estado Juego"] },
-                        { label: '🖼️Portada', val: j["Estado Portada"] },
-                        { label: '🔖Obi', val: j["Estado Spinecard"] },
-                        { label: '🎁Extras', val: j["Estado Extras"] }
-                    ].filter(item => isValid(item.val)).map(item => `
-                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                            <span style="color: #999; font-size: 0.9em;">${item.label}:</span>
-                            <span style="font-weight: bold;">${formatEstado(item.val)}</span>
-                        </div>
-                    `).join('')}
+                    <div class="details-grid" style="margin: 0 12px;">
+                        ${[
+                            { label: '📦Caja', val: j["Estado Caja"] },
+                            { label: '📂Inserto', val: j["Estado Inserto"] },
+                            { label: '📖Manual', val: j["Estado Manual"] },
+                            { label: '💾Juego', val: j["Estado Juego"] },
+                            { label: '🖼️Portada', val: j["Estado Portada"] },
+                            { label: '🔖Obi', val: j["Estado Spinecard"] },
+                            { label: '🎁Extras', val: j["Estado Extras"] }
+                        ].filter(item => isValid(item.val)).map(item => `
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
+                                <span style="color: #999; font-size: 0.9em;">${item.label}:</span>
+                                <span style="font-weight: bold;">${formatEstado(item.val)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
                 `}
             </div>
 
-            <div class="card-footer">
+            <div class="card-footer" style="border-top: 1px solid rgba(255,255,255,0.1); padding: 10px 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
                 <div style="font-size: 0.65em; color: #666; font-style: italic;">
                     <i class="fa-regular fa-calendar-check"></i> ${isValid(j["Fecha revision"]) ? j["Fecha revision"] : 'Pendiente'}
                 </div>
-                <div class="price-tag">
+                <div class="price-tag" style="display: flex; align-items: center; gap: 5px;">
                     <span style="font-size: 1.1em;">💸</span>
                     <span>${j["Tasación Actual"] || "S/T"}</span>
                 </div>
