@@ -44,7 +44,7 @@ function createCardHTML(j) {
         
         const rarezaTexto = (j["Rareza"] || "COMÚN").toString().toUpperCase().trim();
         const rarezaPorcentaje = { "LEGENDARIO": 100, "ÉPICO": 80, "RARO": 60, "INUSUAL": 40, "COMÚN": 20 }[rarezaTexto] || 20;
-        const colorRareza = getColorForRareza(rarezaTexto);
+        const colorRareza = typeof getColorForRareza === 'function' ? getColorForRareza(rarezaTexto) : "#fff";
 
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
         const edicionRaw = j["Edición"] || "";
@@ -94,6 +94,9 @@ function createCardHTML(j) {
             </div>
 
             <div style="position: relative; display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 170px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
+                <div style="position: absolute; bottom: 8px; left: 8px; padding: 4px 10px; border-radius: 4px; font-size: 0.6em; font-weight: 900; text-transform: uppercase; z-index: 5; background: ${esDigital ? '#00d4ff' : '#e67e22'}; color: ${esDigital ? '#000' : '#fff'}; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); display: flex; align-items: center; opacity: 0.95;">
+                    ${esDigital ? '<i class="fa-solid fa-cloud" style="margin-right: 5px;"></i> Digital' : '<i class="fa-solid fa-floppy-disk" style="margin-right: 5px;"></i> Físico'}
+                </div>
                 <img src="${fotoUrl}" loading="lazy" decoding="async" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5));">
             </div>
 
@@ -113,9 +116,9 @@ function createCardHTML(j) {
                             { label: '🔖Obi', val: j["Estado Spinecard"] },
                             { label: '🎁Extras', val: j["Estado Extras"] }
                         ].filter(item => isValid(item.val)).map(item => `
-                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                                <span style="color: #999; font-size: 0.9em;">${item.label}:</span>
-                                <span style="font-weight: bold;">${formatEstado(item.val)}</span>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; align-items: center;">
+                                <span style="color: #999; font-size: 1em;">${item.label}:</span>
+                                <span style="font-weight: bold; font-size: 1em;">${formatEstado(item.val)}</span>
                             </div>
                         `).join('')}
                     </div>
@@ -138,22 +141,18 @@ function createCardHTML(j) {
     }
 }
 
-// --- HELPERS MEJORADOS ---
+// --- HELPERS ---
 
 function getRegionStyle(region) {
     if (!region) return { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
     const r = region.toUpperCase().trim();
-    // Busca en el objeto REGION_COLORS de config.js
     return REGION_COLORS[r] || { bg: "rgba(255,255,255,0.1)", text: "#ccc", border: "transparent" };
 }
 
 function getCompletitudStyle(valor) {
     if (!valor) return "#333";
     const v = valor.toUpperCase().trim();
-    // Busca en el objeto COMPLETITUD_COLORS de config.js
     if (COMPLETITUD_COLORS[v]) return COMPLETITUD_COLORS[v].color;
-    
-    // Búsqueda parcial por si acaso (ej: "COMPLETO (SIN OBI)")
     for (let key in COMPLETITUD_COLORS) {
         if (v.includes(key)) return COMPLETITUD_COLORS[key].color;
     }
@@ -164,7 +163,16 @@ function formatEstado(valor) {
     if (!valor || valor.toUpperCase() === "NA") return "";
     const num = parseFloat(valor);
     if (isNaN(num)) return valor;
-    // Color según nota (0 rojo - 10 verde)
     const hue = Math.min(Math.max(num * 12, 0), 120); 
     return `<span style="color: hsl(${hue}, 100%, 50%);">${num}/10</span>`;
+}
+
+function getColorForRareza(rareza) {
+    const r = rareza ? rareza.toString().toUpperCase() : "";
+    if (r.includes("LEGENDARIO")) return "#EFC36C"; 
+    if (r.includes("ÉPICO"))      return "#A335EE"; 
+    if (r.includes("RARO"))       return "#0070DD"; 
+    if (r.includes("INUSUAL"))    return "#1EFF00"; 
+    if (r.includes("COMÚN"))      return "#FFFFFF"; 
+    return "#888";
 }
