@@ -300,7 +300,7 @@ function getBrandClass(plataformaStr) {
     const p = (plataformaStr || "").toUpperCase();
     
     if (p.includes("NINTENDO") || p.includes("FAMICOM") || p.includes("GAME BOY") || 
-        p.includes("WII") || p.includes("NES") || p.includes("SFC") || p.includes("64")) {
+        p.includes("WII") || p.includes("NES") || p.includes("SFC") || p.includes("64") || p.includes("SWITCH")) {
         return "nintendo";
     }
     if (p.includes("SEGA") || p.includes("MASTER") || p.includes("MEGA") || 
@@ -308,11 +308,15 @@ function getBrandClass(plataformaStr) {
         return "sega";
     }
     if (p.includes("PLAYSTATION") || p.includes("PS1") || p.includes("PS2") || 
-        p.includes("PS3") || p.includes("PSX") || p.includes("PSP") || p.includes("VITA")) {
+        p.includes("PS3") || p.includes("PS4") || p.includes("PS5") || p.includes("PSX") || p.includes("PSP") || p.includes("VITA")) {
         return "sony";
     }
     if (p.includes("XBOX")) {
         return "xbox";
     }
-    return "pc"; // Clase por defecto
+    if (p.includes("PC") || p.includes("STEAM") || p.includes("GOG") || p.includes("EPIC") || p.includes("BATTLE") || p.includes("MS-DOS") || p.includes("WINDOWS")) {
+        return "pc";
+    }
+    
+    return "otros"; // Para Neo Geo, Atari, WonderSwan, etc.
 }
