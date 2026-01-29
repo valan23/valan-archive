@@ -1,25 +1,44 @@
 /**
- * wishlist_games.js - Optimizado
+ * wishlist_games.js - Optimizado 2026
  */
+const TASA_CAMBIO_YEN = 180;
 
+// --- FUNCIONES DE APOYO (DEFINIDAS PARA EVITAR ERRORES) ---
 function obtenerValorEnEuros(precioStr) {
     if (!precioStr || precioStr.toUpperCase() === "NA") return Infinity;
-    // Limpieza más robusta de strings de precio
     const num = parseFloat(precioStr.toString().replace(/[^0-9.,]/g, '').replace(',', '.'));
     if (isNaN(num)) return Infinity;
 
-    // Ajuste de tasa de cambio Yen a Euro (más realista)
-    if (precioStr.includes('¥') || precioStr.toLowerCase().includes('surugaya') || precioStr.toLowerCase().includes('mercari')) {
-        return num / 180; 
-    }
-    return num;
+    const esTiendaJaponesa = precioStr.includes('¥') || 
+                             precioStr.toLowerCase().includes('surugaya') || 
+                             precioStr.toLowerCase().includes('mercari');
+
+    return esTiendaJaponesa ? (num / TASA_CAMBIO_YEN) : num;
 }
 
+function getColorForPrioridad(prioridad) {
+    const p = prioridad ? prioridad.toString().toUpperCase() : "";
+    if (p.includes("IMPRESCINDIBLE")) return "#FF4500"; 
+    if (p.includes("PREFERIDO"))      return "#FFD700"; 
+    if (p.includes("DESEADO"))        return "#00D4FF"; 
+    return "#555";
+}
+
+function getColorForRareza(rareza) {
+    const r = rareza ? rareza.toString().toUpperCase() : "";
+    if (r.includes("LEGENDARIO")) return "#EFC36C"; 
+    if (r.includes("ÉPICO"))      return "#A335EE"; 
+    if (r.includes("RARO"))       return "#0070DD"; 
+    if (r.includes("INUSUAL"))    return "#1EFF00"; 
+    if (r.includes("COMÚN"))      return "#FFFFFF"; 
+    return "#888";
+}
+
+// --- RENDERIZADO PRINCIPAL ---
 function renderWishlist(games) {
     const container = document.getElementById('wishlist-grid');
     if (!container) return;
 
-    // Llamada a filtros (asegúrate de que esta función exista globalmente)
     if (typeof renderFormatFilters === 'function') {
         renderFormatFilters(games, 'format-buttons-container-wishlist', 'wishlist');
     }
@@ -33,7 +52,7 @@ function renderWishlist(games) {
             const carpetaSistema = platformMap[valorExcel] || valorExcel.toLowerCase().replace(/\s+/g, '');
             const fotoUrl = isValid(j["Portada"]) ? `images/covers/${carpetaSistema}/${j["Portada"].trim()}` : `images/covers/default.webp`;
 
-            const style = typeof getRegionStyle === 'function' ? getRegionStyle(j["Región"]) : {bg: '#333', text: '#eee', border: '#444'};
+            const style = typeof getRegionStyle === 'function' ? getRegionStyle(j["Región"]) : {bg: 'rgba(255,255,255,0.1)', text: '#eee', border: 'transparent'};
             const brandClass = typeof getBrandClass === 'function' ? getBrandClass(valorExcel) : "";
             
             const campoFormato = j["Formato"] || "Físico";
@@ -42,7 +61,12 @@ function renderWishlist(games) {
             const edicionRaw = j["Edición"] || "";
             const esEdicionEspecial = isValid(edicionRaw) && edicionRaw.toUpperCase() !== "ESTÁNDAR";
 
-            // --- LÓGICA DE PRECIOS ---
+            const priorTexto = (j["Prioridad"] || "DESEADO").trim().toUpperCase();
+            const colorPrioridad = getColorForPrioridad(priorTexto);
+            const rarezaTexto = (j["Rareza"] || "COMÚN").trim().toUpperCase();
+            const colorRareza = getColorForRareza(rarezaTexto);
+
+            // Precios
             const listaPrecios = [
                 { nombre: 'Nuevo', valor: j["Precio Nuevo"], eur: obtenerValorEnEuros(j["Precio Nuevo"]), color: '#D4BD66' },
                 { nombre: 'CeX', valor: j["Precio Cex"], eur: obtenerValorEnEuros(j["Precio Cex"]), color: '#ff4444' }, 
@@ -55,14 +79,8 @@ function renderWishlist(games) {
             const preciosValidos = listaPrecios.filter(p => isValid(p.valor));
             const precioMinimoEur = preciosValidos.length > 0 ? Math.min(...preciosValidos.map(p => p.eur)) : Infinity;
 
-            const priorTexto = (j["Prioridad"] || "DESEADO").trim().toUpperCase();
-            const colorPrioridad = getColorForPrioridad(priorTexto);
-            
-            const rarezaTexto = (j["Rareza"] || "COMÚN").trim().toUpperCase();
-            const rarezaPorcentaje = { "LEGENDARIO": 100, "ÉPICO": 80, "RARO": 60, "INUSUAL": 40, "COMÚN": 20 }[rarezaTexto] || 20;
-
             return `
-            <div class="card ${brandClass} ${esDigital ? 'digital-variant' : 'physical-variant'}" style="display: flex; flex-direction: column; min-height: 520px;">
+            <div class="card ${brandClass} ${esDigital ? 'digital-variant' : 'physical-variant'}" style="display: flex; flex-direction: column; min-height: 520px; position: relative;">
                 
                 <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10;">
                     ${typeof getPlatformIcon === 'function' ? getPlatformIcon(j["Plataforma"]) : ''}
@@ -85,16 +103,14 @@ function renderWishlist(games) {
                         </div>
                     </div>
                     <div style="flex-grow: 1;"></div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
-                         <div style="font-size: 0.7em; font-weight: 800; color: ${getColorForRareza(rarezaTexto)}; display: flex; align-items: center; gap: 3px;">
-                            <span style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">💎</span>
-                            <span>${rarezaTexto}</span>
-                        </div>
+                    <div style="font-size: 0.7em; font-weight: 800; color: ${colorRareza}; display: flex; align-items: center; gap: 3px;">
+                        <span style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">💎</span>
+                        <span>${rarezaTexto}</span>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 12px; padding: 5px 12px; margin-right: 12px;">
-                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                <div style="margin-bottom: 12px; padding: 0 12px;">
+                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2;">
                         ${j["Nombre Juego"]}
                     </div>
                     ${esEdicionEspecial ? `<div style="font-size: 0.7em; color: #aaa; margin-top: 4px;"><i class="fa-solid fa-star" style="color: #EFC36C;"></i> ${edicionRaw}</div>` : ''}
