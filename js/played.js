@@ -2,7 +2,7 @@
  * played.js - Registro de juegos terminados con Gradientes de Marca
  */
 
-// Función auxiliar para colores de estado (Proceso Juego)
+// 1. Función auxiliar para colores de estado (Proceso Juego)
 function getColorForProceso(proceso) {
     const p = proceso ? proceso.toString().toUpperCase().trim() : "";
     
@@ -15,13 +15,16 @@ function getColorForProceso(proceso) {
         "SIN JUGAR":  { border: "#888888", bg: "rgba(136, 136, 136, 0.15)", text: "#888888" }
     };
 
-    // Si no encuentra el estado, devuelve el dorado por defecto que tenías
     return colores[p] || { border: "#EFC36C", bg: "rgba(239, 195, 108, 0.15)", text: "#EFC36C" };
 }
 
+// 2. Función Principal de Renderizado
 function renderPlayed(games) {
     const container = document.getElementById('played-grid');
     if (!container) return;
+
+    // --- ACTIVAR FILTROS POR AÑO ---
+    updateYearFilters(games);
 
     renderFormatFilters(games, 'format-buttons-container-played', 'played');
 
@@ -51,7 +54,6 @@ function renderPlayed(games) {
             const tiempoJuego = j["Tiempo Juego"] || j["Tiempo juego"] || "--h";
             const procesoJuego = j["Proceso Juego"] || j["Proceso juego"] || "---";
             
-            // Obtener colores para la etiqueta de proceso
             const colorStatus = getColorForProceso(procesoJuego);
 
             return `
@@ -114,7 +116,7 @@ function renderPlayed(games) {
                     <div style="display: flex; flex-direction: column; flex: 1; text-align: right;">
                         <span style="font-size: 0.55em; color: #777; text-transform: uppercase;">Tiempo</span>
                         <span style="font-size: 0.7em; color: #00ff88; font-weight: 800; display: flex; align-items: center; justify-content: flex-end; gap: 3px;">
-                            <i class="fa-regular fa-clock" style="font-size: 0.9em;"></i> ${tiempoJuego}
+                            <i class="fa-regular fa-clock" style="font-size: 0.9em;"></i> ${tiempoJuego} h
                         </span>
                     </div>
                 </div>
@@ -127,7 +129,7 @@ function renderPlayed(games) {
 }
 
 /**
- * HELPERS DE APOYO
+ * 3. HELPERS DE APOYO
  */
 
 function getColorForNota(valor) {
@@ -136,4 +138,61 @@ function getColorForNota(valor) {
     let r = n < 5 ? 255 : Math.round(255 - ((n - 5) * 51));
     let g = n < 5 ? Math.round(68 + (n * 37.4)) : 255;
     return `rgb(${r}, ${g}, 68)`;
+}
+
+// --- LÓGICA DE FILTRADO POR AÑO ---
+
+function updateYearFilters(games) {
+    const container = document.getElementById('year-buttons-container');
+    if (!container) return;
+
+    const counts = { all: games.length };
+    
+    games.forEach(j => {
+        // Buscamos año en "Ultima fecha" o en la columna "Año" directamente
+        const fechaRaw = j["Ultima fecha"] || j["Ultima Fecha"] || j["Año"] || "";
+        const match = String(fechaRaw).match(/\d{4}/);
+        
+        if (match) {
+            const year = match[0];
+            counts[year] = (counts[year] || 0) + 1;
+        }
+    });
+
+    const years = Object.keys(counts).filter(y => y !== 'all').sort((a, b) => b - a);
+
+    let buttonsHTML = `<button class="year-btn active" data-year="all">Todos (${counts.all})</button>`;
+    years.forEach(year => {
+        buttonsHTML += `<button class="year-btn" data-year="${year}">${year} (${counts[year]})</button>`;
+    });
+
+    container.innerHTML = buttonsHTML;
+    setupYearFilterEvents();
+}
+
+function setupYearFilterEvents() {
+    const container = document.getElementById('year-buttons-container');
+    // Clonar para evitar duplicar event listeners si se llama varias veces
+    const newContainer = container.cloneNode(true);
+    container.parentNode.replaceChild(newContainer, container);
+    
+    newContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.year-btn');
+        if (!btn) return;
+
+        const selectedYear = btn.getAttribute('data-year');
+
+        document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const cards = document.querySelectorAll('#played-grid .card');
+        cards.forEach(card => {
+            const cardText = card.innerText || card.textContent;
+            if (selectedYear === 'all' || cardText.includes(selectedYear)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
 }
