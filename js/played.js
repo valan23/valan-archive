@@ -24,9 +24,13 @@ function renderPlayed(games) {
     if (!container) return;
 
     // --- ACTIVAR FILTROS POR AÑO ---
-    updateYearFilters(games);
-
+   // --- PRIMERO: FILTRO DE FORMATO ---
+    // Esto asegura que el contenedor de formatos se llene antes
     renderFormatFilters(games, 'format-buttons-container-played', 'played');
+
+    // --- SEGUNDO: FILTRO POR AÑO ---
+    // Esto llenará el contenedor de años después
+    updateYearFilters(games);
 
     const isValid = (val) => val && val.trim() !== "" && val.toUpperCase() !== "NA";
 
