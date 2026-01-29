@@ -93,8 +93,8 @@ function renderWishlist(games) {
                     </div>
                 </div>
 
-                <div style="margin-bottom: 12px; padding: 5px 0; padding-left: 12px;">
-                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2;">
+                <div style="margin-bottom: 12px; padding: 5px 12px; margin-right: 12px;">
+                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                         ${j["Nombre Juego"]}
                     </div>
                     ${esEdicionEspecial ? `<div style="font-size: 0.7em; color: #aaa; margin-top: 4px;"><i class="fa-solid fa-star" style="color: #EFC36C;"></i> ${edicionRaw}</div>` : ''}
