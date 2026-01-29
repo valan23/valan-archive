@@ -2,10 +2,6 @@
  * games.js - Renderizado optimizado con carga progresiva y Gradientes Dinámicos
  */
 
-/**
- * games.js - Renderizado optimizado con carga progresiva y Badges de Formato
- */
-
 function renderGames(games) {
     const container = document.getElementById('game-grid');
     if (!container) return;
@@ -36,7 +32,6 @@ function createCardHTML(j) {
     try {
         const isValid = (val) => val && val.trim() !== "" && val.toUpperCase() !== "NA";
         
-        // --- 1. Lógica de Carpetas e Imágenes ---
         const platformMap = { "Famicom": "fc", "Famicom Disk System": "fds", "Super Famicom": "sfc" };
         const valorExcel = j["Plataforma"] ? j["Plataforma"].trim() : "";
         const keyMatch = Object.keys(platformMap).find(key => key.toUpperCase() === valorExcel.toUpperCase());
@@ -45,19 +40,19 @@ function createCardHTML(j) {
         const nombrePortada = j["Portada"] ? j["Portada"].trim() : "";
         const fotoUrl = isValid(nombrePortada) ? `images/covers/${carpetaSistema}/${nombrePortada}` : `images/covers/default.webp`;
 
-        // --- 2. Lógica de Marcas y Formato ---
         const brandClass = getBrandClass(valorExcel); 
         const campoFormato = j["Formato"] || "Físico"; 
         const esDigital = campoFormato.toString().toUpperCase().includes("DIGITAL");
 
-        // --- 3. Estilos de UI ---
         const colorCompletitud = getCompletitudStyle(j["Completitud"]);
         const textoBadgeCompletitud = (j["Completitud"] || "???").toUpperCase();
         const style = getRegionStyle(j["Región"]);
+        
         const rarezaMap = { "LEGENDARIO": 100, "ÉPICO": 80, "RARO": 60, "INUSUAL": 40, "COMÚN": 20 };
         const rarezaTexto = (j["Rareza"] || "COMÚN").toString().toUpperCase().trim();
         const rarezaPorcentaje = rarezaMap[rarezaTexto] || 20;
         const colorRareza = getColorForRareza(rarezaTexto);
+        
         const edicionRaw = j["Edición"] || "";
         const esEdicionEspecial = isValid(edicionRaw) && edicionRaw.toUpperCase() !== "ESTÁNDAR";
 
@@ -104,11 +99,9 @@ function createCardHTML(j) {
             </div>
 
             <div style="position: relative; display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 170px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
-                
                 <div style="position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 4px; font-size: 0.55em; font-weight: 900; text-transform: uppercase; z-index: 5; background: ${esDigital ? 'rgba(0, 212, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)'}; color: ${esDigital ? '#00d4ff' : '#aaa'}; border: 1px solid ${esDigital ? '#00d4ff' : 'rgba(255,255,255,0.2)'};">
                     ${esDigital ? '<i class="fa-solid fa-cloud" style="margin-right: 3px;"></i> Digital' : '<i class="fa-solid fa-floppy-disk" style="margin-right: 3px;"></i> Físico'}
                 </div>
-
                 <img src="${fotoUrl}" loading="lazy" decoding="async" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5)); ${esDigital ? 'opacity: 0.7;' : ''}">
             </div>
 
@@ -150,6 +143,7 @@ function createCardHTML(j) {
         return "";
     }
 }
+
 /**
 * HELPERS DE RENDERIZADO
 */
