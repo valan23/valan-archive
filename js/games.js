@@ -90,7 +90,7 @@ function createCardHTML(j) {
                 </div>
             </div>
 
-            <div style="margin-bottom: 12px; padding: 5px 0 5px 12px; border-left: 3px solid ${esDigital ? '#00d4ff' : 'rgba(255,255,255,0.1)'}; margin-right: 12px;">
+            <div style="margin-bottom: 12px; padding: 5px 0; margin-right: 12px;">
                 <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2;">
                     ${j["Nombre Juego"]}
                 </div>
