@@ -241,16 +241,36 @@ header { width: 100%; text-align: center; }
     min-height: 480px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    /* Gradiente base (Gris oscuro/Negro) */
-    background: linear-gradient(135deg, #1e1e24 0%, #0b0b0e 100%);
+    
+    /* Gradiente: Blanco/Gris claro (izquierda) a Gris oscuro/Negro (derecha) */
+    background: linear-gradient(90deg, #e0e0e0 0%, #1e1e24 40%, #0b0b0e 100%);
+    color: #eee; /* Texto claro para que contraste con la parte oscura */
 }
 
-/* Variantes por Compañía (Gradientes Diagonales) */
-.card.nintendo { background: linear-gradient(135deg, rgba(230, 0, 18, 0.15) 0%, #0b0b0e 60%); border-left: 3px solid #e60012; }
-.card.sega     { background: linear-gradient(135deg, rgba(0, 137, 209, 0.15) 0%, #0b0b0e 60%); border-left: 3px solid #0089d1; }
-.card.sony     { background: linear-gradient(135deg, rgba(0, 48, 135, 0.2) 0%, #0b0b0e 60%); border-left: 3px solid #003087; }
-.card.xbox     { background: linear-gradient(135deg, rgba(16, 124, 16, 0.15) 0%, #0b0b0e 60%); border-left: 3px solid #107c10; }
-.card.pc       { background: linear-gradient(135deg, rgba(149, 0, 255, 0.1) 0%, #0b0b0e 60%); border-left: 3px solid #9500ff; }
+/* Línea lateral por marca usando Box-Shadow para no afectar el layout */
+.card.nintendo {
+    box-shadow: inset 6px 0 0 0 #e60012; /* Rojo Nintendo */
+}
+
+.card.sega {
+    box-shadow: inset 6px 0 0 0 #0089cf; /* Azul SEGA */
+}
+
+.card.sony, .card.playstation {
+    box-shadow: inset 6px 0 0 0 #003791; /* Azul PlayStation */
+}
+
+.card.xbox {
+    box-shadow: inset 6px 0 0 0 #107c10; /* Verde Xbox */
+}
+
+.card.pc {
+    box-shadow: inset 6px 0 0 0 #4c5b6a; /* Gris metálico "Steam/PC" */
+}
+
+.card.otros {
+    box-shadow: inset 6px 0 0 0 #9b59b6; /* Púrpura para otras marcas */
+}
 
 /* Efecto Hover */
 .card:hover {
@@ -262,6 +282,11 @@ header { width: 100%; text-align: center; }
 .card-footer {
     position: absolute; bottom: 15px; left: 15px; right: 15px;
     display: flex; justify-content: space-between; align-items: center;
+}
+
+/* Ajuste de brillo para que la parte clara no moleste al texto del título */
+.card .game-title {
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
 /* Este contenedor obliga al icono a tener un tamaño físico real */
