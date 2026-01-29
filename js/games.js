@@ -98,10 +98,6 @@ function createCardHTML(j) {
                 ${esDigital ? `
                     <div style="padding: 15px; text-align: center; color: #00d4ff; font-size: 0.85em; font-weight: bold;">CONTENIDO DIGITAL</div>
                 ` : `
-                    <div style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 10px; flex-grow: 1;">
-                ${esDigital ? `
-                    <div style="padding: 15px; text-align: center; color: #00d4ff; font-size: 0.85em; font-weight: bold;">CONTENIDO DIGITAL</div>
-                ` : `
                     <div class="details-grid" style="display: flex; flex-direction: column; gap: 4px;">
                     ${[
                         { label: '📦Caja', val: j["Estado Caja"] },
