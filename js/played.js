@@ -2,6 +2,23 @@
  * played.js - Registro de juegos terminados con Gradientes de Marca
  */
 
+// Función auxiliar para colores de estado (Proceso Juego)
+function getColorForProceso(proceso) {
+    const p = proceso ? proceso.toString().toUpperCase().trim() : "";
+    
+    const colores = {
+        "COMPLETADO": { border: "#00ff88", bg: "rgba(0, 255, 136, 0.15)", text: "#00ff88" },
+        "EN PROCESO": { border: "#00d4ff", bg: "rgba(0, 212, 255, 0.15)", text: "#00d4ff" },
+        "JUGADO":     { border: "#FFD700", bg: "rgba(255, 215, 0, 0.15)", text: "#FFD700" },
+        "ABANDONADO": { border: "#ff4444", bg: "rgba(255, 68, 68, 0.15)", text: "#ff4444" },
+        "PROBADO":    { border: "#a335ee", bg: "rgba(163, 53, 238, 0.15)", text: "#a335ee" },
+        "SIN JUGAR":  { border: "#888888", bg: "rgba(136, 136, 136, 0.15)", text: "#888888" }
+    };
+
+    // Si no encuentra el estado, devuelve el dorado por defecto que tenías
+    return colores[p] || { border: "#EFC36C", bg: "rgba(239, 195, 108, 0.15)", text: "#EFC36C" };
+}
+
 function renderPlayed(games) {
     const container = document.getElementById('played-grid');
     if (!container) return;
@@ -24,7 +41,8 @@ function renderPlayed(games) {
             const campoFormato = j["Formato"] || "Físico";
             const esDigital = campoFormato.toString().toUpperCase().includes("DIGITAL");
 
-            const nota = parseFloat(j["Nota"]) || "-";
+            const notaRaw = parseFloat(j["Nota"]);
+            const nota = isNaN(notaRaw) ? 0 : notaRaw;
             const colorNota = getColorForNota(nota);
 
             // Variables de datos
@@ -32,6 +50,9 @@ function renderPlayed(games) {
             const ultimaFecha = j["Ultima fecha"] || j["Ultima Fecha"] || "---";
             const tiempoJuego = j["Tiempo Juego"] || j["Tiempo juego"] || "--h";
             const procesoJuego = j["Proceso Juego"] || j["Proceso juego"] || "---";
+            
+            // Obtener colores para la etiqueta de proceso
+            const colorStatus = getColorForProceso(procesoJuego);
 
             return `
             <div class="card ${brandClass} ${esDigital ? 'digital-variant' : ''}">
@@ -57,7 +78,7 @@ function renderPlayed(games) {
                         </div>
                     </div>
                     <div style="flex-grow: 1;"></div>
-                    <div style="background: rgba(239, 195, 108, 0.15); border: 1px solid #EFC36C; color: #EFC36C; font-size: 0.6em; font-weight: 800; padding: 2px 8px; border-radius: 10px; text-transform: uppercase;">
+                    <div style="background: ${colorStatus.bg}; border: 1px solid ${colorStatus.border}; color: ${colorStatus.text}; font-size: 0.6em; font-weight: 800; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;">
                         ${procesoJuego}
                     </div>
                 </div>
@@ -104,19 +125,10 @@ function renderPlayed(games) {
         }
     }).join('');
 }
-/**
- * HELPERS DE APOYO (Para evitar que falle el renderizado)
- */
 
-function renderStars(nota) {
-    const totalStars = 5;
-    const filledStars = Math.round(nota / 2);
-    let html = '';
-    for (let i = 1; i <= totalStars; i++) {
-        html += `<i class="fa-solid fa-star" style="color: ${i <= filledStars ? '#FFD700' : 'rgba(255,255,255,0.1)'}; font-size: 0.8em;"></i>`;
-    }
-    return html;
-}
+/**
+ * HELPERS DE APOYO
+ */
 
 function getColorForNota(valor) {
     const n = parseFloat(valor);
@@ -125,5 +137,3 @@ function getColorForNota(valor) {
     let g = n < 5 ? Math.round(68 + (n * 37.4)) : 255;
     return `rgb(${r}, ${g}, 68)`;
 }
-
-// ... (Aquí puedes mantener tu lógica de updateYearFilters que ya tenías)
