@@ -31,7 +31,7 @@ function renderPlayed(games) {
             const primeraFecha = j["Primera fecha"] || j["Primera Fecha"] || "---";
             const ultimaFecha = j["Ultima fecha"] || j["Ultima Fecha"] || "---";
             const tiempoJuego = j["Tiempo Juego"] || j["Tiempo juego"] || "--h";
-            const proceso = j["Proceso"] || "Finalizado";
+            const procesoJuego = j["Proceso Juego"] || j["Proceso juego"] || "---";
 
             return `
             <div class="card ${brandClass} ${esDigital ? 'digital-variant' : ''}">
@@ -58,7 +58,7 @@ function renderPlayed(games) {
                     </div>
                     <div style="flex-grow: 1;"></div>
                     <div style="background: rgba(239, 195, 108, 0.15); border: 1px solid #EFC36C; color: #EFC36C; font-size: 0.6em; font-weight: 800; padding: 2px 8px; border-radius: 10px; text-transform: uppercase;">
-                        ${proceso}
+                        ${procesoJuego}
                     </div>
                 </div>
 
