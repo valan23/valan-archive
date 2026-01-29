@@ -171,17 +171,25 @@ header { width: 100%; text-align: center; }
 
 /* Logos y Texto en reposo: Apagados */
 .brand-logo-img, .btn-console-icon {
-    height: 25px; width: auto; max-width: 75px; object-fit: contain;
+    height: 25px; 
+    width: auto; 
+    max-width: 75px; 
+    object-fit: contain;
     margin-bottom: 6px;
-    opacity: 0.4; 
-    filter: grayscale(1);
+    
+    /* ESTADO REPOSO: Con color, pero suavizado */
+    opacity: 0.55;           /* Subimos un poco para que el color se aprecie */
+    filter: grayscale(0);    /* ELIMINADO EL GRIS: Ahora se ven los colores originales */
     transition: all 0.3s ease;
 }
 
-/* Texto en reposo: Color apagado */
+/* Texto en reposo: Un poco más claro para acompañar al logo con color */
 .brand-icon span, .filter-btn span {
-    font-size: 9.5px; font-weight: 700; color: #555;
-    text-transform: uppercase; transition: all 0.3s ease;
+    font-size: 9.5px; 
+    font-weight: 700; 
+    color: #888;             /* Un gris más claro que el #555 anterior */
+    text-transform: uppercase; 
+    transition: all 0.3s ease;
 }
 
 .brand-icon:hover:not(.active), .filter-btn:hover:not(.active) {
@@ -189,9 +197,11 @@ header { width: 100%; text-align: center; }
     /* No cambiamos el background aquí para que sea igual al reposo */
 }
 
-.brand-icon:hover .brand-logo-img, .filter-btn:hover .btn-console-icon {
-    opacity: 0.8;
-    filter: grayscale(0.3);
+/* HOVER (Ratón encima): El color se intensifica */
+.brand-icon:hover .brand-logo-img, 
+.filter-btn:hover .btn-console-icon {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.1));
 }
 
 /* ESTADO SELECCIONADO (ACTIVO): Transparente pero vibrante */
@@ -208,15 +218,17 @@ header { width: 100%; text-align: center; }
     transform: scale(1.05);
 }
 
-.brand-icon.active span, .filter-btn.active span {
-    color: #efc36c; /* El texto brilla en dorado */
+/* ESTADO SELECCIONADO (ACTIVO): Color vibrante y resplandor dorado */
+.brand-icon.active .brand-logo-img, 
+.filter-btn.active .btn-console-icon {
     opacity: 1;
-    text-shadow: 0 0 10px rgba(239, 195, 108, 0.4);
+    filter: drop-shadow(0 0 8px rgba(239, 195, 108, 0.4));
 }
 
-.brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon {
+.brand-icon.active span, 
+.filter-btn.active span {
+    color: #efc36c;
     opacity: 1;
-    filter: grayscale(0) drop-shadow(0 0 8px rgba(239, 195, 108, 0.5));
 }
 
 /* Para evitar el recuadro morado al hacer clic (focus) */
