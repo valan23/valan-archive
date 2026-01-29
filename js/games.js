@@ -2,6 +2,10 @@
  * games.js - Renderizado optimizado con carga progresiva y Gradientes Dinámicos
  */
 
+/**
+ * games.js - Renderizado optimizado con carga progresiva y Badges de Formato
+ */
+
 function renderGames(games) {
     const container = document.getElementById('game-grid');
     if (!container) return;
@@ -41,8 +45,8 @@ function createCardHTML(j) {
         const nombrePortada = j["Portada"] ? j["Portada"].trim() : "";
         const fotoUrl = isValid(nombrePortada) ? `images/covers/${carpetaSistema}/${nombrePortada}` : `images/covers/default.webp`;
 
-        // --- 2. Lógica de Marcas y Formato (Llamada a main.js) ---
-        const brandClass = getBrandClass(valorExcel); // Función global en main.js
+        // --- 2. Lógica de Marcas y Formato ---
+        const brandClass = getBrandClass(valorExcel); 
         const campoFormato = j["Formato"] || "Físico"; 
         const esDigital = campoFormato.toString().toUpperCase().includes("DIGITAL");
 
@@ -57,10 +61,8 @@ function createCardHTML(j) {
         const edicionRaw = j["Edición"] || "";
         const esEdicionEspecial = isValid(edicionRaw) && edicionRaw.toUpperCase() !== "ESTÁNDAR";
 
-        // NOTA: Hemos eliminado los estilos inline de 'background' y 'border' 
-        // para que las clases .nintendo, .sega, etc. del CSS funcionen.
         return `
-        <div class="card ${brandClass} ${esDigital ? 'digital-variant' : ''}">
+        <div class="card ${brandClass} ${esDigital ? 'digital-variant' : 'physical-variant'}">
             <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10; background: transparent; width: auto; height: 28px; display: flex; align-items: center;">
                 ${getPlatformIcon(j["Plataforma"])}
             </div>
@@ -102,9 +104,11 @@ function createCardHTML(j) {
             </div>
 
             <div style="position: relative; display: flex; align-items: center; justify-content: center; width: calc(100% - 24px); margin-left: 12px; height: 170px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);"> 
-                <div style="position: absolute; top: 8px; right: 8px; background: ${esDigital ? '#00d4ff' : '#555'}; color: ${esDigital ? '#000' : '#fff'}; font-size: 0.55em; font-weight: 900; padding: 2px 6px; border-radius: 4px; z-index: 5;">
-                    ${esDigital ? 'DIGITAL' : 'FÍSICO'}
+                
+                <div style="position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 4px; font-size: 0.55em; font-weight: 900; text-transform: uppercase; z-index: 5; background: ${esDigital ? 'rgba(0, 212, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)'}; color: ${esDigital ? '#00d4ff' : '#aaa'}; border: 1px solid ${esDigital ? '#00d4ff' : 'rgba(255,255,255,0.2)'};">
+                    ${esDigital ? '<i class="fa-solid fa-cloud" style="margin-right: 3px;"></i> Digital' : '<i class="fa-solid fa-floppy-disk" style="margin-right: 3px;"></i> Físico'}
                 </div>
+
                 <img src="${fotoUrl}" loading="lazy" decoding="async" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5)); ${esDigital ? 'opacity: 0.7;' : ''}">
             </div>
 
