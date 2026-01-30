@@ -1,18 +1,29 @@
+/**
+ * wishlist_games.js - Gestión de la Lista de Deseos
+ */
 function renderWishlist(games) {
     const container = document.getElementById('wishlist-grid');
     if (!container) return;
 
+    // Sincronización con los botones de formato de la sección
     if (typeof renderFormatFilters === 'function') {
-        renderFormatFilters(games, 'format-buttons-container-wishlist', 'wishlist');
+        renderFormatFilters(dataStore['deseados'] || games, 'format-buttons-container-wishlist', 'wishlist');
     }
 
-    container.innerHTML = games.map(j => {
+    container.innerHTML = "";
+    if (games.length === 0) {
+        container.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>No hay juegos en tu lista de deseos.</p>";
+        return;
+    }
+
+    const html = games.map(j => {
         try {
             const plataforma = j["Plataforma"] || "";
             const carpeta = AppUtils.getPlatformFolder(plataforma);
             const fotoUrl = AppUtils.isValid(j["Portada"]) ? `images/covers/${carpeta}/${j["Portada"].trim()}` : `images/covers/default.webp`;
             const priorTexto = (j["Prioridad"] || "DESEADO").trim().toUpperCase();
             
+            // Procesamiento de precios
             const listaPrecios = [
                 { n: 'Nuevo', v: j["Precio Nuevo"], c: '#D4BD66' },
                 { n: 'CeX', v: j["Precio Cex"], c: '#ff4444' },
@@ -25,27 +36,36 @@ function renderWishlist(games) {
             const precioMin = listaPrecios.length ? Math.min(...listaPrecios.map(p => p.eur)) : Infinity;
 
             return `
-            <div class="card ${typeof getBrandClass === 'function' ? getBrandClass(plataforma) : ''}" style="display: flex; flex-direction: column; min-height: 520px; position: relative;">
-                <div style="position: absolute; top: 0; right: 0; background: #555; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 14px; border-bottom-left-radius: 8px; z-index: 10;">${priorTexto}</div>
+            <div class="card ${getBrandClass(plataforma)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative;">
+                <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10;">
+                    ${getPlatformIcon(plataforma)}
+                </div>
+                <div style="position: absolute; top: 0; right: 0; background: #555; color: #fff; font-weight: 900; font-size: 0.65em; padding: 6px 14px; border-bottom-left-radius: 8px; z-index: 10;">${priorTexto}</div>
+                
                 <div style="margin-top: 45px; padding: 0 12px;">
-                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700;">${j["Nombre Juego"]}</div>
+                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; min-height: 2.4em; display: flex; align-items: center;">${j["Nombre Juego"]}</div>
                 </div>
-                <div style="display: flex; justify-content: center; height: 150px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px;">
-                    <img src="${fotoUrl}" style="max-width: 90%; max-height: 90%; object-fit: contain;">
+
+                <div style="height: 150px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;">
                 </div>
-                <div style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 4px; flex-grow: 1;">
+
+                <div style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 6px; flex-grow: 1;">
                     ${listaPrecios.map(p => `
-                        <div style="display: flex; justify-content: space-between; padding: 4px 8px; ${p.eur === precioMin ? 'background: rgba(149,0,255,0.15);' : ''}">
-                            <span style="color: ${p.c}; font-size: 0.75em; font-weight: 700;">${p.eur === precioMin ? '⭐ ' : ''}${p.n}</span>
+                        <div style="display: flex; justify-content: space-between; padding: 4px 8px; border-radius: 4px; margin-bottom: 2px; ${p.eur === precioMin && p.eur !== Infinity ? 'background: rgba(149,0,255,0.2); border: 1px solid rgba(149,0,255,0.3);' : ''}">
+                            <span style="color: ${p.c}; font-size: 0.75em; font-weight: 700;">${p.eur === precioMin && p.eur !== Infinity ? '⭐ ' : ''}${p.n}</span>
                             <span style="color: #eee; font-size: 0.8em; font-weight: 800;">${p.v}</span>
                         </div>
                     `).join('')}
                 </div>
-                <div style="padding: 12px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
-                    <span style="font-size: 0.65em; color: #ccc;">${j["Fecha revision"] || '--/--'}</span>
-                    ${AppUtils.isValid(j["Link"]) ? `<a href="${j["Link"]}" target="_blank" style="color: #9500ff; font-size: 0.65em; font-weight: bold; text-decoration: none;">VER OFERTA</a>` : ''}
+
+                <div style="padding: 12px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.65em; color: #888;">Actualizado: ${j["Fecha revision"] || '--/--'}</span>
+                    ${AppUtils.isValid(j["Link"]) ? `<a href="${j["Link"]}" target="_blank" style="background: #9500ff; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.65em; font-weight: bold; text-decoration: none;">VER OFERTA</a>` : ''}
                 </div>
             </div>`;
         } catch (e) { return ""; }
     }).join('');
+    
+    container.innerHTML = html;
 }
