@@ -44,9 +44,11 @@ const AppUtils = {
     // --- FUNCIONES AÑADIDAS PARA EVITAR EL SYNTAX ERROR ---
     getRarezaColor: (rareza) => {
         const r = (rareza || "").toUpperCase();
-        if (r.includes("MUY RARA")) return "#ff4500"; // Naranja rojizo
-        if (r.includes("RARA")) return "#ffa500";     // Naranja
-        if (r.includes("ÉPICA")) return "#bf00ff";    // Púrpura
+        if (r.includes("LEGENDARIO")) return "#F2B518"; // Dorado
+        if (r.includes("ÉPICO")) return "#bf00ff";     // Púrpura
+        if (r.includes("RARO")) return "#0259D1";    // Azul
+        if (r.includes("INUSUAL")) return "#3AE627";    // Verde
+        if (r.includes("COMÚN")) return "#FFFFFF";    // Blanco
         return "#aaa";                                // Gris estándar
     },
 
