@@ -11,22 +11,23 @@ function renderGames(games) {
     }
 
     container.innerHTML = "";
-
     if (games.length === 0) {
         container.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>No se encontraron juegos.</p>";
         return;
     }
 
-    // Carga progresiva
-    const firstBatch = games.slice(0, 24);
-    container.innerHTML = firstBatch.map(j => createCardHTML(j)).join('');
+    // Renderizamos por fragmentos para no bloquear el hilo principal
+    const renderBatch = (start) => {
+        const batch = games.slice(start, start + 24);
+        const html = batch.map(j => createCardHTML(j)).join('');
+        container.insertAdjacentHTML('beforeend', html);
+        
+        if (start + 24 < games.length) {
+            requestAnimationFrame(() => renderBatch(start + 24));
+        }
+    };
 
-    if (games.length > 24) {
-        setTimeout(() => {
-            const remainingBatch = games.slice(24);
-            container.insertAdjacentHTML('beforeend', remainingBatch.map(j => createCardHTML(j)).join(''));
-        }, 150); 
-    }
+    renderBatch(0);
 }
 
 function createCardHTML(j) {
