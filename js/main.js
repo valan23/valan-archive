@@ -1,88 +1,46 @@
 // main.js - El Director de Orquesta Optimizado
 
-// 1. Almacén central de datos (Caché)
-let dataStore = {
-    'videojuegos': null,
-    'deseados': null,
-    'jugados': null
-};
-
+let dataStore = { 'videojuegos': null, 'deseados': null, 'jugados': null };
 let currentPlatform = "TODAS";
 let currentSection = 'videojuegos';
+let currentFormat = "all"; // Añadido para seguimiento global del filtro de formato
 
-/**
- * CARGADOR INDIVIDUAL (Carga bajo demanda)
- */
 async function loadTabData(sectionId) {
     if (dataStore[sectionId]) return dataStore[sectionId];
-
-    const urls = {
-        'videojuegos': CSV_URL_JUEGOS,
-        'deseados': CSV_URL_DESEADOS,
-        'jugados': CSV_URL_JUGADOS
-    };
+    const urls = { 'videojuegos': CSV_URL_JUEGOS, 'deseados': CSV_URL_DESEADOS, 'jugados': CSV_URL_JUGADOS };
 
     return new Promise((resolve, reject) => {
         Papa.parse(urls[sectionId], {
             download: true,
             header: true,
-            worker: false, // Lo ponemos en false para máxima compatibilidad en iPhone/Vivaldi
             skipEmptyLines: true,
             complete: (results) => {
-                // Filtramos y limpiamos los nombres de las columnas manualmente
-                // Esto soluciona el problema de los espacios en blanco sin usar funciones pesadas
                 const cleanData = results.data.map(row => {
                     const newRow = {};
-                    for (let key in row) {
-                        newRow[key.trim()] = row[key];
-                    }
+                    for (let key in row) { newRow[key.trim()] = row[key]; }
                     return newRow;
                 }).filter(j => j["Nombre Juego"] && j["Nombre Juego"].trim() !== "");
-
                 dataStore[sectionId] = cleanData;
                 resolve(cleanData);
             },
-            error: (err) => {
-                console.error("Error en PapaParse:", err);
-                reject(err);
-            }
+            error: (err) => reject(err)
         });
     });
 }
 
-/**
- * INICIALIZACIÓN (Carga solo la pestaña activa inicialmente)
- */
 async function init() {
     try {
-        // Cargamos solo Videojuegos al entrar para ganar velocidad
         const games = await loadTabData('videojuegos');
-        
         createFilters(games, 'platform-filters');
         renderGames(games);
-
-        // OPCIONAL: Carga las otras pestañas en silencio después de 3 segundos
-        // Esto hace que cuando el usuario haga clic en Diario, ya esté cargado
-        /*
-       setTimeout(() => {
-           loadTabData('deseados');
-           loadTabData('jugados');
-       }, 3000);
-       */
-
-    } catch (error) {
-        console.error("Error crítico en la carga inicial:", error);
-    }
+    } catch (error) { console.error("Error inicial:", error); }
 }
-
 window.onload = init;
 
-/**
- * LÓGICA DE NAVEGACIÓN (Actualizada para carga inteligente)
- */
 async function switchSection(sectionId, btn) {
     currentSection = sectionId;
     currentPlatform = "TODAS"; 
+    currentFormat = "all"; // Reset de formato al cambiar sección
 
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -92,9 +50,7 @@ async function switchSection(sectionId, btn) {
     if (targetSection) targetSection.classList.add('active');
     
     try {
-        // Pedimos los datos (si ya están en dataStore, será instantáneo)
         const data = await loadTabData(sectionId);
-        
         if(sectionId === 'videojuegos') {
             createFilters(data, 'platform-filters');
             renderGames(data); 
@@ -105,14 +61,9 @@ async function switchSection(sectionId, btn) {
             createFilters(data, 'platform-filters-played');
             renderPlayed(data); 
         }
-    } catch (error) {
-        console.error(`Error al cargar la sección ${sectionId}:`, error);
-    }
+    } catch (error) { console.error(`Error en sección ${sectionId}:`, error); }
 }
 
-/**
- * LÓGICA DE FILTRADO (Usa el dataStore)
- */
 function createFilters(games, containerId) {
     const counts = games.reduce((acc, game) => {
         const p = game["Plataforma"];
@@ -123,28 +74,16 @@ function createFilters(games, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
     
-    const prefix = containerId === 'platform-filters' ? 'main' : 
-                   containerId === 'platform-filters-wishlist' ? 'wish' : 'played';
+    const prefix = containerId.includes('wishlist') ? 'wish' : (containerId.includes('played') ? 'played' : 'main');
 
-    let html = `<div class="brand-selector" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">`;
-
-    html += `
-        <div class="brand-icon active" onclick="showBrand('TODAS', this, '${prefix}')" 
-             style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px;">
-            <i class="fa-solid fa-house" style="font-size: 1.5em; min-width: 30px; text-align: center;"></i>
-            <span style="font-weight: 600; font-size: 1em;">TODAS</span>
-        </div>`;
+    let html = `<div class="brand-selector">`;
+    html += `<div class="brand-icon active" onclick="showBrand('TODAS', this, '${prefix}')"><i class="fa-solid fa-house"></i><span>TODAS</span></div>`;
 
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
-        const hasGamesInBrand = data.platforms.some(p => counts[p] > 0);
-        if (hasGamesInBrand) {
-            html += `
-                <div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this, '${prefix}')" 
-                     style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px;">
-                    <img src="${data.logo}" alt="" class="brand-logo-img" 
-                         style="height: 25px; width: auto; max-width: 100px; object-fit: contain;">
-                    <span style="font-weight: 600; font-size: 1em;">${brandName}</span>
-                </div>`;
+        if (data.platforms.some(p => counts[p] > 0)) {
+            html += `<div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this, '${prefix}')">
+                        <img src="${data.logo}" class="brand-logo-img"><span>${brandName}</span>
+                     </div>`;
         }
     }
     html += `</div>`; 
@@ -167,19 +106,17 @@ function createFilters(games, containerId) {
 function showBrand(brand, element, prefix) {
     element.parentElement.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
     element.classList.add('active');
-    
     const container = element.closest('.filter-container');
     container.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
     
     if (brand === 'TODAS') { 
         currentPlatform = "TODAS"; 
-        applyFilters(); 
     } else {
         const targetGroup = document.getElementById(`group-${prefix}-${brand}`);
         if (targetGroup) targetGroup.classList.add('show');
         currentPlatform = BRANDS_CONFIG[brand].platforms; 
-        applyFilters();
     }
+    applyFilters();
 }
 
 function filterByPlatform(p, btn) {
@@ -190,62 +127,30 @@ function filterByPlatform(p, btn) {
 }
 
 function applyFilters() {
-    const searchInput = document.getElementById('searchInput');
-    const q = searchInput ? searchInput.value.toLowerCase() : "";
-    
-    // Obtenemos los datos actuales desde el Almacén Central
+    const q = document.getElementById('searchInput')?.value.toLowerCase() || "";
     const targetData = dataStore[currentSection];
-    let renderFunc;
-
-    if (currentSection === 'videojuegos') renderFunc = renderGames;
-    else if (currentSection === 'deseados') renderFunc = renderWishlist;
-    else if (currentSection === 'jugados') renderFunc = renderPlayed;
-
-    if (!targetData || !renderFunc) return;
+    if (!targetData) return;
 
     const filtered = targetData.filter(j => {
-        let matchesP = false;
-        if (currentPlatform === "TODAS") {
-            matchesP = true;
-        } else if (Array.isArray(currentPlatform)) {
-            matchesP = currentPlatform.includes(j["Plataforma"]);
-        } else {
-            matchesP = (j["Plataforma"] === currentPlatform);
-        }
-        const matchesS = (j["Nombre Juego"] || "").toLowerCase().includes(q);
-        return matchesP && matchesS;
+        let matchesP = (currentPlatform === "TODAS") || 
+                       (Array.isArray(currentPlatform) ? currentPlatform.includes(j["Plataforma"]) : j["Plataforma"] === currentPlatform);
+        let matchesS = (j["Nombre Juego"] || "").toLowerCase().includes(q);
+        
+        // Integración de filtro de formato en el filtrado principal
+        let matchesF = true;
+        const isDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
+        if (currentFormat === 'digital') matchesF = isDigital;
+        else if (currentFormat === 'fisico') matchesF = !isDigital;
+
+        return matchesP && matchesS && matchesF;
     });
 
-    renderFunc(filtered);
+    if (currentSection === 'videojuegos') renderGames(filtered);
+    else if (currentSection === 'deseados') renderWishlist(filtered);
+    else if (currentSection === 'jugados') renderPlayed(filtered);
 }
 
 function filterGames() { applyFilters(); }
-
-/**
- * HELPERS
- */
-function getFlag(region) {
-    if (!region) return '<span class="fi fi-xx"></span>';
-    const codes = { 
-        "ESP": "es", "JAP": "jp", "USA": "us", "EU": "eu", 
-        "UK": "gb", "ITA": "it", "GER": "de", "AUS": "au", "ASIA": "hk"
-    };
-    const r = region.toUpperCase();
-    let code = "xx";
-    for (let key in codes) { if (r.includes(key)) code = codes[key]; }
-    return `<span class="fi fi-${code}"></span>`;
-}
-
-function getPlatformIcon(platformName) {
-    if (!platformName) return '';
-    for (const brand in BRANDS_CONFIG) {
-        const icons = BRANDS_CONFIG[brand].icons;
-        if (icons && icons[platformName]) {
-            return `<img src="${icons[platformName]}" alt="${platformName}" style="height: 20px; width: auto; object-fit: contain;">`;
-        }
-    }
-    return `<span class="platform-tag">${platformName}</span>`;
-}
 
 function renderFormatFilters(games, containerId, sectionPrefix) {
     const container = document.getElementById(containerId);
@@ -258,65 +163,47 @@ function renderFormatFilters(games, containerId, sectionPrefix) {
     };
 
     container.innerHTML = `
-        <button class="format-btn active" data-format="all">
-            <i class="fa-solid fa-layer-group"></i> Todos (${counts.all})
-        </button>
-        <button class="format-btn" data-format="fisico">
-            <i class="fa-solid fa-floppy-disk"></i> Físico (${counts.fisico})
-        </button>
-        <button class="format-btn" data-format="digital">
-            <i class="fa-solid fa-cloud-download"></i> Digital (${counts.digital})
-        </button>
+        <button class="format-btn ${currentFormat === 'all' ? 'active' : ''}" data-format="all"><i class="fa-solid fa-layer-group"></i> Todos (${counts.all})</button>
+        <button class="format-btn ${currentFormat === 'fisico' ? 'active' : ''}" data-format="fisico"><i class="fa-solid fa-floppy-disk"></i> Físico (${counts.fisico})</button>
+        <button class="format-btn ${currentFormat === 'digital' ? 'active' : ''}" data-format="digital"><i class="fa-solid fa-cloud-download"></i> Digital (${counts.digital})</button>
     `;
 
-    // Añadir el evento de click
     container.querySelectorAll('.format-btn').forEach(btn => {
         btn.onclick = () => {
+            currentFormat = btn.dataset.format;
             container.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            filterByFormat(btn.dataset.format, sectionPrefix);
+            applyFilters();
         };
     });
 }
 
-function filterByFormat(format, sectionPrefix) {
-    const cards = document.querySelectorAll(`#${sectionPrefix}-grid .card`);
-    cards.forEach(card => {
-        const isDigital = card.innerText.toUpperCase().includes("DIGITAL");
-        if (format === 'all') {
-            card.style.display = 'flex';
-        } else if (format === 'digital') {
-            card.style.display = isDigital ? 'flex' : 'none';
-        } else {
-            card.style.display = isDigital ? 'none' : 'flex';
-        }
-    });
+// Helpers universales
+function getFlag(region) {
+    if (!region) return '<span class="fi fi-xx"></span>';
+    const codes = { "ESP": "es", "JAP": "jp", "USA": "us", "EU": "eu", "UK": "gb", "ITA": "it", "GER": "de", "AUS": "au", "ASIA": "hk" };
+    const r = region.toUpperCase();
+    let code = "xx";
+    for (let key in codes) { if (r.includes(key)) code = codes[key]; }
+    return `<span class="fi fi-${code}"></span>`;
 }
 
-/**
- * Determina la clase de marca (Nintendo, Sega, etc.) basada en la plataforma
- */
+function getPlatformIcon(platformName) {
+    if (!platformName) return '';
+    for (const brand in BRANDS_CONFIG) {
+        if (BRANDS_CONFIG[brand].icons?.[platformName]) {
+            return `<img src="${BRANDS_CONFIG[brand].icons[platformName]}" alt="${platformName}" style="height: 20px; width: auto;">`;
+        }
+    }
+    return `<span class="platform-tag">${platformName}</span>`;
+}
+
 function getBrandClass(plataformaStr) {
     const p = (plataformaStr || "").toUpperCase();
-    
-    if (p.includes("NINTENDO") || p.includes("FAMICOM") || p.includes("GAME BOY") || 
-        p.includes("WII") || p.includes("NES") || p.includes("SFC") || p.includes("64") || p.includes("SWITCH")) {
-        return "nintendo";
-    }
-    if (p.includes("SEGA") || p.includes("MASTER") || p.includes("MEGA") || 
-        p.includes("SATURN") || p.includes("DREAMCAST") || p.includes("GENESIS")) {
-        return "sega";
-    }
-    if (p.includes("PLAYSTATION") || p.includes("PS1") || p.includes("PS2") || 
-        p.includes("PS3") || p.includes("PS4") || p.includes("PS5") || p.includes("PSX") || p.includes("PSP") || p.includes("VITA")) {
-        return "sony";
-    }
-    if (p.includes("XBOX")) {
-        return "xbox";
-    }
-    if (p.includes("PC") || p.includes("STEAM") || p.includes("GOG") || p.includes("EPIC") || p.includes("BATTLE") || p.includes("MS-DOS") || p.includes("WINDOWS")) {
-        return "pc";
-    }
-    
-    return "otros"; // Para Neo Geo, Atari, WonderSwan, etc.
+    if (p.includes("NINTENDO") || p.includes("FAMICOM") || p.includes("GAME BOY") || p.includes("CUBE") || p.includes("WII") || p.includes("SWITCH")) return "nintendo";
+    if (p.includes("SEGA") || p.includes("MEGA") || p.includes("SATURN") || p.includes("DREAMCAST")) return "sega";
+    if (p.includes("PLAYSTATION") || p.includes("PS")) return "sony";
+    if (p.includes("XBOX")) return "xbox";
+    if (p.includes("PC") || p.includes("STEAM") || p.includes("GOG") || p.includes("EPIC") || p.includes("DOS") || p.includes("BATTLE") || p.includes("WINDOWS")) return "pc";
+    return "otros";
 }
