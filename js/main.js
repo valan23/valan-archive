@@ -151,9 +151,13 @@ function applyFilters() {
     });
 
     // Renderizado según sección
-    if (currentSection === 'videojuegos' && typeof renderGames === 'function') renderGames(filtered);
-    else if (currentSection === 'deseados' && typeof renderWishlist === 'function') renderWishlist(filtered);
-    else if (currentSection === 'jugados' && typeof renderPlayed === 'function') renderPlayed(filtered);
+    if (currentSection === 'videojuegos') {
+        renderGames(filtered); // Esta función usa 'game-grid'
+    } else if (currentSection === 'deseados') {
+        renderWishlist(filtered); // Esta usa 'wishlist-grid'
+    } else if (currentSection === 'jugados') {
+        renderPlayed(filtered); // Esta usa 'played-grid'
+    }
 }
 
 function filterGames() { applyFilters(); }
