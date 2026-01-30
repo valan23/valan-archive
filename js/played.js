@@ -7,7 +7,7 @@ function renderPlayed(games) {
     const container = document.getElementById('played-grid');
     if (!container) return;
 
-    // 1. ACTUALIZACIÓN DINÁMICA DE FORMATOS (Físico/Digital)
+    // 1. ACTUALIZACIÓN DINÁMICA DE FORMATOS
     if (typeof renderFormatFilters === 'function') {
         renderFormatFilters(games, 'format-buttons-container-played', 'played');
     }
@@ -29,33 +29,46 @@ function renderPlayed(games) {
             const carpeta = AppUtils.getPlatformFolder(plataforma);
             const fotoUrl = AppUtils.isValid(j["Portada"]) ? `images/covers/${carpeta}/${j["Portada"].trim()}` : `images/covers/default.webp`;
         
-            // Estilos de Región y Nota
             const styleRegion = AppUtils.getRegionStyle(j["Región"]);
             const nota = parseFloat(j["Nota"]) || 0;
             const hue = Math.min(Math.max(nota * 12, 0), 120);
 
-            // Formateo de Tiempo de Juego
             const tiempoJuego = j["Tiempo Juego"] || "0";
             const horas = tiempoJuego.toString().replace("h", "").trim();
+
+            // Lógica de colores para Proceso Juego
+            const proceso = (j["Proceso Juego"] || "Terminado").toUpperCase();
+            let colorProceso = "#888"; // Default
+            if (proceso.includes("TERMINADO")) colorProceso = "#2E9E7F";
+            if (proceso.includes("PLATINADO") || proceso.includes("100%")) colorProceso = "#00f2ff";
+            if (proceso.includes("CURSO") || proceso.includes("JUGANDO")) colorProceso = "#efc36c";
+            if (proceso.includes("ABANDONADO")) colorProceso = "#ff4444";
 
             return `
             <div class="card ${getBrandClass(plataforma)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px;">
                 
-                <div style="position: absolute; top: 0; right: 0; background: hsl(${hue}, 100%, 40%); color: #fff; font-weight: 900; padding: 8px 15px; border-bottom-left-radius: 12px; z-index: 10; font-size: 1.1em; box-shadow: -2px 2px 10px rgba(0,0,0,0.5);">
-                    ${nota.toFixed(1)}
+                <div style="position: absolute; top: 0; right: 0; z-index: 10; display: flex; flex-direction: column; align-items: flex-end;">
+                    <div style="background: hsl(${hue}, 100%, 40%); color: #fff; font-weight: 900; padding: 8px 15px; border-bottom-left-radius: 12px; font-size: 1.1em; box-shadow: -2px 2px 10px rgba(0,0,0,0.5);">
+                        ${nota.toFixed(1)}
+                    </div>
+                    <div style="background: ${colorProceso}; color: #000; font-size: 0.55em; font-weight: 900; padding: 3px 8px; border-bottom-left-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        ${proceso}
+                    </div>
                 </div>
             
-                <div style="position: absolute; top: 12px; left: 12px; z-index: 10; display: flex; flex-direction: column; gap: 5px; align-items: flex-start;">
+                <div style="position: absolute; top: 12px; left: 12px; z-index: 10; display: flex; flex-direction: column; gap: 8px; align-items: flex-start;">
                     <div class="platform-icon-card" style="position: static; margin: 0;">
                         ${getPlatformIcon(plataforma)}
                     </div>
                     
-                    <div style="background: rgba(0,0,0,0.6); color: #fff; font-size: 0.6em; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;">
-                        ${j["Año"] || "????"}
-                    </div>
+                    <div style="display: flex; gap: 5px; align-items: center;">
+                        <div style="background: rgba(0,0,0,0.6); color: #fff; font-size: 0.6em; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;">
+                            ${j["Año"] || "????"}
+                        </div>
 
-                    <div style="background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-size: 0.55em; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px; white-space: nowrap;">
-                        ${getFlag(j["Región"])} <span>${(j["Región"] || "N/A").toUpperCase()}</span>
+                        <div style="background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-size: 0.55em; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px; white-space: nowrap;">
+                            ${getFlag(j["Región"])} <span>${(j["Región"] || "N/A").toUpperCase()}</span>
+                        </div>
                     </div>
                 </div>
             
@@ -74,7 +87,6 @@ function renderPlayed(games) {
                 </div>
 
                 <div style="padding: 12px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.08); display: grid; grid-template-columns: 1fr auto 1fr; gap: 5px; align-items: center; text-align: center;">
-                
                     <div style="display: flex; flex-direction: column; align-items: flex-start;">
                         <span style="font-size: 0.55em; color: #666; font-weight: 800; letter-spacing: 0.5px;">INICIO</span>
                         <span style="font-size: 0.7em; color: #aaa; font-weight: 600;">${j["Primera fecha"] || "---"}</span>
@@ -89,7 +101,6 @@ function renderPlayed(games) {
                         <span style="font-size: 0.55em; color: #666; font-weight: 800; letter-spacing: 0.5px;">FINALIZADO</span>
                         <span style="font-size: 0.7em; color: #EFC36C; font-weight: 700;">${j["Ultima fecha"] || "---"}</span>
                     </div>
-
                 </div>
             </div>`;
         } catch (e) { return ""; }
