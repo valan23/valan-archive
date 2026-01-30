@@ -1,151 +1,189 @@
-/* --- RESET Y BASES --- */
+/* --- RESET Y BASES (Mantenidos) --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', sans-serif; 
-    background: #0b0b0e; 
-    color: #e0e0e0; 
+    font-family: 'Inter', sans-serif;
+    background: #0b0b0e; /* Tu negro original */
+    color: #e0e0e0;
     padding: 10px;
     overflow-x: hidden;
 }
 
-:root { 
-    --accent: #efc36c; /* Dorado del logo para acentos */
-    --bg-dark: #0b0b0e; 
-    --card-bg: #16161a;
-    --glass-border: rgba(255, 255, 255, 0.08);
+:root {
+    --accent: #efc36c;   /* Dorado Logo */
+    --purple: #9500ff;   /* Morado Logo */
+    --cyan: #00f2ff;     /* Cian Logo */
+    --bg-card: #16161a;
 }
 
 .container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 10px; }
 header { width: 100%; text-align: center; }
 .logo-container { width: 100%; max-width: 450px; margin: 0 auto 20px auto; }
-.main-logo { width: 100%; height: auto; filter: drop-shadow(0 0 12px rgba(239, 195, 108, 0.15)); }
+.main-logo { width: 100%; height: auto; filter: drop-shadow(0 0 15px rgba(239, 195, 108, 0.3)); }
 
 /* --- BUSCADOR --- */
-#searchInput { 
-    width: 100%; max-width: 500px; padding: 12px 20px; border-radius: 25px; 
+#searchInput {
+    width: 100%; max-width: 500px; padding: 12px 20px; border-radius: 25px;
     border: 1px solid #333; background: #1a1a20; color: white; display: block; margin: 15px auto;
     transition: all 0.3s ease;
 }
-#searchInput:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px rgba(239, 195, 108, 0.1); }
+#searchInput:focus {
+    outline: none;
+    border-color: var(--cyan);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+}
 
-/* --- TABS PRINCIPALES --- */
+/* --- SECCIONES PRINCIPALES (TABS) --- */
 .main-tabs { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
+
 .tab-btn {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    color: #777;
+    color: #888;
     padding: 12px 24px;
-    font-size: 0.9em;
+    font-size: 0.95em;
     font-weight: 600;
-    letter-spacing: 0.5px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex; align-items: center; gap: 10px;
-}
-.tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
-.tab-btn.active {
-    background: rgba(239, 195, 108, 0.08) !important;
-    color: var(--accent) !important;
-    border: 1px solid rgba(239, 195, 108, 0.4) !important;
+    position: relative;
 }
 
-/* --- FILTROS (EL ESTANTE) --- */
+.tab-btn:hover { color: #fff; background: rgba(149, 0, 255, 0.1); border-color: var(--purple); }
+
+.tab-btn.active {
+    background: rgba(149, 0, 255, 0.15) !important;
+    color: var(--accent) !important;
+    border: 1px solid var(--accent) !important;
+}
+.tab-btn.active::after {
+    content: ""; position: absolute; bottom: 0; left: 20%; width: 60%; height: 3px;
+    background: var(--accent); border-radius: 10px 10px 0 0; box-shadow: 0 0 10px var(--accent);
+}
+
+/* --- CONTENEDOR DE ICONOS (EL ESTANTE) --- */
 .filter-container {
-    background: #060608 !important;
-    border: 1px solid #1a1a1e !important;
-    box-shadow: inset 0 2px 15px rgba(0,0,0,0.6);
+    background: #050507 !important;
+    border: 1px solid #1c1c21 !important;
+    box-shadow: inset 0 2px 20px rgba(0,0,0,0.9);
     padding: 25px !important;
     border-radius: 15px !important;
 }
 
-.brand-selector { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px 100px; padding-bottom: 20px; }
-.platform-subgroup { display: none; flex-wrap: wrap; justify-content: center; gap: 20px 25px; margin-top: 20px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); }
+/* --- FILTROS DE MARCAS Y CONSOLAS --- */
+.brand-selector { display: flex; flex-wrap: wrap; justify-content: center; gap: 50px 120px; width: 100%; padding-bottom: 20px; }
+.platform-subgroup { display: none; flex-wrap: wrap; justify-content: center; gap: 25px 30px; width: 100%; margin-top: 20px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
 .platform-subgroup.show { display: flex; }
 
-/* --- BOTONES DE MARCAS Y CONSOLAS (SOLUCIÓN LOGOS OSCUROS) --- */
 .brand-icon, .filter-btn {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     cursor: pointer; transition: all 0.3s ease;
-    min-width: 100px; height: 75px;
-    /* Centro ligeramente más claro para que el logo negro se vea */
-    background: radial-gradient(circle, #2a2a2e 0%, #16161a 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+    min-width: 100px; height: 70px;
+    /* Fondo oscuro sólido con borde sutil para que los logos negros tengan contraste */
+    background: #121216 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     padding: 10px;
     margin: 5px;
 }
 
+/* Truco para logos oscuros: les damos un fondo circular tenue o resalte */
 .brand-logo-img, .btn-console-icon {
-    height: 24px; width: auto; max-width: 80px; object-fit: contain; margin-bottom: 8px;
-    opacity: 0.7;
-    /* Sombra blanca muy suave para "despegar" logos negros del fondo */
-    filter: drop-shadow(0px 0px 1px rgba(255,255,255,0.2)); 
-    transition: all 0.3s ease;
+    height: 28px; width: auto; max-width: 80px; object-fit: contain; margin-bottom: 6px;
+    /* Este filtro ayuda a que los logos negros se "despeguen" del fondo oscuro */
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+    opacity: 0.8;
+    transition: 0.3s;
 }
 
 .brand-icon span, .filter-btn span {
-    font-size: 8.5px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.5px;
+    font-size: 9px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 0.5px;
 }
 
-/* Hover/Active */
-.brand-icon:hover, .filter-btn:hover { border-color: rgba(255, 255, 255, 0.2); }
+/* Estados Hover y Activo */
+.brand-icon:hover, .filter-btn:hover { border-color: var(--cyan); background: #1a1a22 !important; }
 .brand-icon.active, .filter-btn.active {
-    background: radial-gradient(circle, #3a3a3e 0%, #1a1a20 100%) !important;
-    border: 1px solid var(--accent) !important;
+    border: 2px solid var(--accent) !important;
+    background: #1e1e26 !important;
+    box-shadow: 0 0 15px rgba(239, 195, 108, 0.15);
     transform: scale(1.05);
 }
 .brand-icon.active span, .filter-btn.active span { color: var(--accent); }
-.brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon { opacity: 1; filter: none; }
+.brand-icon.active .brand-logo-img, .filter-btn.active .btn-console-icon { opacity: 1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
 
-/* --- GRID Y TARJETAS --- */
-.grid, #played-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+/* --- GRID DE JUEGOS --- */
+.grid, #played-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px; margin-top: 30px;
+}
 
 .card {
-    position: relative; display: flex; flex-direction: column; overflow: hidden; min-height: 480px;
+    position: relative; display: flex; flex-direction: column; overflow: hidden;
+    min-height: 480px;
     background: #16161a;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     transition: transform 0.3s ease;
 }
-.card:hover { transform: translateY(-5px); }
+.card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); }
 
-/* Líneas de marca (Shadows de tu referencia) */
-.card.nintendo { box-shadow: inset 6px 0 0 0 #e60012, 0 10px 20px rgba(0,0,0,0.4); }
-.card.sega { box-shadow: inset 6px 0 0 0 #0089cf, 0 10px 20px rgba(0,0,0,0.4); }
-.card.sony, .card.playstation { box-shadow: inset 6px 0 0 0 #003791, 0 10px 20px rgba(0,0,0,0.4); }
-.card.xbox { box-shadow: inset 6px 0 0 0 #107c10, 0 10px 20px rgba(0,0,0,0.4); }
-.card.pc { box-shadow: inset 6px 0 0 0 #4c5b6a, 0 10px 20px rgba(0,0,0,0.4); }
+/* Líneas laterales (Mantenidas por marca) */
+.card.nintendo { box-shadow: inset 6px 0 0 0 #e60012; }
+.card.sega { box-shadow: inset 6px 0 0 0 #0089cf; }
+.card.sony, .card.playstation { box-shadow: inset 6px 0 0 0 #003791; }
+.card.xbox { box-shadow: inset 6px 0 0 0 #107c10; }
+.card.pc { box-shadow: inset 6px 0 0 0 #4c5b6a; }
+.card.otros { box-shadow: inset 6px 0 0 0 var(--purple); }
 
 .game-title {
-    color: #fff; font-family: 'Inter', sans-serif; font-weight: 700;
-    text-transform: uppercase; font-size: 1.1em;
+    color: #fff; font-weight: 700; text-transform: uppercase;
     padding: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
+/* El logo de la consola dentro de la tarjeta con realce para negros */
+.platform-icon-card img {
+    height: 30px !important; width: auto !important;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); /* Para que el logo Sony negro se vea */
+}
+
 .details-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-    font-size: 0.75em; color: #999; background: rgba(0,0,0,0.3);
-    padding: 12px; margin: 0 15px 15px 15px; border-radius: 6px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    font-size: 0.72em; color: #bbb; background: rgba(0,0,0,0.3);
+    padding: 12px; border-radius: 4px; margin: 10px 15px;
 }
 
-.price-tag { color: #00ff88; font-weight: 800; }
+.price-tag {
+    text-align: right; font-size: 0.9em; font-weight: 800; color: var(--cyan);
+    background: rgba(0, 242, 255, 0.1); padding: 5px 10px; border-radius: 6px;
+}
 
-/* --- FILTROS DIARIO --- */
+/* --- FILTROS SECUNDARIOS (AÑO Y FORMATO) --- */
+.year-filter-container, .format-filter-container { margin: 20px 0; display: flex; flex-direction: column; align-items: center; }
+
+.year-buttons, .format-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
 .year-btn, .format-btn {
-    background: #1a1a20; border: 1px solid #333; color: #666;
+    background: #1a1a20; border: 1px solid #333; color: #888;
     padding: 8px 18px; border-radius: 20px; cursor: pointer;
-    font-size: 0.85em; font-weight: 700; transition: all 0.3s ease;
-}
-.year-btn.active, .format-btn.active {
-    background: var(--accent); color: #000; border-color: var(--accent);
+    font-size: 0.85em; font-weight: 700; transition: 0.3s;
 }
 
-/* --- RESPONSIVE MÓVIL --- */
+.year-btn:hover, .format-btn:hover { border-color: var(--cyan); color: #fff; }
+
+.year-btn.active, .format-btn.active {
+    background: var(--accent) !important; color: #000 !important;
+    border-color: var(--accent) !important; box-shadow: 0 0 15px rgba(239, 195, 108, 0.3);
+}
+
+/* --- RESPONSIVE --- */
 @media (max-width: 600px) {
     .brand-selector { gap: 20px 15px; }
-    .brand-icon, .filter-btn { min-width: 85px; height: 65px; margin: 2px; }
+    .brand-icon, .filter-btn { min-width: 80px; height: 60px; padding: 5px; }
     .brand-icon span, .filter-btn span { font-size: 7px; }
     .brand-logo-img { height: 18px; }
+    .main-tabs { gap: 8px; }
+    .tab-btn { padding: 10px 15px; font-size: 0.8em; }
 }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; } }
