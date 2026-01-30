@@ -8,8 +8,6 @@ function renderPlayed(games) {
     if (!container) return;
 
     // 1. ACTUALIZACIÓN DINÁMICA DE FORMATOS (Físico/Digital)
-    // En lugar de enviarle dataStore['jugados'], le enviamos 'games'
-    // que ya vienen filtrados por Marca/Consola desde main.js
     if (typeof renderFormatFilters === 'function') {
         renderFormatFilters(games, 'format-buttons-container-played', 'played');
     }
@@ -31,7 +29,8 @@ function renderPlayed(games) {
             const carpeta = AppUtils.getPlatformFolder(plataforma);
             const fotoUrl = AppUtils.isValid(j["Portada"]) ? `images/covers/${carpeta}/${j["Portada"].trim()}` : `images/covers/default.webp`;
         
-            // Lógica de nota y color
+            // Estilos de Región y Nota
+            const styleRegion = AppUtils.getRegionStyle(j["Región"]);
             const nota = parseFloat(j["Nota"]) || 0;
             const hue = Math.min(Math.max(nota * 12, 0), 120);
 
@@ -40,16 +39,27 @@ function renderPlayed(games) {
             const horas = tiempoJuego.toString().replace("h", "").trim();
 
             return `
-            <div class="card ${getBrandClass(plataforma)}" style="display: flex; flex-direction: column; position: relative; min-height: 500px;">
+            <div class="card ${getBrandClass(plataforma)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px;">
+                
                 <div style="position: absolute; top: 0; right: 0; background: hsl(${hue}, 100%, 40%); color: #fff; font-weight: 900; padding: 8px 15px; border-bottom-left-radius: 12px; z-index: 10; font-size: 1.1em; box-shadow: -2px 2px 10px rgba(0,0,0,0.5);">
                     ${nota.toFixed(1)}
                 </div>
             
-                <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10;">
-                    ${getPlatformIcon(plataforma)}
+                <div style="position: absolute; top: 12px; left: 12px; z-index: 10; display: flex; flex-direction: column; gap: 5px; align-items: flex-start;">
+                    <div class="platform-icon-card" style="position: static; margin: 0;">
+                        ${getPlatformIcon(plataforma)}
+                    </div>
+                    
+                    <div style="background: rgba(0,0,0,0.6); color: #fff; font-size: 0.6em; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;">
+                        ${j["Año"] || "????"}
+                    </div>
+
+                    <div style="background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-size: 0.55em; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px; white-space: nowrap;">
+                        ${getFlag(j["Región"])} <span>${(j["Región"] || "N/A").toUpperCase()}</span>
+                    </div>
                 </div>
             
-                <div style="margin-top: 50px; padding: 0 15px;">
+                <div style="margin-top: 85px; padding: 0 15px;">
                     <div class="game-title" style="font-size: 1.15em; color: #EFC36C; font-weight: 700; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; padding: 0;">
                         ${j["Nombre Juego"]}
                     </div>
@@ -90,7 +100,6 @@ function updateYearButtons(filteredGames) {
     const container = document.getElementById('year-buttons-container');
     if (!container) return;
 
-    // Contar juegos por año BASADO EN EL FILTRO ACTUAL DE CONSOLA
     const counts = { all: filteredGames.length };
     filteredGames.forEach(j => {
         const fecha = j["Ultima fecha"] || j["Año"] || "";
@@ -101,7 +110,6 @@ function updateYearButtons(filteredGames) {
         }
     });
 
-    // Ordenar años de más reciente a más antiguo
     const years = Object.keys(counts).filter(y => y !== 'all').sort((a, b) => b - a);
 
     container.innerHTML = `
