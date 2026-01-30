@@ -7,15 +7,17 @@ function renderPlayed(games) {
     const container = document.getElementById('played-grid');
     if (!container) return;
 
-    // Filtros de formato específicos para esta pestaña
+    // 1. Filtros de formato (Físico/Digital)
     if (typeof renderFormatFilters === 'function') {
-        renderFormatFilters(dataStore['jugados'] || games, 'format-buttons-container-played', 'played');
+        const fullSectionData = dataStore['jugados'] || games;
+        renderFormatFilters(fullSectionData, 'format-buttons-container-played', 'played');
     }
 
-    // Actualizar botones de año basados en los datos originales (sin filtrar)
-    updateYearButtons(dataStore['jugados'] || games);
+    // 2. ACTUALIZACIÓN DINÁMICA: Usamos 'games' (que ya vienen filtrados por consola/marca) 
+    // para recalcular los contadores de los botones de año.
+    updateYearButtons(games);
 
-    // Aplicar el filtro de año local sobre los juegos recibidos
+    // 3. Aplicar el filtro de año sobre los juegos ya filtrados por plataforma
     const filteredByYear = games.filter(j => {
         if (currentPlayedYear === 'all') return true;
         const fecha = j["Ultima fecha"] || j["Año"] || "";
@@ -24,7 +26,7 @@ function renderPlayed(games) {
 
     container.innerHTML = "";
     if (filteredByYear.length === 0) {
-        container.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>No hay partidas registradas para este filtro.</p>";
+        container.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 40px; color: #888;'>No hay partidas registradas para este filtro.</p>";
         return;
     }
 
@@ -46,11 +48,11 @@ function renderPlayed(games) {
                 </div>
                 
                 <div style="margin-top: 50px; padding: 0 12px;">
-                    <div class="game-title" style="font-size: 1.15em; color: #EFC36C; font-weight: 700; line-height: 1.2;">${j["Nombre Juego"]}</div>
+                    <div class="game-title" style="font-size: 1.15em; color: #EFC36C; font-weight: 700; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; padding: 0;">${j["Nombre Juego"]}</div>
                 </div>
 
                 <div style="height: 160px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;">
+                    <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
                 </div>
 
                 <div style="margin: 0 12px 15px; background: rgba(255,255,255,0.05); border-left: 3px solid #EFC36C; border-radius: 4px; padding: 12px; flex-grow: 1; font-size: 0.85em; color: #ddd; font-style: italic; line-height: 1.4;">
@@ -66,13 +68,13 @@ function renderPlayed(games) {
     }).join('');
 }
 
-function updateYearButtons(allPlayedGames) {
+function updateYearButtons(filteredGames) {
     const container = document.getElementById('year-buttons-container');
     if (!container) return;
 
-    // Contar juegos por año
-    const counts = { all: allPlayedGames.length };
-    allPlayedGames.forEach(j => {
+    // Contar juegos por año BASADO EN EL FILTRO ACTUAL DE CONSOLA
+    const counts = { all: filteredGames.length };
+    filteredGames.forEach(j => {
         const fecha = j["Ultima fecha"] || j["Año"] || "";
         const match = String(fecha).match(/\d{4}/);
         if (match) {
@@ -81,6 +83,7 @@ function updateYearButtons(allPlayedGames) {
         }
     });
 
+    // Ordenar años de más reciente a más antiguo
     const years = Object.keys(counts).filter(y => y !== 'all').sort((a, b) => b - a);
 
     container.innerHTML = `
@@ -97,7 +100,6 @@ function updateYearButtons(allPlayedGames) {
 
 function filterByYear(year) {
     currentPlayedYear = year;
-    // Forzamos el reaplicado de filtros generales (esto llamará a renderPlayed)
     if (typeof applyFilters === 'function') {
         applyFilters();
     }
