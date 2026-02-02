@@ -87,12 +87,11 @@ function createCardHTML(j) {
             <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch;">
                 
                 <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: 0.5em; color: #555; font-weight: 900;">FORMATO</span>
                     <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-floppy-disk'}" style="font-size: 1em; margin-bottom: 2px;"></i>
                     <span style="font-size: 0.6em; font-weight: 900; letter-spacing: 0.5px;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                 </div>
                 
-                <div style="flex: 1; background: ${AppUtils.hexToRgba ? AppUtils.hexToRgba(getRarezaColor, 0.15) : 'rgba(255,255,255,0.05)'}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="flex: 1; background: ${AppUtils.hexToRgba ? AppUtils.hexToRgba(rawRarezaColor, 0.15) : 'rgba(255,255,255,0.05)'}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                     <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">RAREZA</span>
                     <span style="font-size: 0.75em; color: #555; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
                 </div>
