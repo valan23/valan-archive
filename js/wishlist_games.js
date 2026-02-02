@@ -5,7 +5,6 @@ function renderWishlist(games) {
     const container = document.getElementById('wishlist-grid');
     if (!container) return;
 
-    // Sincronización segura con dataStore
     if (typeof renderFormatFilters === 'function') {
         const fullData = (window.dataStore && window.dataStore['deseados']) ? window.dataStore['deseados'] : games;
         renderFormatFilters(fullData, 'format-buttons-container-wishlist', 'wishlist');
@@ -18,16 +17,10 @@ function renderWishlist(games) {
 
     container.innerHTML = games.map(j => {
         try {
-            // Verificamos que AppUtils exista antes de usarlo
-            if (typeof AppUtils === 'undefined') {
-                console.error("Error: utils.js no ha cargado correctamente.");
-                return "";
-            }
+            if (typeof AppUtils === 'undefined') return "";
 
             const plataforma = j["Plataforma"] || "";
             const carpeta = AppUtils.getPlatformFolder(plataforma);
-            
-            // Limpieza de nombre de portada y validación
             const portadaNombre = j["Portada"] ? j["Portada"].trim() : "";
             const fotoUrl = AppUtils.isValid(portadaNombre) 
                 ? `images/covers/${carpeta}/${portadaNombre}` 
@@ -47,23 +40,32 @@ function renderWishlist(games) {
             const precioMin = listaPrecios.length ? Math.min(...listaPrecios.map(p => p.eur)) : Infinity;
 
             return `
-            <div class="card ${typeof getBrandClass === 'function' ? getBrandClass(plataforma) : ''}" style="display: flex; flex-direction: column; min-height: 520px; position: relative;">
-                <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10;">
-                    ${typeof getPlatformIcon === 'function' ? getPlatformIcon(plataforma) : ''}
-                </div>
-                <div style="position: absolute; top: 0; right: 0; background: #555; color: #fff; font-weight: 900; font-size: 0.65em; padding: 6px 14px; border-bottom-left-radius: 8px; z-index: 10;">${priorTexto}</div>
+            <div class="card ${typeof getBrandClass === 'function' ? getBrandClass(plataforma) : ''}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
                 
-                <div style="margin-top: 45px; padding: 0 12px;">
-                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; min-height: 2.4em; display: flex; align-items: center;">${j["Nombre Juego"]}</div>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
+                    <div class="icon-gradient-area">
+                        <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
+                            ${typeof getPlatformIcon === 'function' ? getPlatformIcon(plataforma) : ''}
+                        </div>
+                    </div>
+                    <div style="background: #333; color: #fff; font-weight: 900; font-size: 0.7em; padding: 0 15px; display: flex; align-items: center; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3);">
+                        ${priorTexto}
+                    </div>
+                </div>
+                
+                <div style="margin-top: 55px; padding: 0 12px;">
+                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; min-height: 2.4em; display: flex; align-items: center; padding: 0;">
+                        ${j["Nombre Juego"]}
+                    </div>
                 </div>
 
                 <div style="height: 150px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
                 </div>
 
-                <div style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 6px; flex-grow: 1;">
+                <div style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 6px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px;">
                     ${listaPrecios.map(p => `
-                        <div style="display: flex; justify-content: space-between; padding: 4px 8px; border-radius: 4px; margin-bottom: 2px; ${p.eur === precioMin && p.eur !== Infinity ? 'background: rgba(149,0,255,0.2); border: 1px solid rgba(149,0,255,0.3);' : ''}">
+                        <div style="display: flex; justify-content: space-between; padding: 4px 8px; border-radius: 4px; ${p.eur === precioMin && p.eur !== Infinity ? 'background: rgba(149,0,255,0.15); border: 1px solid rgba(149,0,255,0.3);' : 'background: rgba(255,255,255,0.02);'}">
                             <span style="color: ${p.c}; font-size: 0.75em; font-weight: 700;">${p.eur === precioMin && p.eur !== Infinity ? '⭐ ' : ''}${p.n}</span>
                             <span style="color: #eee; font-size: 0.8em; font-weight: 800;">${p.v}</span>
                         </div>
@@ -72,11 +74,11 @@ function renderWishlist(games) {
 
                 <div style="padding: 12px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 0.65em; color: #888;">Act: ${j["Fecha revision"] || '--/--'}</span>
-                    ${AppUtils.isValid(j["Link"]) ? `<a href="${j["Link"]}" target="_blank" style="background: #9500ff; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.65em; font-weight: bold; text-decoration: none;">OFERTA</a>` : ''}
+                    ${AppUtils.isValid(j["Link"]) ? `<a href="${j["Link"]}" target="_blank" style="background: #9500ff; color: #fff; padding: 5px 12px; border-radius: 4px; font-size: 0.65em; font-weight: 900; text-decoration: none; letter-spacing: 0.5px;">OFERTA</a>` : ''}
                 </div>
             </div>`;
         } catch (e) { 
-            console.error("Error en card:", e);
+            console.error("Error en card wishlist:", e);
             return ""; 
         }
     }).join('');
