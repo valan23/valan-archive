@@ -18,26 +18,6 @@ function renderGames(games) {
     container.innerHTML = html;
 }
 
-function renderGames(games) {
-    const container = document.getElementById('game-grid');
-    if (!container) return;
-    
-    if (typeof renderFormatFilters === 'function') {
-        const fullData = (window.dataStore && window.dataStore['videojuegos']) ? window.dataStore['videojuegos'] : games;
-        renderFormatFilters(fullData, 'format-buttons-container-games', 'game');
-    }
-
-    container.innerHTML = "";
-    
-    if (!games || games.length === 0) {
-        container.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 40px; color: #888;'>No se encontraron juegos con estos filtros.</p>";
-        return;
-    }
-
-    const html = games.map(j => createCardHTML(j)).join('');
-    container.innerHTML = html;
-}
-
 function createCardHTML(j) {
     try {
         if (typeof AppUtils === 'undefined') return "";
@@ -49,7 +29,6 @@ function createCardHTML(j) {
         
         const styleRegion = AppUtils.getRegionStyle(j["Región"]);
         
-        // Helper para convertir colores dinámicos (Completitud/Rareza) a RGBA
         const toRgba = (hex, alpha = 0.15) => {
             if (!hex || !hex.startsWith('#')) return `rgba(255,255,255,${alpha})`;
             const r = parseInt(hex.slice(1, 3), 16);
@@ -67,18 +46,20 @@ function createCardHTML(j) {
         const colorTextoFormato = esDigital ? '#00f2ff' : '#EFC36C';
         const bgFormato = esDigital ? 'rgba(0, 242, 255, 0.15)' : 'rgba(239, 195, 108, 0.15)';
 
+        // NOTA: El border-radius de la card es 12px. 
+        // Usamos margin-left: 6px para respetar el box-shadow lateral de la marca.
+
         return `
-        <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
+        <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden; border-radius: 12px;">
             
-            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-    
-                <div class="icon-gradient-area" style="flex: 0 0 calc(60% - 6px); margin-left: 6px; display: flex; border-top-left-radius: 10px; align-items: center; padding-left: 10px;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch; overflow: hidden;">
+                <div class="icon-gradient-area" style="flex: 0 0 calc(60% - 6px); margin-left: 6px; display: flex; align-items: center; padding-left: 10px; border-top-left-radius: 4px;">
                     <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
                         ${getPlatformIcon(plat)}
                     </div>
                 </div>
 
-                <div style="flex: 0 0 40%; background: ${toRgba(colorCompBase, 0.15)}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.2); white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.1);">
+                <div style="flex: 0 0 40%; background: ${toRgba(colorCompBase, 0.2)}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.2); white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.1);">
                     ${(j["Completitud"] || "???").toUpperCase()}
                 </div>
             </div>
@@ -113,8 +94,8 @@ function createCardHTML(j) {
                 ${esEspecial ? `<div style="color: var(--accent); font-size: 0.65em; margin-top: 5px; font-weight: bold; text-align: center;"><i class="fa-solid fa-star"></i> ${j["Edición"]}</div>` : ''}
             </div>
 
-            <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch;">
-                <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); margin-left: 6px; border-bottom-left-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; overflow: hidden;">
+                <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); margin-left: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom-left-radius: 4px;">
                     <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-floppy-disk'}" style="font-size: 1em; margin-bottom: 2px;"></i>
                     <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                 </div>
