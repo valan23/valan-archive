@@ -88,8 +88,9 @@ function createCardHTML(j) {
                     ${esDigital ? 'DIGITAL' : 'FÍSICO'}
                 </div>
 
-                <div style="padding: 5px 12px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center;">
-                    <div style="color: var(--cyan); font-weight: 900; font-size: 0.9em; line-height: 1; letter-spacing: -0.5px;">💸 ${j["Tasación Actual"] || "S/T"}</div>
+                <div style="background: rgba(46, 158, 127, 0.15); border-left: 1px solid rgba(46, 158, 127, 0.3); padding: 0 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px;">
+                        <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">TASACIÓN</span>
+                        <span style="font-size: 0.9em; color: #fff; font-weight: 900; line-height: 1;">💸 ${j["Tasación Actual"] || "S/T"}<small style="font-size: 0.6em; margin-left: 1px;">h</small></span>
                     <div style="font-size: 0.50em; color: #666; margin-top: 3px; font-weight: bold; text-transform: uppercase;">Rev: ${j["Fecha revision"] || '--/--'}</div>
                 </div>
             </div>
