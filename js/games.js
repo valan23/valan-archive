@@ -64,9 +64,6 @@ function createCardHTML(j) {
             </div>
 
             <div style="height: 160px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
-                <div style="position: absolute; top: 5px; right: 5px; font-size: 0.6em; padding: 2px 6px; border-radius: 3px; background: ${esDigital ? '#00f2ff33' : '#9500ff33'}; color: ${esDigital ? '#00f2ff' : '#9500ff'}; border: 1px solid currentColor;">
-                    ${esDigital ? 'DIGITAL' : 'FÍSICO'}
-                </div>
                 <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
             </div>
 
@@ -84,9 +81,16 @@ function createCardHTML(j) {
                 ${esEspecial ? `<div style="color: var(--accent); font-size: 0.65em; margin-top: 5px; font-weight: bold; text-align: center;"><i class="fa-solid fa-star"></i> ${j["Edición"]}</div>` : ''}
             </div>
 
-            <div style="padding: 12px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.65em; color: #555;">Rev: ${j["Fecha revision"] || '--/--'}</span>
-                <div style="color: var(--cyan); font-weight: 900; font-size: 0.85em;">💸 ${j["Tasación Actual"] || "S/T"}</div>
+            <div style="margin-top: 10px; height: 50px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; justify-content: space-between;">
+                
+                <div style="background: ${esDigital ? '#00f2ff' : '#9500ff'}; color: #000; font-weight: 900; font-size: 0.65em; padding: 0 15px; display: flex; align-items: center; border-top-right-radius: 12px;">
+                    ${esDigital ? 'DIGITAL' : 'FÍSICO'}
+                </div>
+
+                <div style="padding: 5px 12px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center;">
+                    <div style="color: var(--cyan); font-weight: 900; font-size: 0.9em; line-height: 1;">💸 ${j["Tasación Actual"] || "S/T"}</div>
+                    <div style="font-size: 0.55em; color: #555; margin-top: 2px; font-weight: bold;">REV: ${j["Fecha revision"] || '--/--'}</div>
+                </div>
             </div>
         </div>`;
     } catch (e) { 
