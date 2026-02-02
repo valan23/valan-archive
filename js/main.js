@@ -210,7 +210,8 @@ function getPlatformIcon(platformName) {
 
 function getBrandClass(plataformaStr) {
     const p = (plataformaStr || "").toUpperCase();
-    if (p.includes("NINTENDO") || p.includes("FAMICOM") || p.includes("GAME BOY") || p.includes("CUBE") || p.includes("WII") || p.includes("SWITCH")) return "nintendo";
+    if (p.includes("PC ENGINE") || p.includes("TURBOGRAFX") || p.includes("WONDERSWAN") || p.includes("3DO")) return "otros";
+    if (p.includes("NINTENDO") || p.includes("FAMICOM") || p.includes("BOY") || p.includes("CUBE") || p.includes("WII") || p.includes("SWITCH")) return "nintendo";
     if (p.includes("SEGA") || p.includes("MEGA") || p.includes("SATURN") || p.includes("DREAMCAST")) return "sega";
     if (p.includes("PLAYSTATION") || p.includes("PS")) return "sony";
     if (p.includes("XBOX")) return "xbox";
