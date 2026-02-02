@@ -70,13 +70,15 @@ function createCardHTML(j) {
         return `
         <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
             
-            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-                <div class="icon-gradient-area">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch; overflow: hidden;">
+    
+                <div class="icon-gradient-area" style="flex: 0 0 60%; margin: 0; display: flex; align-items: center; padding-left: 15px; background: var(--brand-color-soft);">
                     <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
                         ${getPlatformIcon(plat)}
                     </div>
                 </div>
-                <div style="width: 37.5%; background: ${toRgba(colorCompBase, 0.15)}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.05);">
+
+                <div style="flex: 0 0 40%; background: ${toRgba(colorCompBase, 0.15)}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.2); white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.1);">
                     ${(j["Completitud"] || "???").toUpperCase()}
                 </div>
             </div>
