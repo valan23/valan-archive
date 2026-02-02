@@ -202,14 +202,14 @@
             background: var(--brand-color-soft) !important;
             display: flex;
             align-items: center;
-            /* Eliminamos cualquier margen para que el fondo toque el borde izquierdo */
-            margin: 0 !important; 
-            /* El padding-left de 15px asegura que el ICONO no pise la línea de 6px */
-            padding-left: 15px !important; 
+            padding-left: 10px !important;
+            /* El margen izquierdo de 6px evita que pise el box-shadow lateral */
+            margin-left: 6px !important; 
+            border-top-left-radius: 4px;
         }
 
-        .card-footer-item, [style*="background: var(--bgFormato)"] {
-            margin-left: 6px;
+        .card-footer-item, [style*="background: ${bgFormato}"] {
+            margin-left: 6px !important;
         }
 
         /* Nueva clase común para el área del icono en el header */
