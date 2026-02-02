@@ -47,10 +47,10 @@ function renderPlayed(games) {
 
         return `
         <div class="card ${getBrandClass(plataforma)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px; overflow: hidden;">
-            
+    
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-                
-                <div style="flex-grow: 1; margin-left: 6px; background: linear-gradient(to right, rgba(248, 248, 240, 0.5), transparent); display: flex; align-items: center; padding-left: 10px;">
+        
+                <div class="icon-gradient-area">
                     <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
                         ${getPlatformIcon(plataforma)}
                     </div>
@@ -59,7 +59,8 @@ function renderPlayed(games) {
                 <div style="background: hsl(${hue}, 100%, 40%); color: #fff; font-weight: 900; width: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3);">
                     ${nota.toFixed(1)}
                 </div>
-            </div>
+            </div>  
+            `;
 
             <div style="position: absolute; top: 55px; left: 18px; z-index: 10; display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
                 <div style="background: rgba(0,0,0,0.7); color: #fff; font-size: 0.6em; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">
