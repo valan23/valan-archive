@@ -29,7 +29,6 @@ function createCardHTML(j) {
         
         const styleRegion = AppUtils.getRegionStyle(j["Región"]);
         
-        // Función auxiliar para convertir HEX a RGBA con opacidad
         const toRgba = (hex, alpha = 0.15) => {
             if (!hex || !hex.startsWith('#')) return `rgba(255,255,255,${alpha})`;
             const r = parseInt(hex.slice(1, 3), 16);
@@ -40,16 +39,15 @@ function createCardHTML(j) {
 
         // 1. Lógica de Completitud (Header)
         const colorCompBase = AppUtils.getCompletitudStyle(j["Completitud"]);
-        const bgCompletitud = toRgba(colorCompBase, 0.15); // Fondo translúcido
+        const bgCompletitud = toRgba(colorCompBase, 0.15);
 
         // 2. Lógica de Rareza (Footer)
         const rawRarezaColor = AppUtils.getRarezaColor(j["Rareza"]);
-        const bgRareza = toRgba(rawRarezaColor, 0.15); // Fondo translúcido
+        const bgRareza = toRgba(rawRarezaColor, 0.15);
 
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
         const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
 
-        // Estilos de Formato
         const colorTextoFormato = esDigital ? '#00f2ff' : '#EFC36C';
         const bgFormato = esDigital ? 'rgba(0, 242, 255, 0.15)' : 'rgba(239, 195, 108, 0.15)';
 
@@ -57,12 +55,12 @@ function createCardHTML(j) {
         <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
             
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-                <div class="icon-gradient-area">
+                <div class="icon-gradient-area" style="flex-grow: 1;">
                     <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
                         ${getPlatformIcon(plat)}
                     </div>
                 </div>
-                <div style="background: ${bgCompletitud}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; padding: 0 15px; display: flex; align-items: center; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap; border-left: 1px solid ${toRgba(colorCompBase, 0.3)};">
+                <div style="width: 37.5%; background: ${bgCompletitud}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap; border-left: 1px solid ${toRgba(colorCompBase, 0.3)};">
                     ${(j["Completitud"] || "???").toUpperCase()}
                 </div>
             </div>
@@ -104,11 +102,12 @@ function createCardHTML(j) {
                     <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                 </div>
                 
-                <div style="flex: 1; background: ${bgRareza}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: 0.75em; color: ${bgRareza}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
+                <div style="flex: 1; background: ${bgRareza}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                    <span style="font-size: 0.5em; color: #fff; opacity: 0.5; font-weight: 900;">RAREZA</span>
+                    <span style="font-size: 0.75em; color: ${rawRarezaColor}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
                 </div>
 
-                <div style="flex: 1; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="flex: 1; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                     <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">VALOR APROX</span>
                     <span style="font-size: 0.85em; color: #fff; font-weight: 900; line-height: 1;">${j["Tasación Actual"] || "S/T"}</span>
                     <div style="font-size: 0.45em; color: #555; margin-top: 2px; font-weight: bold;">${j["Fecha revision"] || '--/--'}</div>
