@@ -1,23 +1,3 @@
-function renderGames(games) {
-    const container = document.getElementById('game-grid');
-    if (!container) return;
-
-    if (typeof renderFormatFilters === 'function') {
-        const fullData = (window.dataStore && window.dataStore['videojuegos']) ? window.dataStore['videojuegos'] : games;
-        renderFormatFilters(fullData, 'format-buttons-container-games', 'game');
-    }
-
-    container.innerHTML = "";
-
-    if (!games || games.length === 0) {
-        container.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 40px; color: #888;'>No se encontraron juegos con estos filtros.</p>";
-        return;
-    }
-
-    const html = games.map(j => createCardHTML(j)).join('');
-    container.innerHTML = html;
-}
-
 function createCardHTML(j) {
     try {
         if (typeof AppUtils === 'undefined') return "";
@@ -28,18 +8,23 @@ function createCardHTML(j) {
         const fotoUrl = AppUtils.isValid(portada) ? `images/covers/${carpeta}/${portada}` : `images/covers/default.webp`;
         
         const styleRegion = AppUtils.getRegionStyle(j["Región"]);
-        const colorComp = AppUtils.getCompletitudStyle(j["Completitud"]);
         
-        // Lógica de Rareza desde utils.js
-        const rawRarezaColor = AppUtils.getRarezaColor(j["Rareza"]);
-        
-        // Convertidor interno de HEX a RGBA (15% opacidad) para el fondo
-        const getBgRareza = (hex) => {
+        // Función auxiliar para convertir HEX a RGBA con opacidad
+        const toRgba = (hex, alpha = 0.15) => {
+            if (!hex || !hex.startsWith('#')) return `rgba(255,255,255,${alpha})`;
             const r = parseInt(hex.slice(1, 3), 16);
             const g = parseInt(hex.slice(3, 5), 16);
             const b = parseInt(hex.slice(5, 7), 16);
-            return `rgba(${r}, ${g}, ${b}, 0.15)`;
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
         };
+
+        // 1. Lógica de Completitud (Header)
+        const colorCompBase = AppUtils.getCompletitudStyle(j["Completitud"]);
+        const bgCompletitud = toRgba(colorCompBase, 0.15); // Fondo translúcido
+
+        // 2. Lógica de Rareza (Footer)
+        const rawRarezaColor = AppUtils.getRarezaColor(j["Rareza"]);
+        const bgRareza = toRgba(rawRarezaColor, 0.15); // Fondo translúcido
 
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
         const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
@@ -57,7 +42,7 @@ function createCardHTML(j) {
                         ${getPlatformIcon(plat)}
                     </div>
                 </div>
-                <div style="background: ${colorComp}; color: #000; font-weight: 900; font-size: 0.7em; padding: 0 15px; display: flex; align-items: center; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap;">
+                <div style="background: ${bgCompletitud}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; padding: 0 15px; display: flex; align-items: center; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap; border-left: 1px solid ${toRgba(colorCompBase, 0.3)};">
                     ${(j["Completitud"] || "???").toUpperCase()}
                 </div>
             </div>
@@ -96,15 +81,14 @@ function createCardHTML(j) {
                 
                 <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-floppy-disk'}" style="font-size: 1em; margin-bottom: 2px;"></i>
-                    <span style="font-size: 0.6em; font-weight: 900; letter-spacing: 0.5px;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
+                    <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                 </div>
                 
-                <div style="flex: 1; background: ${getBgRareza(rawRarezaColor)}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                    <span style="font-size: 0.5em; color: #555; opacity: 0.5; font-weight: 900;">RAREZA</span>
-                    <span style="font-size: 0.75em; color: #fff; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
+                <div style="flex: 1; background: ${bgRareza}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <span style="font-size: 0.75em; color: ${bgRareza}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
                 </div>
 
-                <div style="flex: 1; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="flex: 1; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">VALOR APROX</span>
                     <span style="font-size: 0.85em; color: #fff; font-weight: 900; line-height: 1;">${j["Tasación Actual"] || "S/T"}</span>
                     <div style="font-size: 0.45em; color: #555; margin-top: 2px; font-weight: bold;">${j["Fecha revision"] || '--/--'}</div>
