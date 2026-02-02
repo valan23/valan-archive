@@ -18,6 +18,26 @@ function renderGames(games) {
     container.innerHTML = html;
 }
 
+function renderGames(games) {
+    const container = document.getElementById('game-grid');
+    if (!container) return;
+    
+    if (typeof renderFormatFilters === 'function') {
+        const fullData = (window.dataStore && window.dataStore['videojuegos']) ? window.dataStore['videojuegos'] : games;
+        renderFormatFilters(fullData, 'format-buttons-container-games', 'game');
+    }
+
+    container.innerHTML = "";
+    
+    if (!games || games.length === 0) {
+        container.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 40px; color: #888;'>No se encontraron juegos con estos filtros.</p>";
+        return;
+    }
+
+    const html = games.map(j => createCardHTML(j)).join('');
+    container.innerHTML = html;
+}
+
 function createCardHTML(j) {
     try {
         if (typeof AppUtils === 'undefined') return "";
@@ -29,6 +49,7 @@ function createCardHTML(j) {
         
         const styleRegion = AppUtils.getRegionStyle(j["Región"]);
         
+        // Helper para convertir colores dinámicos (Completitud/Rareza) a RGBA
         const toRgba = (hex, alpha = 0.15) => {
             if (!hex || !hex.startsWith('#')) return `rgba(255,255,255,${alpha})`;
             const r = parseInt(hex.slice(1, 3), 16);
@@ -37,13 +58,8 @@ function createCardHTML(j) {
             return `rgba(${r}, ${g}, ${b}, ${alpha})`;
         };
 
-        // 1. Lógica de Completitud (Header)
         const colorCompBase = AppUtils.getCompletitudStyle(j["Completitud"]);
-        const bgCompletitud = toRgba(colorCompBase, 0.15);
-
-        // 2. Lógica de Rareza (Footer)
         const rawRarezaColor = AppUtils.getRarezaColor(j["Rareza"]);
-        const bgRareza = toRgba(rawRarezaColor, 0.15);
 
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
         const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
@@ -55,12 +71,12 @@ function createCardHTML(j) {
         <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
             
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-                <div class="icon-gradient-area" style="flex-grow: 1;">
+                <div class="icon-gradient-area">
                     <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
                         ${getPlatformIcon(plat)}
                     </div>
                 </div>
-                <div style="width: 40%; background: ${bgCompletitud}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap; border-left: 1px solid ${toRgba(colorCompBase, 0.3)};">
+                <div style="width: 37.5%; background: ${toRgba(colorCompBase, 0.15)}; color: ${colorCompBase}; font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.05);">
                     ${(j["Completitud"] || "???").toUpperCase()}
                 </div>
             </div>
@@ -96,13 +112,13 @@ function createCardHTML(j) {
             </div>
 
             <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch;">
-                
                 <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-floppy-disk'}" style="font-size: 1em; margin-bottom: 2px;"></i>
                     <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                 </div>
                 
-                <div style="flex: 1; background: ${bgRareza}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="flex: 1; background: ${toRgba(rawRarezaColor, 0.15)}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                    <span style="font-size: 0.5em; color: #fff; opacity: 0.5; font-weight: 900;">RAREZA</span>
                     <span style="font-size: 0.75em; color: ${rawRarezaColor}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
                 </div>
 
