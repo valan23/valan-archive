@@ -29,22 +29,28 @@ function createCardHTML(j) {
         
         const styleRegion = AppUtils.getRegionStyle(j["Región"]);
         const colorComp = AppUtils.getCompletitudStyle(j["Completitud"]);
-        const colorRareza = typeof AppUtils.getRarezaColor === 'function' ? AppUtils.getRarezaColor(j["Rareza"]) : "#ccc";
+        
+        // Rareza: Usamos el color pero con opacidad
+        const rawRarezaColor = typeof AppUtils.getRarezaColor === 'function' ? AppUtils.getRarezaColor(j["Rareza"]) : "#ccc";
         
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
         const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
+
+        // Definimos los colores translúcidos para el footer
+        // Digital: Cian con 15% opacidad | Físico: Dorado con 15% opacidad
+        const bgFormato = esDigital ? 'rgba(0, 242, 255, 0.15)' : 'rgba(239, 195, 108, 0.15)';
+        const borderFormato = esDigital ? 'rgba(0, 242, 255, 0.3)' : 'rgba(239, 195, 108, 0.3)';
+        const colorTextoFormato = esDigital ? '#00f2ff' : '#EFC36C';
 
         return `
         <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
             
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-                
                 <div class="icon-gradient-area">
                     <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
                         ${getPlatformIcon(plat)}
                     </div>
                 </div>
-
                 <div style="background: ${colorComp}; color: #000; font-weight: 900; font-size: 0.7em; padding: 0 15px; display: flex; align-items: center; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap;">
                     ${(j["Completitud"] || "???").toUpperCase()}
                 </div>
@@ -59,7 +65,6 @@ function createCardHTML(j) {
                     <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text};">
                          ${getFlag(j["Región"])} ${j["Región"] || "N/A"}
                     </div>
-                    <span style="font-size: 0.65em; font-weight: 800; color: ${colorRareza};">💎 ${j["Rareza"] || "COMÚN"}</span>
                 </div>
             </div>
 
@@ -83,15 +88,20 @@ function createCardHTML(j) {
 
             <div style="margin-top: 10px; height: 50px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; justify-content: space-between;">
                 
-                <div style="background: ${esDigital ? '#00f2ff' : '#EFC36C'}; color: #000; font-weight: 900; font-size: 0.65em; padding: 0 20px; display: flex; align-items: center; border-top-right-radius: 12px; letter-spacing: 0.5px; box-shadow: 2px 0 10px rgba(0,0,0,0.2);">
+                <div style="background: ${bgFormato}; border-right: 1px solid ${borderFormato}; color: ${colorTextoFormato}; font-weight: 900; font-size: 0.65em; padding: 0 15px; display: flex; align-items: center; letter-spacing: 0.5px;">
                     <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-floppy-disk'}" style="margin-right: 6px; font-size: 1.1em;"></i>
                     ${esDigital ? 'DIGITAL' : 'FÍSICO'}
                 </div>
+                
+                <div style="background: rgba(255,255,255,0.03); border-right: 1px solid rgba(255,255,255,0.05); padding: 0 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 70px;">
+                    <span style="font-size: 0.5em; color: #888; font-weight: 900;">RAREZA</span>
+                    <span style="font-size: 0.75em; color: ${rawRarezaColor}; font-weight: 900; line-height: 1;">💎 ${j["Rareza"] || "COMÚN"}</span>
+                </div>
 
-                <div style="background: rgba(46, 158, 127, 0.15); border-left: 1px solid rgba(46, 158, 127, 0.3); padding: 0 15px; display: flex; flex-direction: column; align-items: center; border-top-left-radius: 12px; justify-content: center; min-width: 65px;">
-                        <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">TASACIÓN</span>
-                        <span style="font-size: 0.9em; color: #fff; font-weight: 900; line-height: 1;">💸 ${j["Tasación Actual"] || "S/T"}</span>
-                    <div style="font-size: 0.50em; color: #666; margin-top: 3px; font-weight: bold; text-transform: uppercase;">Rev: ${j["Fecha revision"] || '--/--'}</div>
+                <div style="background: rgba(46, 158, 127, 0.15); padding: 0 12px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; min-width: 80px; flex-grow: 1;">
+                    <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">TASACIÓN</span>
+                    <span style="font-size: 0.9em; color: #fff; font-weight: 900; line-height: 1;">💸 ${j["Tasación Actual"] || "S/T"}</span>
+                    <div style="font-size: 0.45em; color: #666; margin-top: 2px; font-weight: bold;">Rev: ${j["Fecha revision"] || '--/--'}</div>
                 </div>
             </div>
         </div>`;
