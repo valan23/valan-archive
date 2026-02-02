@@ -34,19 +34,23 @@ function createCardHTML(j) {
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
         const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
 
-        // Mimetizamos el estilo de la Wishlist usando flexbox y estilos directos
         return `
-        <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative;">
+        <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
             
-            <div class="platform-icon-card" style="position: absolute; top: 12px; left: 12px; z-index: 10;">
-                ${getPlatformIcon(plat)}
-            </div>
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
+                
+                <div class="icon-gradient-area">
+                    <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
+                        ${getPlatformIcon(plat)}
+                    </div>
+                </div>
 
-            <div style="position: absolute; top: 0; right: 0; background: ${colorComp}; color: #000; font-weight: 900; font-size: 0.65em; padding: 6px 14px; border-bottom-left-radius: 8px; z-index: 10;">
-                ${(j["Completitud"] || "???").toUpperCase()}
+                <div style="background: ${colorComp}; color: #000; font-weight: 900; font-size: 0.7em; padding: 0 15px; display: flex; align-items: center; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3); white-space: nowrap;">
+                    ${(j["Completitud"] || "???").toUpperCase()}
+                </div>
             </div>
             
-            <div style="margin-top: 45px; padding: 0 12px;">
+            <div style="margin-top: 55px; padding: 0 12px;">
                 <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; min-height: 2.4em; display: flex; align-items: center; padding: 0;">
                     ${j["Nombre Juego"]}
                 </div>
