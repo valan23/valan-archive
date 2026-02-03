@@ -199,13 +199,17 @@
         }
 
         .icon-gradient-area {
-            background: var(--brand-color-soft) !important;
+            /* Fondo blanco claro transparente solicitado */
+            background: rgba(255, 255, 255, 0.12) !important; 
+            /* Efecto de desenfoque de fondo para que resalte el logo */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+    
             display: flex;
             align-items: center;
             padding-left: 10px !important;
-            /* El margen izquierdo de 6px evita que pise el box-shadow lateral */
             margin-left: 6px !important; 
-            border-top-left-radius: 4px;
+            border-top-left-radius: 11px;
         }
 
         .card-footer-item, [style*="background: ${bgFormato}"] {
