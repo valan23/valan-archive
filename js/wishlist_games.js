@@ -36,17 +36,17 @@ function renderWishlist(games) {
             // --- NUEVA LÓGICA DE PRIORIDAD (FUEGOS) ---
             const priorRaw = (j["Prioridad"] || "NORMAL").trim().toUpperCase();
             let priorIconos = "🔥";
-            let colorPrioridad = "#00D4FF"; // Default Normal (Celeste)
+            let colorPrioridad = "#4D94FF"; // Azul por defecto (Normal)
 
             if (priorRaw.includes("MUY ALTA") || priorRaw.includes("CRÍTICO")) {
                 priorIconos = "🔥🔥🔥";
                 colorPrioridad = "#FF4D4D"; // Rojo
             } else if (priorRaw.includes("ALTA") || priorRaw.includes("PRINCIPAL")) {
                 priorIconos = "🔥🔥";
-                colorPrioridad = "#00FF88"; // Verde neón
+                colorPrioridad = "#FFD700"; // Amarillo
             } else if (priorRaw.includes("NORMAL") || priorRaw.includes("BONUS")) {
                 priorIconos = "🔥";
-                colorPrioridad = "#00D4FF"; // Cyan
+                colorPrioridad = "#4D94FF"; // Azul
             }
             
             // --- CÁLCULO DE MEJOR PRECIO ---
@@ -83,7 +83,7 @@ function renderWishlist(games) {
                         </div>
                     </div>
                     
-                    <div style="flex: 0 0 40%; background: ${colorPrioridad}; color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.2); line-height: 1;">
+                    <div style="flex: 0 0 40%; background: ${toRgba(colorPrioridad, 0.2)}; color: ${colorPrioridad}; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 -1px 0 rgba(255,255,255,0.1); border-left: 1px solid ${toRgba(colorPrioridad, 0.3)}; line-height: 1;">
                         <span style="font-size: 0.85em; margin-bottom: 2px;">${priorIconos}</span>
                         <span style="font-weight: 900; font-size: 0.55em; text-transform: uppercase; letter-spacing: 0.5px;">${priorRaw}</span>
                     </div>
