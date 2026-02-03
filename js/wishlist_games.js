@@ -23,7 +23,7 @@ function renderWishlist(games) {
                 ? `images/covers/${carpeta}/${portadaNombre}` 
                 : `images/covers/default.webp`;
             
-            // --- NUEVAS DEFINICIONES PARA EVITAR EL ERROR ---
+            // --- DEFINICIONES DE ESTADO Y REGIÓN ---
             const edicion = j["Edición"] || "";
             const esEspecial = AppUtils.isValid(edicion);
             const region = j["Región"] || "N/A";
@@ -31,7 +31,6 @@ function renderWishlist(games) {
                 ? REGION_COLORS[region] 
                 : { bg: "rgba(255,255,255,0.1)", text: "#fff", border: "rgba(255,255,255,0.2)" };
 
-            // Función local para banderas si no existe la global
             const getFlag = (reg) => {
                 const flags = { "JAP": "🇯🇵", "ESP": "🇪🇸", "USA": "🇺🇸", "EU": "🇪🇺", "UK": "🇬🇧" };
                 return flags[reg] || "🌐";
@@ -58,7 +57,18 @@ function renderWishlist(games) {
                 ? listaPrecios.reduce((prev, curr) => (prev.eur < curr.eur) ? prev : curr) 
                 : { v: "--", n: "N/A" };
 
+            // --- VARIABLES PARA EL FOOTER (CORRECCIÓN DE ERRORES) ---
             const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
+            const bgFormato = esDigital ? 'rgba(0, 212, 255, 0.15)' : 'rgba(239, 195, 108, 0.15)';
+            const colorTextoFormato = esDigital ? '#00d4ff' : '#EFC36C';
+            const rawRarezaColor = (typeof AppUtils.getRarezaColor === 'function') ? AppUtils.getRarezaColor(j["Rareza"]) : "#fff";
+            
+            // Función auxiliar simple para RGBA si no existe
+            const toRgba = (hex, alpha) => {
+                if (!hex || hex[0] !== '#') return `rgba(255,255,255,${alpha})`;
+                const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            };
 
             return `
             <div class="card ${typeof getBrandClass === 'function' ? getBrandClass(plataforma) : ''}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden;">
@@ -69,7 +79,6 @@ function renderWishlist(games) {
                             ${typeof getPlatformIcon === 'function' ? getPlatformIcon(plataforma) : ''}
                         </div>
                     </div>
-                    
                     <div style="background: ${colorPrioridad}; color: #000; font-weight: 900; font-size: 0.7em; padding: 0 15px; display: flex; align-items: center; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3);">
                         ${priorTexto}
                     </div>
@@ -82,15 +91,12 @@ function renderWishlist(games) {
                         </div>` : 
                         `<div style="height: 12px;"></div>`
                     }
-
                     <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2; display: flex; align-items: center; padding: 0;">
                         ${j["Nombre Juego"]}
                     </div>
-
                     <div style="font-size: 0.7em; color: #888; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
                         ${j["Nombre Japones"] || ""}
                     </div>
-
                     <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
                         <span style="font-size: 0.7em; color: #888; font-weight: bold;">${j["Año"] || "????"}</span>
                         <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text};">
@@ -101,9 +107,6 @@ function renderWishlist(games) {
 
                 <div style="height: 150px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
                     <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
-                    ${AppUtils.isValid(j["Link"]) ? 
-                        `<a href="${j["Link"]}" target="_blank" style="position: absolute; bottom: 5px; right: 5px; background: #9500ff; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.6em; font-weight: 900; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">OFERTA <i class="fa-solid fa-external-link" style="margin-left:3px;"></i></a>` : ''
-                    }
                 </div>
 
                 <div style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 6px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px;">
@@ -115,25 +118,26 @@ function renderWishlist(games) {
                     `).join('')}
                 </div>
 
-                <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: stretch; background: rgba(0,0,0,0.2);">
-                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05);">
-                        <span style="font-size: 0.5em; color: #888; text-transform: uppercase; font-weight: 800;">Formato</span>
-                        <span style="font-size: 0.7em; color: ${esDigital ? '#00d4ff' : '#EFC36C'}; font-weight: 800;">
-                            <i class="fa-solid ${esDigital ? 'fa-cloud' : 'fa-compact-disc'}" style="font-size: 0.9em;"></i> ${j["Formato"] || 'FÍSICO'}
-                        </span>
+                <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; overflow: hidden; position: relative;">
+                    
+                    <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}" style="font-size: 1em; margin-bottom: 2px;"></i>
+                        <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                     </div>
 
-                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05);">
-                        <span style="font-size: 0.5em; color: #888; text-transform: uppercase; font-weight: 800;">Rareza</span>
-                        <span style="font-size: 0.7em; color: #fff; font-weight: 800;">
-                             <i class="fa-solid fa-star" style="color: #ffd700; font-size: 0.8em;"></i> ${j["Rareza"] || '---'}
-                        </span>
+                    <div style="flex: 1; background: ${toRgba(rawRarezaColor, 0.15)}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                        <span style="font-size: 0.45em; color: #888; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Rareza</span>
+                        <span style="font-size: 0.7em; color: ${rawRarezaColor}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
                     </div>
 
-                    <div style="flex: 1.2; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(149,0,255,0.05);">
-                        <span style="font-size: 0.5em; color: #888; text-transform: uppercase; font-weight: 800;">Mínimo</span>
-                        <span style="font-size: 0.85em; color: #fff; font-weight: 900; letter-spacing: -0.5px;">${precioMinObj.v}</span>
-                        <span style="font-size: 0.45em; color: #555; font-weight: 700; margin-top: 1px;">ACT: ${j["Fecha revision"] || '--/--'}</span>
+                    <div style="flex: 1; background: rgba(149, 0, 255, 0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative;">
+                        <span style="font-size: 0.45em; color: #888; font-weight: 800; text-transform: uppercase;">Mínimo</span>
+                        <span style="font-size: 0.8em; color: #fff; font-weight: 900;">${precioMinObj.v}</span>
+                        <div style="font-size: 0.45em; color: #555; margin-top: 2px; font-weight: bold;">${j["Fecha revision"] || '--/--'}</div>
+                        
+                        ${AppUtils.isValid(j["Link"]) ? 
+                            `<a href="${j["Link"]}" target="_blank" style="position: absolute; top: -12px; right: 5px; background: #9500ff; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.55em; font-weight: 900; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 20;">OFERTA <i class="fa-solid fa-external-link"></i></a>` : ''
+                        }
                     </div>
                 </div>
             </div>`;
