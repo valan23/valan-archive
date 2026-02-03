@@ -149,7 +149,7 @@ function createCardHTML(j) {
                     <div style="flex: 1; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                         <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">VALOR APROX</span>
                         <span style="font-size: 0.85em; color: #fff; font-weight: 900; line-height: 1;">${j["Tasación Actual"] || "S/T"}</span>
-                        <div style="font-size: 0.5em; color: #555; margin-top: 2px; font-weight: bold;">${j["Fecha revision"] || '--/--'}</div>
+                        <div style="font-size: 0.55em; color: #555; margin-top: 2px; font-weight: bold;">${j["Fecha revision"] || '--/--'}</div>
                     </div>
              </div>
         </div>`;
