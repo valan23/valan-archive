@@ -78,7 +78,7 @@ function createCardHTML(j) {
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
         
                 <div class="icon-gradient-area" style="flex: 0 0 calc(60% - 6px); border-top-left-radius: 11px;">
-                    <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
+                    <div class="platform-icon-card" style="margin: 0; filter: none;">
                         ${getPlatformIcon(plat)}
                     </div>
                 </div>
