@@ -119,9 +119,11 @@
         }
 
         .brand-logo-img, .btn-console-icon {
-            max-height: 25px; width: auto; max-width: 45px; 
+            max-height: 25px; 
+            width: auto; 
+            max-width: 45px;  
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); /* Sombra natural, no perfilado */
+            filter: none !important; /* Cambiado de drop-shadow a none */
         }
 
         .brand-icon span, .filter-btn span {
