@@ -67,7 +67,7 @@ function createCardHTML(j) {
             
             <div style="margin-top: 55px; padding: 0 12px;">
                 ${esEspecial ? 
-                    `<div style="color: var(--accent); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px;">
+                    `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px;">
                         <i class="fa-solid fa-star" style="font-size: 0.9em;"></i> ${j["Edición"]}
                     </div>` : 
                     `<div style="height: 12px;"></div>` /* Espaciador si no hay edición para mantener alineación */
@@ -77,8 +77,8 @@ function createCardHTML(j) {
                     ${j["Nombre Juego"]}
                 </div>
 
-                <div style="font-size: 0.75em; color: #aaa; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
-                    ${j["Nombre Japonés"] || ""}
+                <div style="font-size: 0.65em; color: #aaa; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
+                    ${j["Nombre Japones"] || ""}
                 </div>
 
                 <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
