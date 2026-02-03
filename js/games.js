@@ -129,7 +129,7 @@ function createCardHTML(j) {
                     .filter(i => AppUtils.isValid(i.v)).map(i => `
                         <div style="display: flex; flex-direction: column; padding: 4px 6px; border-radius: 4px; background: ${getStatusGradient(i.v)}; border-left: 2px solid rgba(255,255,255,0.1);">
                             <span style="color: #888; font-size: 0.55em; font-weight: 700; text-transform: uppercase;">${i.l}</span>
-                            <span style="color: #eee; font-size: 0.7em; font-weight: 800;">${i.v.toUpperCase()}</span>
+                            <span style="color: #eee; font-size: 0.9em; font-weight: 800; text-align: right;">${i.v.toUpperCase()}</span>
                         </div>
                     `).join('')
                 }
