@@ -66,12 +66,22 @@ function createCardHTML(j) {
             </div>
             
             <div style="margin-top: 55px; padding: 0 12px;">
-                <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; min-height: 2.4em; display: flex; align-items: center; padding: 0;">
+                ${esEspecial ? 
+                    `<div style="color: var(--accent); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px;">
+                        <i class="fa-solid fa-star" style="font-size: 0.9em;"></i> ${j["Edición"]}
+                    </div>` : 
+                    `<div style="height: 12px;"></div>` /* Espaciador si no hay edición para mantener alineación */
+                }
+
+                <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2; display: flex; align-items: center; padding: 0;">
                     ${j["Nombre Juego"]}
                 </div>
-                
-                ${esEspecial ? `<div style="color: var(--accent); font-size: 0.65em; margin-top: 5px; font-weight: bold; text-align: center;"><i class="fa-solid fa-star"></i> ${j["Edición"]}</div>` : ''}
-                <div style="display: flex; gap: 8px; align-items: center; margin-top: 5px;">
+
+                <div style="font-size: 0.75em; color: #aaa; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
+                    ${j["Nombre Japonés"] || ""}
+                </div>
+
+                <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
                     <span style="font-size: 0.7em; color: #888; font-weight: bold;">${j["Año"] || "????"}</span>
                     <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text};">
                          ${getFlag(j["Región"])} ${j["Región"] || "N/A"}
@@ -104,7 +114,6 @@ function createCardHTML(j) {
                     </div>
         
                     <div style="flex: 1; background: ${toRgba(rawRarezaColor, 0.15)}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                        <span style="font-size: 0.5em; color: #fff; opacity: 0.5; font-weight: 900;">RAREZA</span>
                         <span style="font-size: 0.75em; color: ${rawRarezaColor}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
                     </div>
 
