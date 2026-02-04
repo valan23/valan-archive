@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="images/favicon.png">
     <title>Valan Retro | Colección</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -25,16 +26,14 @@
 
     <nav class="main-nav">
         <div class="nav-container">
-            <img src="images/main_logo.png" alt="VALAN" class="nav-logo">
-
-            <div class="main-tabs">
+            <img src="images/main_logo.png" class="nav-logo"> 
+            <div class="main-tabs"> 
                 <span class="tab-link active" onclick="switchSection('videojuegos', this)">Juegos</span>
-                <span class="tab-link" onclick="switchSection('deseados', this)">Wishlist</span>
-                <span class="tab-link" onclick="switchSection('jugados', this)">Diario</span>
+                <span class="tab-link" onclick="switchSection('deseados', this)">Deseados</span>
+                <span class="tab-link" onclick="switchSection('jugados', this)">Jugados</span>
             </div>
 
-            <div class="search-wrapper" style="margin: 0; width: 250px;">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <div class="search-wrapper"> <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" id="searchInput" placeholder="Buscar título..." onkeyup="filterGames()">
             </div>
         </div>
