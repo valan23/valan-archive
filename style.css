@@ -2,9 +2,9 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    --accent: #efc36c;   /* Dorado Logo */
-    --purple: #9500ff;   /* Morado Logo */
-    --cyan: #00f2ff;     /* Cian Logo */
+    --accent: #efc36c;   
+    --purple: #9500ff;   
+    --cyan: #00f2ff;     
     --bg-dark: #0b0b0e;
     --bg-card: #16161a;
     --navbar-bg: rgba(18, 18, 22, 0.9);
@@ -15,10 +15,32 @@ body {
     background: var(--bg-dark);
     color: #e0e0e0;
     overflow-x: hidden;
-    padding-top: 80px; /* Espacio para la navbar fija */
+    padding-top: 100px; 
 }
 
-/* --- NAVBAR PROFESIONAL (Glassmorphism) --- */
+/* --- CONTROL DE IMÁGENES (Evita que la web explote) --- */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- LOGOS --- */
+.main-logo {
+    max-width: 450px; /* Tamaño máximo del logo principal */
+    width: 100%;
+    margin: 0 auto;
+    filter: drop-shadow(0 0 12px rgba(239, 195, 108, 0.2));
+}
+
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* --- NAVBAR --- */
 .main-nav {
     position: fixed;
     top: 0;
@@ -45,11 +67,10 @@ body {
 }
 
 .nav-logo {
-    height: 40px;
-    filter: drop-shadow(0 0 8px rgba(239, 195, 108, 0.2));
+    height: 35px; /* Tamaño fijo en la barra superior */
+    width: auto;
 }
 
-/* SECCIONES (TABS) DENTRO DE NAV */
 .main-tabs {
     display: flex;
     gap: 30px;
@@ -57,7 +78,6 @@ body {
 
 .tab-link {
     color: #777;
-    text-decoration: none;
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -65,15 +85,10 @@ body {
     cursor: pointer;
     position: relative;
     padding: 10px 0;
-    transition: all 0.3s ease;
+    transition: 0.3s;
 }
 
-.tab-link:hover { color: #fff; }
-
-.tab-link.active {
-    color: var(--accent);
-}
-
+.tab-link.active { color: var(--accent); }
 .tab-link.active::after {
     content: "";
     position: absolute;
@@ -82,164 +97,118 @@ body {
     width: 100%;
     height: 2px;
     background: var(--accent);
-    box-shadow: 0 0 10px var(--accent);
 }
 
-/* --- CONTENEDOR PRINCIPAL --- */
-.container { 
-    width: 100%; 
-    max-width: 1300px; 
-    margin: 0 auto; 
-    padding: 20px; 
+/* --- FILTROS --- */
+.filter-section {
+    background: #0d0d11;
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 40px;
 }
 
-/* --- BUSCADOR ESTILIZADO --- */
+.brand-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.icon-wrapper {
+    width: 70px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+}
+
+/* IMPORTANTE: Esto controla los logos de las consolas */
+.brand-logo-img {
+    max-height: 25px !important; 
+    max-width: 50px !important;
+    object-fit: contain;
+}
+
+.brand-icon span {
+    font-size: 9px;
+    font-weight: 800;
+    color: #555;
+    text-transform: uppercase;
+}
+
+.brand-icon.active .icon-wrapper {
+    background: rgba(149, 0, 255, 0.1);
+    border-color: var(--accent);
+}
+
+/* --- BUSCADOR --- */
 .search-wrapper {
     position: relative;
-    max-width: 500px;
-    margin: 20px auto 40px;
 }
 
 #searchInput {
-    width: 100%;
-    padding: 14px 20px 14px 45px;
-    border-radius: 30px;
-    border: 1px solid rgba(255,255,255,0.1);
     background: #16161a;
+    border: 1px solid rgba(255,255,255,0.1);
     color: white;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-}
-
-#searchInput:focus {
-    outline: none;
-    border-color: var(--accent);
-    background: #1c1c22;
-    box-shadow: 0 0 20px rgba(239, 195, 108, 0.1);
+    padding: 10px 15px 10px 35px;
+    border-radius: 20px;
+    width: 100%;
 }
 
 .search-icon {
     position: absolute;
-    left: 18px;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
     color: #555;
 }
 
-/* --- PANEL DE FILTROS (REDISEÑADO) --- */
-.filter-section {
-    background: #0d0d11;
-    border: 1px solid rgba(255,255,255,0.03);
-    padding: 40px;
-    border-radius: 20px;
-    margin-bottom: 40px;
-}
+/* --- GRID Y CARDS --- */
+.container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 20px; }
 
-.brand-selector { 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 30px 60px; 
-}
-
-.brand-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.icon-wrapper {
-    width: 70px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 8px;
-    transition: all 0.3s ease;
-}
-
-.brand-logo-img {
-    max-height: 22px;
-    max-width: 50px;
-    object-fit: contain;
-    opacity: 0.6;
-    transition: all 0.3s ease;
-}
-
-.brand-icon span {
-    font-size: 10px;
-    font-weight: 800;
-    color: #555;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Estados Hover y Active del Filtro */
-.brand-icon:hover .icon-wrapper {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-5px);
-}
-
-.brand-icon:hover .brand-logo-img { opacity: 1; }
-
-.brand-icon.active .icon-wrapper {
-    background: rgba(149, 0, 255, 0.15);
-    border-color: var(--accent);
-    box-shadow: 0 0 15px rgba(239, 195, 108, 0.1);
-}
-
-.brand-icon.active .brand-logo-img { 
-    opacity: 1; 
-    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
-}
-
-.brand-icon.active span { color: var(--accent); }
-
-/* --- GRID DE TARJETAS (Común para todos) --- */
-.grid, #played-grid, #wishlist-grid {
+.grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
 }
 
-/* Corrección de la clase .card (Eliminados duplicados) */
 .card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
     background: #121216;
-    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.05);
     overflow: hidden;
+    transition: 0.3s;
 }
 
-.card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-}
+.card:hover { transform: translateY(-5px); }
 
-/* ÁREAS DE COLOR DINÁMICO */
-.icon-gradient-area {
-    background: rgba(255, 255, 255, 0.8) !important;
+/* --- BOTONES FORMATO (Añadido que faltaba) --- */
+.format-buttons {
     display: flex;
-    align-items: center;
+    gap: 10px;
     justify-content: center;
-    border-top-left-radius: 11px;
+    flex-wrap: wrap;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .main-tabs { display: none; } /* En móvil se usaría un menú hamburguesa o scroll lateral */
-    .brand-selector { gap: 20px; }
-    .filter-section { padding: 20px; }
-    body { padding-top: 60px; }
+.format-btn, .year-btn {
+    background: #1a1a20;
+    border: 1px solid #333;
+    color: #888;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.format-btn.active, .year-btn.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
 }
