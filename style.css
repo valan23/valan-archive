@@ -2,12 +2,12 @@
 /* NAVBAR: Ajuste de separación y fondo */
 .main-nav {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 75px;
+    top: 0; left: 0; width: 100%; 
+    min-height: 75px; /* min-height en lugar de height fijo */
     z-index: 9999;
     background: rgba(11, 11, 14, 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    /* Ralla inferior sutil con degradado */
     border-bottom: 2px solid;
     border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1;
     display: flex; align-items: center;
@@ -18,29 +18,28 @@
     width: 100%;
     max-width: 1300px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 10px 20px;
     display: flex;
+    flex-wrap: wrap; /* PERMITE QUE LOS ELEMENTOS BAJEN DE LÍNEA SI NO CABEN */
+    justify-content: space-between; /* Logo izquierda, buscador derecha, pestañas centro */
     align-items: center;
-    justify-content: center; /* Centra el contenido principal (los tabs) */
-    position: relative;
-    height: 100%;
+    gap: 15px; /* Espacio mínimo entre elementos antes de chocar */
 }
 
 /* LOGO: Empujado a la izquierda */
 .nav-logo {
-    position: absolute;
-    left: 20px;
-    height: 30px;
-    width: auto;
+    height: 35px;
+    width: auto; /* Permite que el ancho se ajuste solo */
+    object-fit: contain; /* Evita que se estire */
+    flex-shrink: 0; /* No deja que el logo se haga pequeño */
 }
 
 /* BUSCADOR: Empujado a la derecha */
 .search-wrapper {
-    position: absolute;
-    right: 20px;
-    width: 250px;
-    display: flex;
-    align-items: center;
+    width: 280px;
+    position: relative;
+    order: 3;
+    flex-shrink: 1;
 }
 
 /* LUPA: Posicionada a la izquierda DENTRO de la barra */
@@ -70,7 +69,8 @@ box-shadow: 0 0 15px rgba(239, 195, 108, 0.1);
 /* TABS: Ahora están centrados naturalmente por el justify-content: center del padre */
 .main-tabs {
     display: flex;
-    gap: 30px;
+    gap: 20px;
+    order: 2; /* Prioridad de orden visual */
 }
 
 /* TABS: Interactividad completa */
@@ -366,13 +366,22 @@ border-color: var(--accent) !important;
         max-width: 300px;
         justify-content: center;
     }
-    body {
-        padding-top: 200px !important; /* Ajusta este espacio según crezca la navbar */
-    }
     .brand-selector { gap: 20px 15px; }
     .brand-icon, .filter-btn { min-width: 80px; }
     .icon-wrapper { width: 50px; height: 38px; }
     .brand-logo-img { max-height: 18px; }
     .brand-icon span, .filter-btn span { font-size: 7px; }
-    .main-tabs { gap: 8px; }
+    .main-tabs { 
+        gap: 8px; 
+        order: 1; /* Pone las pestañas arriba si quieres, o déjalo igual */
+        width: 100%;
+        justify-content: center;
+    }
+    .search-wrapper {
+        width: 100%;
+        max-width: 400px;
+    }
+    body {
+        padding-top: 150px !important; /* Aumenta el margen porque la barra ahora es más alta */
+    }
 }
