@@ -148,9 +148,8 @@ function renderWishlist(games) {
                             </a>` : 
                             `<span style="color: #444; font-size: 0.5em; font-weight: bold;">SIN LINK</span>`
                         }
-                        <div style="font-size: 0.5em; color: #666; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2px; width: 100%; text-align: center;">
-                            Rev: ${j["Fecha revision"] || '--/--'}
-                        </div>
+                        
+                        <div style="font-size: 0.55em; color: #555; margin-top: 2px; font-weight: bold;">${j["Fecha revision"] || '--/--'}</div>
                     </div>
                 </div>
             </div>`;
