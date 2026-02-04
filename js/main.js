@@ -77,10 +77,9 @@ function createFilters(games, containerId) {
 
     // Construimos la lista de marcas estilo "Navbar"
     let html = `
-        <div class="brand-icon ${currentPlatform === 'TODAS' ? 'active' : ''}" onclick="showBrand('TODAS', this)">
-            <i class="fa-solid fa-house" style="margin-bottom:5px; font-size:14px;"></i>
-            <span>TODAS</span>
-        </div>`;
+    <div class="brand-icon ${currentPlatform === 'TODAS' ? 'active' : ''}" onclick="showBrand('TODAS', this)">
+        <i class="fa-solid fa-house" style="margin-bottom:6px; font-size:18px;"></i> <span>TODAS</span>
+    </div>`;
 
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
         // Solo mostramos la marca si hay juegos de sus plataformas en esta sección
