@@ -57,9 +57,24 @@
     <div class="container">
 
         <div id="section-videojuegos" class="section-content active">
-            <div class="filter-section">
-                <div id="platform-filters" class="brand-selector"></div>
-                <div id="format-buttons-container-games" class="format-buttons" style="margin-top: 30px;"></div>
+            <div class="filters-bar">
+                <div class="dropdown-filter">
+                    <button class="dropbtn" onclick="toggleDropdown('plat-games')">
+                        <i class="fa-solid fa-gamepad"></i> Plataforma <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div id="plat-games" class="dropdown-content">
+                        <div id="platform-filters" class="brand-selector"></div>
+                    </div>
+                </div>
+
+                <div class="dropdown-filter">
+                    <button class="dropbtn" onclick="toggleDropdown('form-games')">
+                        <i class="fa-solid fa-box-open"></i> Formato <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div id="form-games" class="dropdown-content">
+                        <div id="format-buttons-container-games" class="format-buttons"></div>
+                    </div>
+                </div>
             </div>
             <div id="game-grid" class="grid"></div> 
         </div>
