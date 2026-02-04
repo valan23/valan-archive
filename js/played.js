@@ -56,10 +56,12 @@ function renderPlayed(games) {
                         ${getPlatformIcon(plataforma)}
                     </div>
                 </div>
-                <div style="flex: 0 0 40%; background: hsl(${hue}, 80%, 40%); font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.2); white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.1);">
-                    <span style="color: #fff; font-weight: 900; font-size: 1.3em; line-height: 1;">${nota.toFixed(1)}</span>
-                    <div style="height: 16px; background: ${colorProceso}; color: #fff; font-size: 0.45em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.5px; border-bottom-left-radius: 8px;">
+                <div style="flex: 0 0 40%; display: flex; flex-direction: column; align-items: stretch; border-top-right-radius: 11px; overflow: hidden;">
+                    <div style="flex: 1; background: ${toRgba(colorProceso, 0.15)}; color: ${colorProceso}; font-size: 0.5em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                         ${proceso}
+                    </div>
+                    <div style="flex: 1.5; background: ${toRgba(`hsl(${hue}, 80%, 45%)`, 0.15)}; color: hsl(${hue}, 80%, 60%); font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 1.2em; border-bottom-left-radius: 12px;">
+                        ${nota.toFixed(1)}
                     </div>
                 </div>
             </div>
