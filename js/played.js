@@ -25,6 +25,14 @@ function renderPlayed(games) {
     // 4. Renderizado final
    container.innerHTML = filteredByYear.map(j => {
     try {
+        const toRgba = (hex, alpha = 0.15) => {
+            if (!hex || typeof hex !== 'string' || hex[0] !== '#') return `rgba(255,255,255,${alpha})`;
+            const r = parseInt(hex.slice(1, 3), 16),
+                  g = parseInt(hex.slice(3, 5), 16),
+                  b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        };
+        
         const plataforma = j["Plataforma"] || "";
         const carpeta = AppUtils.getPlatformFolder(plataforma);
         const fotoUrl = AppUtils.isValid(j["Portada"]) ? `images/covers/${carpeta}/${j["Portada"].trim()}` : `images/covers/default.webp`;
@@ -60,7 +68,7 @@ function renderPlayed(games) {
                     <div style="flex: 1; background: ${toRgba(colorProceso, 0.15)}; color: ${colorProceso}; font-size: 0.5em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                         ${proceso}
                     </div>
-                    <div style="flex: 1.5; background: ${toRgba(`hsl(${hue}, 80%, 45%)`, 0.15)}; color: hsl(${hue}, 80%, 60%); font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 1.2em; border-bottom-left-radius: 12px;">
+                    <div style="flex: 1.5; background: hsla(${hue}, 80%, 45%, 0.15); color: hsl(${hue}, 80%, 60%); font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 1.2em; border-bottom-left-radius: 12px;">
                         ${nota.toFixed(1)}
                     </div>
                 </div>
