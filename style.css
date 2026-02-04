@@ -75,16 +75,33 @@ box-shadow: 0 0 15px rgba(239, 195, 108, 0.1);
 
 /* TABS: Interactividad completa */
 .tab-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+    text-align: center;
     color: #666; /* Desactivado */
     font-size: 0.85rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     cursor: pointer;
-    padding: 10px 0;
+    padding: 5px 10px;
     transition: all 0.3s ease;
     position: relative;
     border-bottom: 2px solid transparent;
+}
+
+.tab-top {
+    font-size: 0.65rem; /* Texto de arriba más pequeño */
+    text-transform: uppercase;
+    opacity: 0.8;
+    letter-spacing: 0.5px;
+}
+
+.tab-bottom {
+    font-size: 0.9rem; /* Texto de abajo más prominente */
+    font-weight: 900;
 }
 
 /* Estado: Pasar el ratón (Hover) */
@@ -335,18 +352,23 @@ border-color: var(--accent) !important;
 /* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 600px) {
     .nav-container {
-        flex-direction: column; /* Apila elementos en pantallas pequeñas */
+        flex-direction: column;
         height: auto;
-        padding: 15px;
+        gap: 15px;
+        padding: 15px 0;
     }
-    .main-nav { height: auto; }
-    .nav-logo, .search-wrapper { 
-        position: relative !important; 
-        left: 0 !important; 
-        right: 0 !important; 
-        margin: 10px 0;
+    .main-nav {
+        height: auto;
     }
-    body { padding-top: 180px !important; } /* Más espacio si la barra crece */
+    .nav-logo, .search-wrapper {
+        position: static !important; /* Quita el posicionamiento absoluto */
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+    body {
+        padding-top: 200px !important; /* Ajusta este espacio según crezca la navbar */
+    }
     .brand-selector { gap: 20px 15px; }
     .brand-icon, .filter-btn { min-width: 80px; }
     .icon-wrapper { width: 50px; height: 38px; }
