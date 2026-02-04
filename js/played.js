@@ -56,11 +56,11 @@ function renderPlayed(games) {
                         ${getPlatformIcon(plataforma)}
                     </div>
                 </div>
-                <div style="flex: 0 0 40%; background: hsl(${hue}, 80%, 40%); display: flex; flex-direction: column; align-items: center; justify-content: center; border-top-right-radius: 11px; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3);">
+                <div style="flex: 0 0 40%; background: hsl(${hue}, 80%, 40%); font-weight: 900; font-size: 0.75em; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 10px rgba(0,0,0,0.2); white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.1);">
                     <span style="color: #fff; font-weight: 900; font-size: 1.3em; line-height: 1;">${nota.toFixed(1)}</span>
-                    <span style="color: rgba(255,255,255,0.9); font-size: 0.45em; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; background: rgba(0,0,0,0.2); padding: 1px 4px; border-radius: 2px;">
+                    <div style="height: 16px; background: ${colorProceso}; color: #fff; font-size: 0.45em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.5px; border-bottom-left-radius: 8px;">
                         ${proceso}
-                    </span>
+                    </div>
                 </div>
             </div>
 
@@ -98,9 +98,6 @@ function renderPlayed(games) {
 
             <div style="height: 150px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
                 <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
-                <div style="position: absolute; bottom: 5px; right: 5px; background: ${colorProceso}; color: #fff; font-size: 0.5em; font-weight: 900; padding: 2px 6px; border-radius: 3px; text-transform: uppercase;">
-                    ${proceso}
-                </div>
             </div>
 
             <div style="margin: 0 12px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid #EFC36C; border-radius: 4px; padding: 10px; flex-grow: 1; font-size: 0.75em; color: #bbb; font-style: italic; line-height: 1.4; display: flex; align-items: center;">
