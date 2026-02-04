@@ -76,24 +76,6 @@ async function switchSection(sectionId, btn) {
     }
 }
 
-function toggleDropdown(id) {
-    const menus = document.querySelectorAll('.dropdown-content');
-    menus.forEach(menu => {
-        if (menu.id === id) {
-            menu.classList.toggle('show');
-        } else {
-            menu.classList.remove('show');
-        }
-    });
-}
-
-// Cerrar si haces clic fuera del botón
-window.onclick = function(event) {
-    if (!event.target.closest('.dropdown-filter')) {
-        document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
-    }
-}
-
 function createFilters(games, containerId) {
     const counts = games.reduce((acc, game) => {
         const p = game["Plataforma"];
@@ -104,48 +86,50 @@ function createFilters(games, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
     
+    // El prefijo nos ayuda a saber en qué sección estamos
     const prefix = containerId.includes('wishlist') ? 'wish' : (containerId.includes('played') ? 'played' : 'main');
 
-    let html = `<div class="brand-selector">`;
-    html += `<div class="brand-icon active" onclick="showBrand('TODAS', this, '${prefix}')"><i class="fa-solid fa-house"></i><span>TODAS</span></div>`;
+    // Construimos la lista de marcas estilo "Navbar"
+    let html = `
+        <div class="brand-icon ${currentPlatform === 'TODAS' ? 'active' : ''}" onclick="showBrand('TODAS', this)">
+            <i class="fa-solid fa-house" style="margin-bottom:5px; font-size:14px;"></i>
+            <span>TODAS</span>
+        </div>`;
 
     for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
-        if (data.platforms.some(p => counts[p] > 0)) {
-            html += `<div class="brand-icon ${data.class}" onclick="showBrand('${brandName}', this, '${prefix}')">
-                        <img src="${data.logo}" class="brand-logo-img"><span>${brandName}</span>
-                     </div>`;
+        // Solo mostramos la marca si hay juegos de sus plataformas en esta sección
+        const hasGames = data.platforms.some(p => counts[p] > 0);
+        
+        if (hasGames) {
+            const isActive = Array.isArray(currentPlatform) && currentPlatform.join() === data.platforms.join();
+            html += `
+                <div class="brand-icon ${isActive ? 'active' : ''}" onclick="showBrand('${brandName}', this)">
+                    <img src="${data.logo}" class="brand-logo-img">
+                    <span>${brandName}</span>
+                </div>`;
         }
     }
-    html += `</div>`; 
-
-    for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
-        html += `<div id="group-${prefix}-${brandName}" class="platform-subgroup">`;
-        data.platforms.forEach(p => {
-            if (counts[p]) {
-                const icon = data.icons?.[p] ? `<img src="${data.icons[p]}" class="btn-console-icon">` : '';
-                html += `<button class="filter-btn ${data.class}" onclick="filterByPlatform('${p}', this)">
-                            ${icon} <span>${p} (${counts[p]})</span>
-                         </button>`;
-            }
-        });
-        html += `</div>`;
-    }
+    
     container.innerHTML = html;
+
+    // Aprovechamos para renderizar los botones de formato (Físico/Digital)
+    const formatContainerId = containerId.replace('platform-filters', 'format-buttons-container');
+    renderFormatFilters(games, formatContainerId);
 }
 
-function showBrand(brand, element, prefix) {
+function showBrand(brand, element) {
+    // 1. UI: Gestionar clase activa
     element.parentElement.querySelectorAll('.brand-icon').forEach(i => i.classList.remove('active'));
     element.classList.add('active');
-    const container = element.closest('.filter-container');
-    container.querySelectorAll('.platform-subgroup').forEach(g => g.classList.remove('show'));
     
+    // 2. Lógica: Actualizar plataforma actual
     if (brand === 'TODAS') { 
         currentPlatform = "TODAS"; 
     } else {
-        const targetGroup = document.getElementById(`group-${prefix}-${brand}`);
-        if (targetGroup) targetGroup.classList.add('show');
+        // Pasamos el array de plataformas de esa marca (definido en config.js)
         currentPlatform = BRANDS_CONFIG[brand].platforms; 
     }
+    
     applyFilters();
 }
 
