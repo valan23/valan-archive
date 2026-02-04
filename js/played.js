@@ -28,95 +28,113 @@ function renderPlayed(games) {
         const plataforma = j["Plataforma"] || "";
         const carpeta = AppUtils.getPlatformFolder(plataforma);
         const fotoUrl = AppUtils.isValid(j["Portada"]) ? `images/covers/${carpeta}/${j["Portada"].trim()}` : `images/covers/default.webp`;
-    
+        
         const styleRegion = AppUtils.getRegionStyle(j["Región"]);
         const nota = parseFloat(j["Nota"]) || 0;
+        // Color dinámico según la nota (de rojo a verde)
         const hue = Math.min(Math.max(nota * 12, 0), 120);
 
         const tiempoJuego = j["Tiempo Juego"] || "0";
         const horas = tiempoJuego.toString().replace("h", "").trim();
-
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
+        const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
 
         const proceso = (j["Proceso Juego"] || "Terminado").toUpperCase();
         let colorProceso = "#2E9E7F"; 
         if (proceso.includes("COMPLETADO") || proceso.includes("100%")) colorProceso = "#10C809";
         if (proceso.includes("EN PROCESO") || proceso.includes("JUGANDO")) colorProceso = "#46A68B";
-        if (proceso.includes("JUGADO")) colorProceso = "#BBF041";
-        if (proceso.includes("PROBADO")) colorProceso = "#F0CA41";
-        if (proceso.includes("SIN JUGAR")) colorProceso = "#8F8F8F";
+        if (proceso.includes("JUGADO")) colorProceso = "#C7EB57";
+        if (proceso.includes("PROBADO")) colorProceso = "#E38B44";
         if (proceso.includes("ABANDONADO")) colorProceso = "#D63B18";
 
         return `
-        <div class="card ${getBrandClass(plataforma)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px; overflow: hidden;">
+        <div class="card ${getBrandClass(plataforma)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px; overflow: hidden; border-radius: 12px;">
     
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-        
-                <div class="icon-gradient-area">
-                    <div class="platform-icon-card" style="margin: 0; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.6));">
+                <div class="icon-gradient-area" style="flex: 0 0 60%; border-top-left-radius: 11px; display: flex; align-items: center; justify-content: center;">
+                    <div class="platform-icon-card" style="margin: 0; filter: none;">
                         ${getPlatformIcon(plataforma)}
                     </div>
                 </div>
-
-                <div style="background: hsl(${hue}, 100%, 40%); color: #fff; font-weight: 900; width: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3);">
-                    ${nota.toFixed(1)}
+                <div style="flex: 0 0 40%; background: hsl(${hue}, 80%, 40%); display: flex; flex-direction: column; align-items: center; justify-content: center; border-top-right-radius: 11px; border-bottom-left-radius: 12px; box-shadow: -2px 0 10px rgba(0,0,0,0.3);">
+                    <span style="color: #fff; font-weight: 900; font-size: 1.3em; line-height: 1;">${nota.toFixed(1)}</span>
+                    <span style="color: rgba(255,255,255,0.9); font-size: 0.45em; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; background: rgba(0,0,0,0.2); padding: 1px 4px; border-radius: 2px;">
+                        ${proceso}
+                    </span>
                 </div>
             </div>
 
-            <div style="position: absolute; top: 55px; left: 18px; z-index: 10; display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
-                <div style="background: rgba(0,0,0,0.7); color: #fff; font-size: 0.6em; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">
-                    ${j["Año"] || "????"}
+            <div style="margin-top: 55px; padding: 0 12px;">
+                ${esEspecial ? 
+                    `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px;">
+                        <i class="fa-solid fa-star" style="font-size: 0.9em;"></i> ${j["Edición"]}
+                    </div>` : 
+                    `<div style="height: 12px;"></div>`
+                }
+
+                <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2; display: flex; align-items: center; padding: 0;">
+                    ${j["Nombre Juego"]}
                 </div>
 
-                <div style="background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-size: 0.55em; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px;">
-                    ${getFlag(j["Región"])} <span>${(j["Región"] || "N/A").toUpperCase()}</span>
+                <div style="font-size: 0.7em; color: #888; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
+                    ${j["Nombre Japones"] || ""}
                 </div>
+                
+                <div style="margin-top: 8px; line-height: 1.2;">
+                    <div style="display: inline-flex; align-items: center; gap: 8px; vertical-align: middle;">
+                        <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-weight: bold; white-space: nowrap;">
+                            ${getFlag(j["Región"])} ${j["Región"] || "N/A"}
+                        </div>
+                        <span style="font-size: 0.7em; color: #888; font-weight: bold; white-space: nowrap;">
+                            ${j["Año"] || "????"}
+                        </span>
+                    </div>
+                    <span style="font-size: 0.7em; color: #555; word-wrap: break-word;">
+                        <span style="color: #ccc; margin: 0 6px;">|</span>
+                        ${j["Desarrolladora"] || "Unknown"}
+                    </span>
+                </div>
+            </div>
 
-                <div style="background: ${colorProceso}; color: #fff; font-size: 0.55em; font-weight: 900; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <div style="height: 150px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
+                <div style="position: absolute; bottom: 5px; right: 5px; background: ${colorProceso}; color: #fff; font-size: 0.5em; font-weight: 900; padding: 2px 6px; border-radius: 3px; text-transform: uppercase;">
                     ${proceso}
                 </div>
             </div>
-        
-            <div style="margin-top: 100px; padding: 0 15px; z-index: 2;">
-                <div class="game-title" style="font-size: 1.15em; color: #EFC36C; font-weight: 700; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; padding: 0;">
-                    ${j["Nombre Juego"]}
-                </div>
-            </div>
 
-            <div style="height: 160px; margin: 10px 15px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
-            </div>
-
-            <div style="margin: 0 15px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid #EFC36C; border-radius: 4px; padding: 12px; flex-grow: 1; font-size: 0.82em; color: #bbb; font-style: italic; line-height: 1.4; display: flex; align-items: center;">
+            <div style="margin: 0 12px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid #EFC36C; border-radius: 4px; padding: 10px; flex-grow: 1; font-size: 0.75em; color: #bbb; font-style: italic; line-height: 1.4; display: flex; align-items: center;">
                 "${j["Comentario"] || "Sin comentarios."}"
             </div>
 
-            <div style="height: 50px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; justify-content: space-between;">
-                    
-                    <div style="background: ${esDigital ? '#00f2ff' : '#EFC36C'}; color: #000; font-weight: 900; font-size: 0.65em; padding: 0 15px; display: flex; align-items: center; border-top-right-radius: 12px;">
-                        <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}" style="margin-right: 5px;"></i>
-                        ${esDigital ? 'DIG' : 'FIS'}
-                    </div>
+            <div style="height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; overflow: hidden;">
+                <div style="flex: 1; background: ${esDigital ? 'rgba(0, 242, 255, 0.1)' : 'rgba(239, 195, 108, 0.1)'}; color: ${esDigital ? '#00f2ff' : '#EFC36C'}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}" style="font-size: 1em; margin-bottom: 2px;"></i>
+                    <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
+                </div>
 
-                    <div style="display: flex; gap: 10px; align-items: center; padding: 0 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 0.5em; color: #555; font-weight: 800;">INICIO</div>
-                            <div style="font-size: 0.65em; color: #888; font-weight: 600;">${j["Primera fecha"] || '--/--'}</div>
-                        </div>
-                        <div style="color: #444; font-size: 0.8em;">➔</div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 0.5em; color: #555; font-weight: 800;">FIN</div>
-                            <div style="font-size: 0.65em; color: #EFC36C; font-weight: 700;">${j["Ultima fecha"] || '--/--'}</div>
-                        </div>
+                <div style="flex: 1; display: flex; gap: 5px; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05); padding: 0 5px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.45em; color: #555; font-weight: 800;">INICIO</div>
+                        <div style="font-size: 0.6em; color: #888;">${j["Primera fecha"] || '--/--'}</div>
                     </div>
-
-                    <div style="background: rgba(46, 158, 127, 0.15); border-left: 1px solid rgba(46, 158, 127, 0.3); padding: 0 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px;">
-                        <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">TIEMPO</span>
-                        <span style="font-size: 0.9em; color: #fff; font-weight: 900; line-height: 1;">${horas}<small style="font-size: 0.6em; margin-left: 1px;">h</small></span>
+                    <div style="color: #333; font-size: 0.7em;">➔</div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.45em; color: #555; font-weight: 800;">FIN</div>
+                        <div style="font-size: 0.6em; color: #EFC36C; font-weight: 700;">${j["Ultima fecha"] || '--/--'}</div>
                     </div>
                 </div>
+
+                <div style="flex: 1; background: rgba(46, 158, 127, 0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px;">
+                    <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">TIEMPO</span>
+                    <span style="font-size: 0.9em; color: #fff; font-weight: 900; line-height: 1;">${horas}<small style="font-size: 0.6em; margin-left: 1px;">h</small></span>
+                </div>
+            </div>
         </div>`;
-    } catch (e) { return ""; }
+    } catch (e) { 
+        console.error("Error en card played:", e);
+        return ""; 
+    }
 }).join('');
 }
 
