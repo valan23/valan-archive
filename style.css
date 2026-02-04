@@ -40,30 +40,39 @@
 .search-wrapper {
     width: 400px; /* Ahora el buscador puede ser más ancho y profesional */
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 /* LUPA: Posicionada a la izquierda DENTRO de la barra */
 .search-icon {
     position: absolute;
-    left: 12px;
+    left: 15px;
     color: #555;
-    z-index: 10;
-    pointer-events: none; /* Para que no interfiera al hacer clic */
+    font-size: 0.9rem;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* INPUT: Espacio a la izquierda para que el texto no pise la lupa */
 #searchInput {
     width: 100%;
-    padding: 8px 15px 8px 35px !important; /* El 35px es vital para la lupa */
+    padding: 10px 15px 10px 40px !important; /* El padding-left debe ser suficiente para la lupa */
     border-radius: 20px;
-    background: #16161a;
+    background: #1a1a20;
     border: 1px solid rgba(255,255,255,0.1);
     color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s;
 }
 
 #searchInput:focus {
-outline: none; border-color: var(--accent);
-box-shadow: 0 0 15px rgba(239, 195, 108, 0.1);
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(239, 195, 108, 0.1);
 }
 
 /* FILA INFERIOR: Pestañas centradas */
