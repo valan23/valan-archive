@@ -78,9 +78,9 @@ function renderWishlist(games) {
                         </div>
                     </div>
                     
-                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; padding-right: 12px; background: rgba(0,0,0,0.2); border-top-right-radius: 11px;">
-                        <span style="font-size: 0.55em; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; line-height: 1;">Prioridad</span>
-                        <div style="font-size: 0.8em; margin-top: 2px;">
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: ${toRgba(colorPrioridad, 0.2)}; border-top-right-radius: 11px; border-left: 1px solid rgba(255,255,255,0.1);">
+                        <span style="font-size: 0.55em; color: ${colorPrioridad}; text-transform: uppercase; letter-spacing: 1px; font-weight: 900; line-height: 1;">Prioridad</span>
+                        <div style="font-size: 0.8em; margin-top: 2px; filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">
                             ${priorIconos}
                         </div>
                     </div>
