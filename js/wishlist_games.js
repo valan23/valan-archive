@@ -131,7 +131,7 @@ function renderWishlist(games) {
                     `).join('')}
                 </div>
 
-                <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; overflow: hidden; position: relative;">
+                <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; overflow: hidden;">
                     <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-floppy-disk'}" style="font-size: 1em; margin-bottom: 2px;"></i>
                         <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
@@ -141,7 +141,7 @@ function renderWishlist(games) {
                         <span style="font-size: 0.7em; color: ${rawRarezaColor}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
                     </div>
 
-                    <div style="flex: 1.2; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 4px;">
+                    <div style="flex: 1; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                         ${AppUtils.isValid(j["Link"]) ? 
                             `<a href="${j["Link"]}" target="_blank" style="background: #2e9e7f; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.6em; font-weight: 900; text-decoration: none; text-align: center; width: 85%; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: transform 0.2s;">
                                 COMPRAR <i class="fa-solid fa-external-link" style="font-size: 0.8em;"></i>
