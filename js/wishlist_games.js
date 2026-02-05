@@ -1,163 +1,139 @@
+// wishlist_games.js - Gestión de Lista de Deseos
+
 function renderWishlist(games) {
     const container = document.getElementById('wishlist-grid');
     if (!container) return;
 
-    if (typeof renderFormatFilters === 'function') {
-        const fullData = (window.dataStore && window.dataStore['deseados']) ? window.dataStore['deseados'] : games;
-        renderFormatFilters(fullData, 'format-buttons-container-wishlist', 'wishlist');
-    }
+    container.innerHTML = "";
 
     if (!games || games.length === 0) {
-        container.innerHTML = "<div style='grid-column:1/-1; text-align:center; padding:50px; color:#888;'>No hay juegos que coincidan con los filtros.</div>";
+        container.innerHTML = `
+            <div style='grid-column:1/-1; text-align:center; padding:60px; color:#555;'>
+                <i class="fa-solid fa-heart-crack" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+                <p style="font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">La lista de deseos está vacía o filtrada</p>
+            </div>`;
         return;
     }
 
-    container.innerHTML = games.map(j => {
-        try {
-            if (typeof AppUtils === 'undefined') return "";
+    const html = games.map(j => createWishlistCardHTML(j)).join('');
+    container.innerHTML = html;
+}
 
-            const plat = j["Plataforma"] || "";
-            const carpeta = AppUtils.getPlatformFolder(plat);
-            const portada = j["Portada"] ? j["Portada"].trim() : "";
-            const fotoUrl = AppUtils.isValid(portada) ? `images/covers/${carpeta}/${portada}` : `images/covers/default.webp`;
-            
-            const toRgba = (hex, alpha = 0.15) => {
-                if (!hex || typeof hex !== 'string' || hex[0] !== '#') return `rgba(255,255,255,${alpha})`;
-                const r = parseInt(hex.slice(1, 3), 16), 
-                      g = parseInt(hex.slice(3, 5), 16), 
-                      b = parseInt(hex.slice(5, 7), 16);
-                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-            };
-            
-            // --- DEFINICIONES DE ESTADO Y REGIÓN ---
-            const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
-            const styleRegion = AppUtils.getRegionStyle(j["Región"]);
+function createWishlistCardHTML(j) {
+    try {
+        if (typeof AppUtils === 'undefined') return "";
 
-            // --- NUEVA LÓGICA DE PRIORIDAD (FUEGOS) ---
-            const priorRaw = (j["Prioridad"] || "NORMAL").trim().toUpperCase();
-            let priorIconos = "🔥";
-            let colorPrioridad = "#4D94FF"; // Azul por defecto (Normal)
+        const plat = j["Plataforma"] || "";
+        const carpeta = AppUtils.getPlatformFolder(plat);
+        const portada = j["Portada"] ? j["Portada"].trim() : "";
+        const fotoUrl = AppUtils.isValid(portada) ? `images/covers/${carpeta}/${portada}` : `images/covers/default.webp`;
+        
+        const styleRegion = AppUtils.getRegionStyle(j["Región"]);
+        const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
+        const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
+        const rawRarezaColor = AppUtils.getRarezaColor(j["Rareza"]);
 
-            if (priorRaw.includes("MUY ALTA") || priorRaw.includes("CRÍTICO")) {
-                priorIconos = "🔥🔥🔥";
-                colorPrioridad = "#FF4D4D"; // Rojo
-            } else if (priorRaw.includes("ALTA") || priorRaw.includes("PRINCIPAL")) {
-                priorIconos = "🔥🔥";
-                colorPrioridad = "#FFD700"; // Amarillo
-            } else if (priorRaw.includes("NORMAL") || priorRaw.includes("BONUS")) {
-                priorIconos = "🔥";
-                colorPrioridad = "#4D94FF"; // Azul
-            }
-            
-            // --- CÁLCULO DE MEJOR PRECIO ---
-            const listaPrecios = [
-                { n: 'Nuevo', v: j["Precio Nuevo"], c: '#D4BD66' },
-                { n: 'CeX', v: j["Precio Cex"], c: '#ff4444' },
-                { n: 'Wallapop', v: j["Precio Wallapop"], c: '#2E9E7F' },
-                { n: 'eBay', v: j["Precio Ebay"], c: '#0064d2' },
-                { n: 'Surugaya', v: j["Precio Surugaya"], c: '#5da9ff' },
-                { n: 'Mercari', v: j["Precio Mercari"], c: '#59C0C2' }
-            ].filter(p => AppUtils.isValid(p.v)).map(p => ({...p, eur: AppUtils.obtenerValorEnEuros(p.v)}));
+        // --- LÓGICA DE PRIORIDAD ---
+        const priorRaw = (j["Prioridad"] || "NORMAL").trim().toUpperCase();
+        let priorIconos = "🔥";
+        let colorPrioridad = "#4D94FF";
 
-            const precioMinObj = listaPrecios.length 
-                ? listaPrecios.reduce((prev, curr) => (prev.eur < curr.eur) ? prev : curr) 
-                : { v: "--", n: "N/A" };
-
-            const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
-            const bgFormato = esDigital ? 'rgba(0, 212, 255, 0.15)' : 'rgba(239, 195, 108, 0.15)';
-            const colorTextoFormato = esDigital ? '#00d4ff' : '#EFC36C';
-            const rawRarezaColor = AppUtils.getRarezaColor(j["Rareza"]);
-
-            return `
-            <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; min-height: 520px; position: relative; overflow: hidden; border-radius: 12px;">
-                
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
-                    <div class="icon-gradient-area" style="flex: 0 0 60%; border-top-left-radius: 11px; display: flex; align-items: center; justify-content: center;">
-                        <div class="platform-icon-card" style="margin: 0; filter: none;">
-                            ${getPlatformIcon(plat)}
-                        </div>
-                    </div>
-                    
-                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: ${toRgba(colorPrioridad, 0.2)}; border-top-right-radius: 11px; border-left: 1px solid rgba(255,255,255,0.1);">
-                        <span style="font-size: 0.55em; color: ${colorPrioridad}; text-transform: uppercase; letter-spacing: 1px; font-weight: 900; line-height: 1;">Prioridad</span>
-                        <div style="font-size: 0.8em; margin-top: 2px; filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">
-                            ${priorIconos}
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 55px; padding: 0 12px;">
-                    ${esEspecial ? 
-                        `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px;">
-                            <i class="fa-solid fa-star" style="font-size: 0.9em;"></i> ${j["Edición"]}
-                        </div>` : 
-                        `<div style="height: 12px;"></div>` /* Espaciador si no hay edición para mantener alineación */
-                    }
-
-                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2; display: flex; align-items: center; padding: 0;">
-                        ${j["Nombre Juego"]}
-                    </div>
-
-                    <div style="font-size: 0.7em; color: #888; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
-                        ${j["Nombre Japones"] || ""}
-                    </div>
-                    
-                    <div style="margin-top: 8px; line-height: 1.2;">
-                        <div style="display: inline-flex; align-items: center; gap: 8px; vertical-align: middle;">
-                            <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-weight: bold; white-space: nowrap;">
-                                ${getFlag(j["Región"])} ${j["Región"] || "N/A"}
-                            </div>
-
-                            <span style="font-size: 0.7em; color: #888; font-weight: bold; white-space: nowrap;">
-                                ${j["Año"] || "????"}
-                            </span>
-                        </div>
-
-                        <span style="font-size: 0.7em; color: #555; word-wrap: break-word;">
-                            <span style="color: #ccc; margin: 0 6px;">|</span>
-                            ${j["Desarrolladora"] || "Unknown"}
-                        </span>
-                    </div>
-                </div>
-
-                <div style="height: 150px; margin: 15px 12px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
-                </div>
-
-                <div style="margin: 0 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 6px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px;">
-                    ${listaPrecios.map(p => `
-                        <div style="display: flex; justify-content: space-between; padding: 3px 8px; border-radius: 4px; ${p.v === precioMinObj.v ? 'background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.2);' : ''}">
-                            <span style="color: ${p.c}; font-size: 0.7em; font-weight: 700; text-transform: uppercase;">${p.n}</span>
-                            <span style="color: #eee; font-size: 0.75em; font-weight: 800;">${p.v}</span>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div style="margin-top: 10px; height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; overflow: hidden;">
-                    <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-floppy-disk'}" style="font-size: 1em; margin-bottom: 2px;"></i>
-                        <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
-                    </div>
-
-                    <div style="flex: 1; background: ${toRgba(rawRarezaColor, 0.15)}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                        <span style="font-size: 0.7em; color: ${rawRarezaColor}; font-weight: 900; line-height: 1;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
-                    </div>
-
-                    <div style="flex: 1; background: rgba(46, 158, 127, 0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                        ${AppUtils.isValid(j["Link"]) ? 
-                            `<a href="${j["Link"]}" target="_blank" style="background: #2e9e7f; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.6em; font-weight: 900; text-decoration: none; text-align: center; width: 85%; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: transform 0.2s;">
-                                COMPRAR <i class="fa-solid fa-external-link" style="font-size: 0.8em;"></i>
-                            </a>` : 
-                            `<span style="color: #444; font-size: 0.5em; font-weight: bold;">SIN LINK</span>`
-                        }
-                        
-                        <div style="font-size: 0.55em; color: #555; margin-top: 2px; font-weight: bold;">${j["Fecha revision"] || '--/--'}</div>
-                    </div>
-                </div>
-            </div>`;
-        } catch (e) { 
-            console.error("Error en card wishlist:", e);
-            return ""; 
+        if (priorRaw.includes("MUY ALTA") || priorRaw.includes("CRÍTICO")) {
+            priorIconos = "🔥🔥🔥";
+            colorPrioridad = "#FF4D4D";
+        } else if (priorRaw.includes("ALTA") || priorRaw.includes("PRINCIPAL")) {
+            priorIconos = "🔥🔥";
+            colorPrioridad = "#FFD700";
         }
-    }).join('');
+
+        // --- LÓGICA DE PRECIOS ---
+        const listaPrecios = [
+            { n: 'Nuevo', v: j["Precio Nuevo"], c: '#D4BD66' },
+            { n: 'CeX', v: j["Precio Cex"], c: '#ff4444' },
+            { n: 'Wallapop', v: j["Precio Wallapop"], c: '#2E9E7F' },
+            { n: 'eBay', v: j["Precio Ebay"], c: '#0064d2' },
+            { n: 'Surugaya', v: j["Precio Surugaya"], c: '#5da9ff' },
+            { n: 'Mercari', v: j["Precio Mercari"], c: '#59C0C2' }
+        ].filter(p => AppUtils.isValid(p.v));
+
+        // Calcular el precio más bajo (requiere AppUtils.obtenerValorEnEuros)
+        let precioMinObj = { v: null };
+        if (listaPrecios.length > 0) {
+            precioMinObj = listaPrecios.reduce((prev, curr) => {
+                const valPrev = AppUtils.obtenerValorEnEuros(prev.v);
+                const valCurr = AppUtils.obtenerValorEnEuros(curr.v);
+                return valPrev < valCurr ? prev : curr;
+            });
+        }
+
+        const toRgba = (hex, alpha = 0.15) => {
+            if (!hex || hex[0] !== '#') return `rgba(255,255,255,${alpha})`;
+            const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        };
+
+        return `
+        <div class="card ${getBrandClass(plat)}">
+            
+            <div style="display: flex; height: 45px; align-items: stretch; position: relative; z-index: 10;">
+                <div class="icon-gradient-area" style="flex: 1.2; display: flex; align-items: center; padding-left: 10px;">
+                    ${getPlatformIcon(plat)}
+                </div>
+                <div style="flex: 0.8; background: ${toRgba(colorPrioridad, 0.25)}; border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <span style="font-size: 0.5rem; color: ${colorPrioridad}; font-weight: 900; text-transform: uppercase;">Prioridad</span>
+                    <span style="font-size: 0.8rem; line-height: 1;">${priorIconos}</span>
+                </div>
+            </div>
+
+            <div style="padding: 15px 15px 0 15px; margin-left: 6px;">
+                ${esEspecial ? `<div style="color: var(--cyan); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;"><i class="fa-solid fa-star"></i> ${j["Edición"]}</div>` : '<div style="height:12px"></div>'}
+                <div class="game-title" style="padding:0; line-height: 1.1; margin-bottom: 4px; color: #EFC36C;">${j["Nombre Juego"]}</div>
+                <div style="font-size: 0.7rem; color: #666; font-family: 'Noto Sans JP', sans-serif; min-height: 14px;">${j["Nombre Japones"] || ""}</div>
+                
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+                    <div style="font-size: 0.55rem; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-weight: 900; display: flex; align-items: center; gap: 4px;">
+                        ${getFlag(j["Región"])} ${j["Región"]}
+                    </div>
+                    <span style="font-size: 0.7rem; color: #555; font-weight: 800;">${j["Año"] || "????"}</span>
+                </div>
+            </div>
+
+            <div style="height: 140px; margin: 15px; background: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,0.03);">
+                <img src="${fotoUrl}" loading="lazy" style="max-width: 95%; max-height: 95%; object-fit: contain; opacity: 0.8;" onerror="this.src='images/covers/default.webp'">
+            </div>
+
+            <div style="margin: 0 15px; background: rgba(0,0,0,0.25); border-radius: 8px; padding: 10px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.02);">
+                ${listaPrecios.length > 0 ? listaPrecios.map(p => {
+                    const esMinimo = p.v === precioMinObj.v;
+                    return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; border-radius: 4px; ${esMinimo ? 'background: rgba(46, 158, 127, 0.15); border: 1px solid rgba(46, 158, 127, 0.3);' : ''}">
+                        <span style="color: ${p.c}; font-size: 0.65rem; font-weight: 800; text-transform: uppercase;">${p.n}</span>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            ${esMinimo ? '<i class="fa-solid fa-tag" style="color: #2e9e7f; font-size: 0.6rem;"></i>' : ''}
+                            <span style="color: ${esMinimo ? '#fff' : '#aaa'}; font-size: 0.75rem; font-weight: 900;">${p.v}</span>
+                        </div>
+                    </div>`;
+                }).join('') : `<div style="text-align:center; color:#444; font-size:0.6rem; margin-top:20px;">SIN DATOS DE PRECIO</div>`}
+            </div>
+
+            <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; margin-left: 6px;">
+                <div style="flex: 1; background: rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(0,0,0,0.2);">
+                    <span style="font-size: 0.6rem; color: ${rawRarezaColor}; font-weight: 900; text-align: center;">${(j["Rareza"] || "COMÚN").toUpperCase()}</span>
+                </div>
+                
+                <div style="flex: 2; display: flex; align-items: center; justify-content: center; padding: 0 10px; background: rgba(46, 158, 127, 0.05);">
+                    ${AppUtils.isValid(j["Link"]) ? `
+                        <a href="${j["Link"]}" target="_blank" class="buy-button" style="background: #2e9e7f; color: #fff; text-decoration: none; padding: 6px 0; width: 100%; border-radius: 6px; font-size: 0.7rem; font-weight: 900; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;">
+                            <i class="fa-solid fa-cart-shopping"></i> COMPRAR
+                        </a>
+                    ` : `
+                        <span style="font-size: 0.6rem; color: #333; font-weight: 900; letter-spacing: 1px;">SIN ENLACE</span>
+                    `}
+                </div>
+            </div>
+        </div>`;
+    } catch (e) {
+        console.error("Error en card wishlist:", e);
+        return "";
+    }
 }
