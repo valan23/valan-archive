@@ -81,7 +81,7 @@ function createWishlistCardHTML(j) {
         <div class="card ${getBrandClass(plat)}">
             <div style="display: flex; height: 45px; align-items: stretch; position: relative; z-index: 10;">
                 <div class="icon-gradient-area">
-                    ${getPlatformIcon(plataforma)}
+                    ${getPlatformIcon(plat)}
                 </div>
                 <div style="flex: 0.8; background: ${toRgba(colorPrioridad, 0.25)}; border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <span style="font-size: 0.5rem; color: ${colorPrioridad}; font-weight: 900; text-transform: uppercase;">Prioridad</span>
