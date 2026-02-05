@@ -94,11 +94,12 @@ function createWishlistCardHTML(j) {
                 <div class="game-title" style="padding:0; line-height: 1.1; margin-bottom: 4px; color: #EFC36C;">${j["Nombre Juego"]}</div>
                 <div style="font-size: 0.7rem; color: #666; font-family: 'Noto Sans JP', sans-serif; min-height: 14px;">${j["Nombre Japones"] || ""}</div>
                 
-                <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
-                    <div style="font-size: 0.55rem; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-weight: 900; display: flex; align-items: center; gap: 4px;">
-                        ${getFlag(j["Región"])} ${j["Región"]}
+                <div style="margin-top: 8px; line-height: 1.2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-weight: bold;">
+                        ${getFlag(j["Región"])} ${j["Región"] || "N/A"}
                     </div>
-                    <span style="font-size: 0.7rem; color: #555; font-weight: 800;">${j["Año"] || "????"}</span>
+                    <span style="font-size: 0.7em; color: #888; font-weight: bold;">${j["Año"] || "????"}</span>
+                    <span style="font-size: 0.7em; color: #555;">| <i>${j["Desarrolladora"] || "---"}</i></span>
                 </div>
             </div>
 
