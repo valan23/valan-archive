@@ -51,14 +51,10 @@ async function switchSection(sectionId, btn) {
     try {
         const data = await loadTabData(sectionId);
         
-        // Renderizamos filtros y juegos
-        const filterId = sectionId === 'videojuegos' ? 'platform-filters' : 
-                         (sectionId === 'deseados' ? 'platform-filters-wishlist' : 'platform-filters-played');
+        // Inyectamos siempre en el contenedor global de la Navbar
+        createFilters(data, 'global-platform-filters');
         
-        createFilters(data, filterId);
-        applyFilters(); // Centralizamos el renderizado inicial aquí
-        
-        document.getElementById('searchInput').value = "";
+        applyFilters();
     } catch (error) { console.error(error); }
 }
 
