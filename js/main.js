@@ -164,56 +164,49 @@ function applyFilters() {
     const dataToFilter = dataStore[currentSection];
     if (!dataToFilter) return;
 
-    const filtered = dataToFilter.filter(game => {
+    // 1. Primero filtramos por todo EXCEPTO el formato
+    // (Para que los contadores de formato nos digan cuántos hay en ese año/consola/búsqueda)
+    const filteredByYearAndPlatform = dataToFilter.filter(game => {
         const matchesSearch = game["Nombre Juego"].toLowerCase().includes(currentSearch.toLowerCase());
         
-        let matchesPlatform = false;
-        if (currentPlatform === "TODAS") {
-            matchesPlatform = true;
-        } else if (Array.isArray(currentPlatform)) {
-            matchesPlatform = currentPlatform.includes(game["Plataforma"]);
-        } else {
-            matchesPlatform = game["Plataforma"] === currentPlatform;
-        }
+        let matchesPlatform = (currentPlatform === "TODAS") || 
+            (Array.isArray(currentPlatform) ? currentPlatform.includes(game["Plataforma"]) : game["Plataforma"] === currentPlatform);
         
-        let matchesFormat = true;
-        if (currentFormat !== "all") {
-            const esDigital = String(game["Formato"]).toUpperCase().includes("DIGITAL");
-            matchesFormat = (currentFormat === "digital") ? esDigital : !esDigital;
-        }
-
         let matchesYear = true;
         if (currentSection === 'jugados' && currentPlayedYear !== 'all') {
             const fecha = game["Ultima fecha"] || game["Ultima Fecha"] || game["Última Fecha"] || game["Año"] || "";
             matchesYear = String(fecha).includes(currentPlayedYear);
         }
 
-        return matchesSearch && matchesPlatform && matchesFormat && matchesYear;
+        return matchesSearch && matchesPlatform && matchesYear;
     });
 
-    // Renderizado según sección
-    if (currentSection === 'videojuegos') renderGames(filtered);
-    else if (currentSection === 'deseados') renderWishlist(filtered);
-    else if (currentSection === 'jugados') renderPlayed(filtered);
+    // 2. Actualizamos los botones de formato con estos datos ya filtrados por AÑO
+    // Ahora los números de Físico/Digital cambiarán al pulsar un año
+    renderUniversalFormatFilters(filteredByYearAndPlatform);
 
-    // Actualizar la barra de filtros de la navegación
-    renderUniversalFormatFilters(dataToFilter);
+    // 3. Por último, aplicamos el filtro de formato para mostrar los juegos finales
+    const finalFiltered = filteredByYearAndPlatform.filter(game => {
+        if (currentFormat === "all") return true;
+        const esDigital = String(game["Formato"] || "").toUpperCase().includes("DIGITAL");
+        return (currentFormat === "digital") ? esDigital : !esDigital;
+    });
+
+    // 4. Renderizamos la rejilla
+    if (currentSection === 'videojuegos') renderGames(finalFiltered);
+    else if (currentSection === 'deseados') renderWishlist(finalFiltered);
+    else if (currentSection === 'jugados') renderPlayed(finalFiltered);
 }
 
 // 7. Render de Filtros Profesionales (Navbar superior)
-function renderUniversalFormatFilters(games) {
+function renderUniversalFormatFilters(dataForCounters) {
     const container = document.getElementById('nav-format-filter');
     if (!container) return;
 
-    // Calculamos totales sobre el set de datos actual
-    const total = games.length;
-    const digital = games.filter(g => {
-        const formato = String(g["Formato"] || "").toUpperCase();
-        return formato.includes("DIGITAL");
-    }).length;
+    const total = dataForCounters.length;
+    const digital = dataForCounters.filter(g => String(g["Formato"] || "").toUpperCase().includes("DIGITAL")).length;
     const fisico = total - digital;
 
-    // Inyectamos los botones
     container.innerHTML = `
         <button class="year-btn ${currentFormat === 'all' ? 'active' : ''}" onclick="setFormatFilter('all')">
             TODOS <span>${total}</span>
@@ -224,7 +217,7 @@ function renderUniversalFormatFilters(games) {
         <button class="year-btn ${currentFormat === 'digital' ? 'active' : ''}" onclick="setFormatFilter('digital')">
             DIGITAL <span>${digital}</span>
         </button>
-        `;
+    `;
 
     // Lógica de visibilidad del Año
     const yearGroup = document.getElementById('year-filter-group');
