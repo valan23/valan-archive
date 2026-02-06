@@ -41,7 +41,6 @@ const AppUtils = {
         return esTiendaJaponesa ? (num / TASA_CAMBIO_YEN) : num;
     },
 
-    // --- FUNCIONES AÑADIDAS PARA EVITAR EL SYNTAX ERROR ---
     getRarezaColor: (rareza) => {
         const r = (rareza || "").toUpperCase();
         if (r.includes("LEGENDARIO")) return "#F2B518"; // Dorado
@@ -55,5 +54,37 @@ const AppUtils = {
     formatEstado: (estado) => {
         if (!estado) return "-";
         return estado.toString().toUpperCase();
+    },
+
+    // --- NUEVAS FUNCIONES INTEGRADAS ---
+
+    getBrandClass: (plataformaStr) => {
+        const p = (plataformaStr || "").toUpperCase();
+        if (p.includes("PC ENGINE") || p.includes("TURBOGRAFX") || p.includes("WONDERSWAN") || p.includes("3DO")) return "otros";
+        if (p.includes("NINTENDO") || p.includes("FAMICOM") || p.includes("BOY") || p.includes("CUBE") || p.includes("WII") || p.includes("SWITCH")) return "nintendo";
+        if (p.includes("SEGA") || p.includes("MEGA") || p.includes("MASTER SYSTEM") || p.includes("GEAR") || p.includes("32X") || p.includes("SATURN") || p.includes("DREAMCAST")) return "sega";
+        if (p.includes("PLAYSTATION") || p.includes("PS")) return "sony";
+        if (p.includes("XBOX")) return "xbox";
+        if (p.includes("PC") || p.includes("STEAM") || p.includes("GOG") || p.includes("EPIC") || p.includes("DOS") || p.includes("BATTLE") || p.includes("WINDOWS") || p.includes("RETROARCH")) return "pc";
+        return "otros";
+    },
+
+    getPlatformIcon: (platformName) => {
+        if (!platformName || typeof BRANDS_CONFIG === 'undefined') return '';
+        for (const brand in BRANDS_CONFIG) {
+            if (BRANDS_CONFIG[brand].icons?.[platformName]) {
+                return `<img src="${BRANDS_CONFIG[brand].icons[platformName]}" alt="${platformName}" style="height: 20px; width: auto;">`;
+            }
+        }
+        return `<span class="platform-tag">${platformName}</span>`;
+    },
+
+    getFlag: (region) => {
+        if (!region) return '<span class="fi fi-xx"></span>';
+        const codes = { "ESP": "es", "JAP": "jp", "USA": "us", "EU": "eu", "UK": "gb", "ITA": "it", "GER": "de", "AUS": "au", "ASIA": "hk" };
+        const r = region.toUpperCase();
+        let code = "xx";
+        for (let key in codes) { if (r.includes(key)) code = codes[key]; }
+        return `<span class="fi fi-${code}"></span>`;
     }
 };
