@@ -53,24 +53,35 @@ async function switchSection(sectionId, btn) {
     currentPlatform = "TODAS"; 
     currentFormat = "all"; 
     currentPlayedYear = "all";
+    currentSearch = ""; // También reseteamos la búsqueda
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+    const consoleContainer = document.getElementById('consoleSelector');
+    if (consoleContainer) {
+        consoleContainer.innerHTML = ""; 
+    }
 
     // UI de las pestañas
     document.querySelectorAll('.tab-link').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
 
-    // Visibilidad de contenedores de las secciones
+    // 5. Visibilidad de contenedores de sección
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     const target = document.getElementById('section-' + sectionId);
     if (target) target.classList.add('active');
     
     try {
+        // 6. Cargar los nuevos datos
         const data = await loadTabData(sectionId);
+        
+        // 7. Regenerar los filtros de MARCAS (para que ninguna aparezca como active)
         createFilters(data, 'global-platform-filters');
         
-        if (document.getElementById('searchInput')) {
-            document.getElementById('searchInput').value = "";
-            currentSearch = "";
-        }
+        // 8. Aplicar filtros (esto dibujará la tabla y reseteará la barra superior de formatos/años)
         applyFilters();
     } catch (error) { 
         console.error("Error al cambiar sección:", error); 
