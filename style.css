@@ -275,9 +275,9 @@ body {
 
 /* --- BARRA DE FILTROS PROFESIONAL --- */
 .filter-bar {
-    background: rgba(18, 18, 22, 0.8);
-    backdrop-filter: blur(15px);
-    padding: 15px 0;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 10px 0;
     width: 100%;
     display: flex;
     justify-content: center; /* Centra todo el contenido */
@@ -292,12 +292,13 @@ body {
 
 .filter-container {
     width: 100%;
-    max-width: 1300px;
+    max-width: 1200px;
     display: flex;
     justify-content: center; /* Centra los grupos de filtros */
     align-items: center;
     gap: 40px; /* Espacio entre Formato y Año */
     padding: 0 20px;
+    flex-wrap: wrap;
 }
 
 .filter-group {
@@ -307,51 +308,61 @@ body {
 }
 
 .filter-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    color: var(--accent); /* Color amarillo para las etiquetas */
+    color: #666;
+    font-size: 0.65rem;
     font-weight: 800;
+    text-transform: uppercase;
     letter-spacing: 1px;
-    opacity: 0.8;
+    white-space: nowrap;
 }
 
 .filter-pills {
     display: flex;
     gap: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .filter-pills::-webkit-scrollbar { display: none; } /* Ocultar scroll en Chrome/Safari */
 
 /* Botones estilo "Píldora" */
-.format-btn, .year-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #e0e0e0;
-    padding: 6px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.75rem;
+.year-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 6px 14px;
+    font-size: 0.7rem;
     font-weight: 700;
-    text-transform: uppercase;
+    border-radius: 50px;
+    cursor: pointer;
     transition: all 0.3s ease;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.format-btn:hover, .year-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: var(--accent);
+.year-btn span {
+    opacity: 0.5;
+    font-size: 0.6rem;
 }
 
-/* Activos */
-.format-btn.active {
-    background: var(--accent) !important;
-    color: #000 !important;
-    border-color: var(--accent) !important;
+.year-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .year-btn.active {
-    background: var(--cyan) !important;
-    color: #000 !important;
-    border-color: var(--cyan) !important;
+    background: var(--accent); /* Tu color dorado/amarillo */
+    color: #000;
+    box-shadow: 0 4px 15px rgba(239, 195, 108, 0.3);
+}
+
+.year-btn.active span {
+    opacity: 1;
+    font-weight: 900;
 }
 
 .filter-divider {
@@ -446,22 +457,6 @@ body {
     background: rgba(0, 242, 255, 0.05); padding: 5px 10px; border-radius: 6px;
 }
 
-/* --- FILTROS SECUNDARIOS --- */
-.format-buttons, .year-buttons {
-    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-    margin: 20px 0;
-}
-
-.format-btn, .year-btn {
-    background: #1a1a20; border: 1px solid #333; color: #777;
-    padding: 8px 18px; border-radius: 20px; cursor: pointer;
-    font-size: 0.8rem; font-weight: 700; transition: 0.3s;
-}
-
-.format-btn.active, .year-btn.active {
-    background: var(--accent) !important; color: #000 !important;
-    border-color: var(--accent) !important;
-}
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
@@ -475,13 +470,11 @@ body {
     .brand-selector { gap: 15px; }
     .brand-logo-img { height: 20px; }
     .filter-container {
-        flex-direction: column;
         gap: 15px;
-    }
-    .filter-pills {
-        flex-wrap: wrap;
         justify-content: center;
     }
-    .filter-divider { display: none; }
-    .filter-bar { top: 340px; } /* Ajuste por el nav móvil más alto */
+    .filter-group {
+        flex-direction: column;
+        align-items: center;
+    }
 }
