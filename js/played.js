@@ -134,9 +134,10 @@ function updateYearButtons(filteredGames) {
     const container = document.getElementById('year-buttons-container');
     if (!container) return;
 
+    // Obtener años únicos
     const counts = { all: filteredGames.length };
     filteredGames.forEach(j => {
-        const fecha = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || j["Año"] || "";
+        const fecha = j["Ultima fecha"] || j["Ultima Fecha"] || j["Año"] || "";
         const match = String(fecha).match(/\d{4}/);
         if (match) {
             const y = match[0];
@@ -147,24 +148,26 @@ function updateYearButtons(filteredGames) {
     const years = Object.keys(counts).filter(y => y !== 'all').sort((a, b) => b - a);
 
     container.innerHTML = `
-        <button class="year-btn ${currentPlayedYear === 'all' ? 'active' : ''}" onclick="filterByYear('all')">
-            <i class="fa-solid fa-calendar-days"></i> Todos (${counts.all})
-        </button>
+        <button class="year-btn ${currentPlayedYear === 'all' ? 'active' : ''}" 
+                onclick="filterByYear('all')">TODOS</button>
         ${years.map(y => `
-            <button class="year-btn ${currentPlayedYear === y ? 'active' : ''}" onclick="filterByYear('${y}')">
-                ${y} <span style="font-size: 0.8em; opacity: 0.7; margin-left: 4px;">(${counts[y]})</span>
-            </button>
+            <button class="year-btn ${currentPlayedYear === y ? 'active' : ''}" 
+                    onclick="filterByYear('${y}')">${y}</button>
         `).join('')}
     `;
 }
 
+// ESTA FUNCIÓN ES LA QUE HACE QUE EL FILTRO SE ACTIVE
 function filterByYear(year) {
+    console.log("Filtrando por año:", year);
     currentPlayedYear = year;
-    // Si tienes una función global de filtrado, la llamamos. 
-    // Si no, llamamos directamente a renderPlayed con la colección global.
+    
+    // IMPORTANTE: Aquí debes llamar a la función que redibuja tu grid.
+    // Si tu función de carga principal se llama applyFilters o renderPlayed:
     if (typeof applyFilters === 'function') {
-        applyFilters();
-    } else if (typeof gameCollection !== 'undefined') {
-        renderPlayed(gameCollection);
+        applyFilters(); 
+    } else {
+        // Si no tienes applyFilters, usa la colección global
+        renderPlayed(window.allGamesData); 
     }
 }
