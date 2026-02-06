@@ -6,6 +6,7 @@ let currentSection = 'videojuegos';
 let currentFormat = "all";
 let currentSearch = '';
 let currentPlayedYear = 'all'; 
+let currentComplete = 'all'; // Variable actualizada
 
 // 1. Carga de datos optimizada
 async function loadTabData(sectionId) {
@@ -53,35 +54,25 @@ async function switchSection(sectionId, btn) {
     currentPlatform = "TODAS"; 
     currentFormat = "all"; 
     currentPlayedYear = "all";
-    currentSearch = ""; // También reseteamos la búsqueda
+    currentSearch = "";
+    currentComplete = "all"; // Reset aquí
 
     const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.value = "";
-    }
+    if (searchInput) searchInput.value = "";
 
     const consoleContainer = document.getElementById('consoleSelector');
-    if (consoleContainer) {
-        consoleContainer.innerHTML = ""; 
-    }
+    if (consoleContainer) consoleContainer.innerHTML = ""; 
 
-    // UI de las pestañas
     document.querySelectorAll('.tab-link').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
 
-    // 5. Visibilidad de contenedores de sección
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     const target = document.getElementById('section-' + sectionId);
     if (target) target.classList.add('active');
     
     try {
-        // 6. Cargar los nuevos datos
         const data = await loadTabData(sectionId);
-        
-        // 7. Regenerar los filtros de MARCAS (para que ninguna aparezca como active)
         createFilters(data, 'global-platform-filters');
-        
-        // 8. Aplicar filtros (esto dibujará la tabla y reseteará la barra superior de formatos/años)
         applyFilters();
     } catch (error) { 
         console.error("Error al cambiar sección:", error); 
@@ -170,14 +161,13 @@ function filterBySpecificConsole(platform, element, brandName = null) {
     applyFilters();
 }
 
-// 6. EL CEREBRO: Aplicación de Filtros Unificada
+// 6. EL CEREBRO: Aplicación de Filtros Unificada (ACTUALIZADO)
 function applyFilters() {
     const dataToFilter = dataStore[currentSection];
     if (!dataToFilter) return;
 
-    // 1. Primero filtramos por todo EXCEPTO el formato
-    // (Para que los contadores de formato nos digan cuántos hay en ese año/consola/búsqueda)
-    const filteredByYearAndPlatform = dataToFilter.filter(game => {
+    // 1. Filtro base (Plataforma, búsqueda y año)
+    const baseFiltered = dataToFilter.filter(game => {
         const matchesSearch = game["Nombre Juego"].toLowerCase().includes(currentSearch.toLowerCase());
         
         let matchesPlatform = (currentPlatform === "TODAS") || 
@@ -188,73 +178,95 @@ function applyFilters() {
             const fecha = game["Ultima fecha"] || game["Ultima Fecha"] || game["Última Fecha"] || game["Año"] || "";
             matchesYear = String(fecha).includes(currentPlayedYear);
         }
-
         return matchesSearch && matchesPlatform && matchesYear;
     });
 
-    // 2. Actualizamos los botones de formato con estos datos ya filtrados por AÑO
-    // Ahora los números de Físico/Digital cambiarán al pulsar un año
-    renderUniversalFormatFilters(filteredByYearAndPlatform);
+    // 2. Actualizar botones de la interfaz con la base filtrada
+    renderUniversalFormatFilters(baseFiltered);
+    renderUniversalCompleteFilters(baseFiltered); // Nueva función
 
-    // 3. Por último, aplicamos el filtro de formato para mostrar los juegos finales
-    const finalFiltered = filteredByYearAndPlatform.filter(game => {
-        if (currentFormat === "all") return true;
-        const esDigital = String(game["Formato"] || "").toUpperCase().includes("DIGITAL");
-        return (currentFormat === "digital") ? esDigital : !esDigital;
+    // 3. Aplicar filtros de Formato y Completitud sobre la base
+    const finalFiltered = baseFiltered.filter(game => {
+        // Filtro Formato
+        let matchesFormat = true;
+        if (currentFormat !== "all") {
+            const esDigital = String(game["Formato"] || "").toUpperCase().includes("DIGITAL");
+            matchesFormat = (currentFormat === "digital") ? esDigital : !esDigital;
+        }
+
+        // Filtro Completitud
+        let matchesComplete = true;
+        if (currentComplete !== "all") {
+            const valorCSV = String(game["Completitud"] || "").trim().toUpperCase();
+            matchesComplete = (valorCSV === currentComplete.toUpperCase());
+        }
+
+        return matchesFormat && matchesComplete;
     });
 
-    // 4. Renderizamos la rejilla
+    // 4. Renderizado
     if (currentSection === 'videojuegos') renderGames(finalFiltered);
     else if (currentSection === 'deseados') renderWishlist(finalFiltered);
     else if (currentSection === 'jugados') renderPlayed(finalFiltered);
 }
 
-// 7. Render de Filtros Profesionales (Navbar superior)
-// main.js - Línea 228 aproximadamente
-function renderUniversalFormatFilters(dataForCounters) { // <--- Asegúrate que aquí diga dataForCounters
-    const container = document.getElementById('nav-format-filter');
+// 7. Render de Filtros Profesionales
+function renderUniversalCompleteFilters(dataForCounters) {
+    const container = document.getElementById('nav-status-filter');
+    const groupComplete = document.getElementById('group-estado'); 
     if (!container) return;
 
-    // Usamos el mismo nombre que pusimos arriba en el paréntesis
-    const total = dataForCounters.length; 
-    const digital = dataForCounters.filter(g => {
-        const formato = String(g["Formato"] || "").toUpperCase();
-        return formato.includes("DIGITAL");
-    }).length;
-    const fisico = total - digital;
-
-    container.innerHTML = `
-        <button class="year-btn ${currentFormat === 'all' ? 'active' : ''}" onclick="setFormatFilter('all')">
-            TODOS <span>${total}</span>
-        </button>
-        <button class="year-btn ${currentFormat === 'fisico' ? 'active' : ''}" onclick="setFormatFilter('fisico')">
-            FÍSICO <span>${fisico}</span>
-        </button>
-        <button class="year-btn ${currentFormat === 'digital' ? 'active' : ''}" onclick="setFormatFilter('digital')">
-            DIGITAL <span>${digital}</span>
-        </button>
-    `;
-
-    // Lógica para mostrar/ocultar el grupo de año
-    const yearGroup = document.getElementById('year-filter-group');
-    if (yearGroup) {
-        if (currentSection === 'jugados') {
-            yearGroup.style.display = 'flex';
-            if (typeof updateYearButtons === 'function') {
-                // Aquí también pasamos dataForCounters
-                updateYearButtons(dataForCounters); 
-            }
-        } else {
-            yearGroup.style.display = 'none';
-        }
+    // Solo mostramos este filtro en la sección "videojuegos" (Colección)
+    if (currentSection !== 'videojuegos') {
+        if (groupComplete) groupComplete.style.display = 'none';
+        return;
     }
+    if (groupComplete) groupComplete.style.display = 'flex';
+
+    // Tus tipos específicos mapeados a etiquetas legibles
+    const types = [
+        { id: 'all', label: 'TODOS' },
+        { id: 'A Estrenar', label: 'ESTRENAR' },
+        { id: 'Íntegro', label: 'ÍNTEGRO' },
+        { id: 'Completo', label: 'CIB' },
+        { id: 'Incompleto', label: 'INC' },
+        { id: 'Suelto', label: 'SUELTO' },
+        { id: 'Repro', label: 'REPRO' },
+        { id: 'Digital', label: 'DIGITAL' }
+    ];
+
+    container.innerHTML = types.map(type => {
+        let count = 0;
+        if (type.id === 'all') {
+            count = dataForCounters.length;
+        } else {
+            count = dataForCounters.filter(g => 
+                String(g["Completitud"] || "").trim().toUpperCase() === type.id.toUpperCase()
+            ).length;
+        }
+
+        return `
+            <button class="year-btn ${currentComplete === type.id ? 'active' : ''}" 
+                    onclick="setCompleteFilter('${type.id}')">
+                ${type.label} <span>${count}</span>
+            </button>
+        `;
+    }).join('');
 }
 
 function setFormatFilter(format) {
     currentFormat = format;
+    // Si elegimos digital, reseteamos completitud a "all" para evitar conflictos lógicos
+    if (format === 'digital') {
+        currentComplete = 'all';
+    }
     applyFilters();
 }
 
+function setCompleteFilter(value) {
+    currentComplete = value;
+    applyFilters();
+}
 // Listener del buscador
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchInput')?.addEventListener('input', (e) => {
