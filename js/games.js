@@ -15,14 +15,18 @@ function renderGames(games) {
         return;
     }
 
-    // Usamos DocumentFragment para mejor rendimiento si la lista es enorme
+    // Usamos map y join para inyectar todo el HTML de una vez
     const html = games.map(j => createCardHTML(j)).join('');
     container.innerHTML = html;
 }
 
 function createCardHTML(j) {
     try {
-        if (typeof AppUtils === 'undefined') return "";
+        // Validación de seguridad para AppUtils
+        if (typeof AppUtils === 'undefined') {
+            console.error("AppUtils no está cargado antes de games.js");
+            return "";
+        }
 
         // --- PREPARACIÓN DE DATOS ---
         const plat = j["Plataforma"] || "";
@@ -32,9 +36,12 @@ function createCardHTML(j) {
         const styleRegion = AppUtils.getRegionStyle(j["Región"]);
         const colorCompBase = AppUtils.getCompletitudStyle(j["Completitud"]);
         const rawRarezaColor = AppUtils.getRarezaColor(j["Rareza"]);
+        
+        // El formato ahora se lee de forma robusta
         const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
         const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
 
+        // Helpers locales de estilo
         const toRgba = (hex, alpha = 0.15) => {
             if (!hex || !hex.startsWith('#')) return `rgba(255,255,255,${alpha})`;
             const r = parseInt(hex.slice(1, 3), 16);
@@ -58,12 +65,13 @@ function createCardHTML(j) {
         };
 
         // --- CONSTRUCCIÓN DEL HTML ---
+        // CAMBIO: Se han añadido los prefijos AppUtils. a las funciones que faltaban
         return `
-        <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; overflow: hidden;">
+        <div class="card ${AppUtils.getBrandClass(plat)}" style="display: flex; flex-direction: column; overflow: hidden;">
             
             <div style="display: flex; height: 45px; align-items: stretch; position: relative; z-index: 10;">
                 <div class="icon-gradient-area">
-                    ${getPlatformIcon(plat)}
+                    ${AppUtils.getPlatformIcon(plat)}
                 </div>
                 <div style="flex: 1; background: ${toRgba(colorCompBase, 0.25)}; color: ${colorCompBase}; font-weight: 900; font-size: 0.7em; display: flex; align-items: center; justify-content: center; border-left: 1px solid rgba(255,255,255,0.05); letter-spacing: 0.5px;">
                     ${(j["Completitud"] || "???").toUpperCase()}
@@ -83,7 +91,7 @@ function createCardHTML(j) {
 
                 <div style="margin-top: 8px; line-height: 1.2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-weight: bold;">
-                        ${getFlag(j["Región"])} ${j["Región"] || "N/A"}
+                        ${AppUtils.getFlag(j["Región"])} ${j["Región"] || "N/A"}
                     </div>
                     <span style="font-size: 0.7em; color: #888; font-weight: bold;">${j["Año"] || "????"}</span>
                     <span style="font-size: 0.7em; color: #555;">| <i>${j["Desarrolladora"] || "---"}</i></span>
