@@ -19,21 +19,37 @@ body {
 }
 
 /* --- NAVEGACIÓN UNIFICADA (MAIN-NAV) --- */
+/* --- NAVEGACIÓN UNIFICADA (MAIN-NAV) --- */
 .main-nav {
     position: fixed;
     top: 0; left: 0; width: 100%;
     z-index: 9999;
     
-    /* Restaurado: Degradado Sólido de Amarillo a Negro */
-    background: linear-gradient(to bottom, 
-        #0b0b0e 0%,      /* Empezamos oscuro para que el buscador se vea bien */
-        #4a3d25 50%,     /* Transición sutil */
-        #0b0b0e 100%     /* Terminamos oscuro para fundir con la web */
-    );
+    /* FONDO CHULO: Efecto de iluminación radial combinado con degradado vertical */
+    /* 1. Un brillo muy sutil en el centro para dar volumen */
+    /* 2. Un degradado de negro a un tono "petróleo/dorado" muy oscuro */
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(239, 195, 108, 0.15) 0%, transparent 70%),
+        linear-gradient(to bottom, 
+            #050507 0%,      /* Casi negro arriba */
+            #121216 40%,     /* Gris azulado muy oscuro en el medio */
+            #121216 70%, 
+            #0b0b0e 100%     /* Fundido al fondo de la web */
+        );
+
+    /* Añadimos un sutil efecto de cristal para que los juegos se intuyan al pasar por debajo */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     
-    /* Línea inferior amarilla restaurada */
+    /* Línea inferior amarilla con brillo neón */
     border-bottom: 2px solid;
-    border-image: linear-gradient(to right, transparent 0%, var(--accent) 50%, transparent 100%) 1;
+    border-image: linear-gradient(to right, 
+        transparent 0%, 
+        var(--accent) 50%, 
+        transparent 100%
+    ) 1;
+
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     transition: transform 0.4s ease-in-out;
 }
 
