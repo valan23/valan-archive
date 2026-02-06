@@ -11,7 +11,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    padding-top: 320px !important; 
+    padding-top: 380px !important; 
     font-family: 'Inter', sans-serif;
     background: var(--bg-dark);
     color: #e0e0e0;
@@ -378,7 +378,7 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px; 
     /* Aumenta este margen si ves que los títulos se siguen cortando */
-    margin-top: 60px; 
+    margin-top: 80px; 
     padding-bottom: 50px;
 }
 
