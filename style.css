@@ -203,13 +203,17 @@ body {
 /* --- FILA DE CONSOLAS (MISMO FORMATO QUE MARCAS) --- */
 .nav-row-consoles {
     width: 100%;
-    padding: 10px 0 15px 0;
+    padding: 12px 0 18px 0; /* Ajustado para ser idéntico a marcas */
     background: transparent; 
     display: flex;
     justify-content: center;
     /* Línea superior que la separa de las marcas */
     border-top: 1px solid;
-    border-image: linear-gradient(to right, transparent, rgba(239, 195, 108, 0.2), transparent) 1;
+    border-image: linear-gradient(to right, 
+        transparent 10%, 
+        rgba(239, 195, 108, 0.6) 50%, 
+        transparent 90%
+    ) 1;
 }
 
 .console-selector {
