@@ -7,7 +7,7 @@ function renderPlayed(games) {
     const container = document.getElementById('played-grid');
     if (!container) return;
 
-    // 1. ACTUALIZACIÓN DINÁMICA DE FORMATOS (Si existe la función)
+    // 1. ACTUALIZACIÓN DINÁMICA DE FORMATOS
     if (typeof renderFormatFilters === 'function') {
         renderFormatFilters(games, 'format-buttons-container-played', 'played');
     }
@@ -18,8 +18,8 @@ function renderPlayed(games) {
     // 3. Aplicar el filtro de año local
     const filteredByYear = games.filter(j => {
         if (currentPlayedYear === 'all') return true;
-        // Buscamos el año en "Ultima fecha" o "Año" de forma robusta
-        const fechaVal = j["Ultima fecha"] || j["Ultima Fecha"] || j["Año"] || "";
+        // Buscamos el año de finalización (4 dígitos) en cualquier campo de fecha
+        const fechaVal = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || j["Año"] || "";
         return String(fechaVal).includes(currentPlayedYear);
     });
 
@@ -41,8 +41,6 @@ function renderPlayed(games) {
             
             const styleRegion = AppUtils.getRegionStyle(j["Región"]);
             const nota = parseFloat(String(j["Nota"]).replace(',', '.')) || 0;
-            
-            // Color dinámico según la nota (0=rojo, 120=verde)
             const hue = Math.min(Math.max(nota * 12, 0), 120);
 
             const tiempoJuego = j["Tiempo Juego"] || j["Tiempo"] || "0";
@@ -50,20 +48,17 @@ function renderPlayed(games) {
             const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
             const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
 
-            // Lógica de Proceso
             const proceso = (j["Proceso Juego"] || j["Estado"] || "Terminado").toUpperCase();
             let colorProceso = "#2E9E7F"; 
             if (proceso.includes("COMPLETADO") || proceso.includes("100%")) colorProceso = "#9825DA";
             if (proceso.includes("PROCESO") || proceso.includes("JUGANDO")) colorProceso = "#4242C9";
             if (proceso.includes("ABANDONADO")) colorProceso = "#FF4D4D";
 
-            // Fechas robustas (evita el error de campos vacíos si cambian las tildes o mayúsculas)
             const fInicio = j["Primera fecha"] || j["Primera Fecha"] || "--/--";
             const fFin = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || "--/--";
 
             return `
             <div class="card ${getBrandClass(plat)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px; overflow: hidden; border-radius: 12px;">
-        
                 <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
                     <div class="icon-gradient-area">
                         ${getPlatformIcon(plat)}
@@ -80,7 +75,7 @@ function renderPlayed(games) {
 
                 <div style="margin-top: 55px; padding: 0 12px;">
                     ${esEspecial ? `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;"><i class="fa-solid fa-star"></i> ${j["Edición"]}</div>` : `<div style="height: 12px;"></div>`}
-                    <div class="game-title" style="font-size: 1.1em; color: #EFC36C; font-weight: 700; line-height: 1.2; padding: 0;">
+                    <div class="game-title" style="font-size: 1.1em; color: var(--accent); font-weight: 700; line-height: 1.2; padding: 0;">
                         ${j["Nombre Juego"]}
                     </div>
                     <div style="font-size: 0.7em; color: #888; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
@@ -100,12 +95,12 @@ function renderPlayed(games) {
                     <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
                 </div>
 
-                <div style="margin: 0 12px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid #EFC36C; border-radius: 4px; padding: 10px; flex-grow: 1; font-size: 0.75em; color: #bbb; font-style: italic; line-height: 1.4; display: flex; align-items: center;">
+                <div style="margin: 0 12px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent); border-radius: 4px; padding: 10px; flex-grow: 1; font-size: 0.75em; color: #bbb; font-style: italic; line-height: 1.4; display: flex; align-items: center;">
                     "${j["Comentario"] || "Sin comentarios."}"
                 </div>
 
                 <div style="height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; background: rgba(0,0,0,0.1);">
-                    <div style="flex: 0.8; background: ${esDigital ? 'rgba(0, 242, 255, 0.1)' : 'rgba(239, 195, 108, 0.1)'}; color: ${esDigital ? '#00f2ff' : '#EFC36C'}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="flex: 0.8; background: ${esDigital ? 'rgba(0, 242, 255, 0.1)' : 'rgba(239, 195, 108, 0.1)'}; color: ${esDigital ? 'var(--cyan)' : 'var(--accent)'}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}" style="font-size: 0.9em;"></i>
                         <span style="font-size: 0.55em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                     </div>
@@ -118,7 +113,7 @@ function renderPlayed(games) {
                         <div style="color: #333; font-size: 0.7em;">➔</div>
                         <div style="text-align: center;">
                             <div style="font-size: 0.45em; color: #555; font-weight: 800;">FIN</div>
-                            <div style="font-size: 0.6em; color: #EFC36C; font-weight: 700;">${fFin}</div>
+                            <div style="font-size: 0.6em; color: var(--accent); font-weight: 700;">${fFin}</div>
                         </div>
                     </div>
 
@@ -139,10 +134,9 @@ function updateYearButtons(filteredGames) {
     const container = document.getElementById('year-buttons-container');
     if (!container) return;
 
-    // Solo contamos juegos que tengan alguna fecha válida
     const counts = { all: filteredGames.length };
     filteredGames.forEach(j => {
-        const fecha = j["Ultima fecha"] || j["Ultima Fecha"] || j["Año"] || "";
+        const fecha = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || j["Año"] || "";
         const match = String(fecha).match(/\d{4}/);
         if (match) {
             const y = match[0];
@@ -154,11 +148,11 @@ function updateYearButtons(filteredGames) {
 
     container.innerHTML = `
         <button class="year-btn ${currentPlayedYear === 'all' ? 'active' : ''}" onclick="filterByYear('all')">
-            Todos (${counts.all})
+            <i class="fa-solid fa-calendar-days"></i> Todos (${counts.all})
         </button>
         ${years.map(y => `
             <button class="year-btn ${currentPlayedYear === y ? 'active' : ''}" onclick="filterByYear('${y}')">
-                ${y} (${counts[y]})
+                ${y} <span style="font-size: 0.8em; opacity: 0.7; margin-left: 4px;">(${counts[y]})</span>
             </button>
         `).join('')}
     `;
@@ -166,8 +160,11 @@ function updateYearButtons(filteredGames) {
 
 function filterByYear(year) {
     currentPlayedYear = year;
-    // Forzamos la reaplicación de filtros globales para que renderPlayed se ejecute de nuevo
+    // Si tienes una función global de filtrado, la llamamos. 
+    // Si no, llamamos directamente a renderPlayed con la colección global.
     if (typeof applyFilters === 'function') {
         applyFilters();
+    } else if (typeof gameCollection !== 'undefined') {
+        renderPlayed(gameCollection);
     }
 }
