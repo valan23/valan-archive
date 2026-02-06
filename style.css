@@ -24,23 +24,19 @@ body {
     top: 0; left: 0; width: 100%;
     z-index: 9999;
     
-    /* 1. Degradado vertical: del oro #efc36c al fondo oscuro */
+    /* 1. Degradado vertical más intenso (subimos la opacidad al 35%) */
     background: linear-gradient(to bottom, 
-        rgba(239, 195, 108, 0.15) 0%,   /* Oro con 15% opacidad arriba */
-        rgba(11, 11, 14, 0.95) 100%     /* Tu color #0b0b0e casi opaco abajo */
+        rgba(239, 195, 108, 0.35) 0%,   
+        rgba(11, 11, 14, 1) 100%
     );
     
-    /* 2. Borde inferior: Línea oro que se desvanece a los lados */
+    /* 2. Línea inferior de cierre (desvanecida a los lados) */
     border-bottom: 2px solid;
     border-image: linear-gradient(to right, 
         transparent 0%, 
         #efc36c 50%, 
         transparent 100%
     ) 1;
-
-    /* Un sutil brillo extra para que la línea 'viva' */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px); /* Opcional: efecto cristal si hay contenido detrás */
 }
 
 .nav-container {
@@ -106,8 +102,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #1a1a1a; /* Texto casi negro para legibilidad */
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    color: #e0e0e0; /* Volvemos al blanco/gris claro */
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -119,20 +114,29 @@ body {
 .tab-top { font-size: 0.65rem; opacity: 0.8; }
 .tab-bottom { font-size: 0.9rem; font-weight: 900; }
 
-.tab-link:hover { color: #444; }
+.tab-link:hover { 
+    color: #fff; 
+}
+
 .tab-link.active {
-    color: #000 !important; /* Negro puro cuando está activo */
-    border-bottom: 2px solid #000
+    color: var(--accent) !important; /* Vuelve el amarillo #efc36c */
+    border-bottom: 2px solid var(--accent);
 }
 
 /* FILA INFERIOR: Marcas (Sub-Nav) */
 .nav-row-brands {
     width: 100%;
     padding: 12px 0 18px 0;
-    background: transparent; /* Quitamos el degradado previo para no ensuciar */
-    border-top: 1px solid rgba(239, 195, 108, 0.1); /* Separación muy tenue */
+    background: transparent;
     display: flex;
     justify-content: center;
+    /* Creamos la línea divisoria superior */
+    border-top: 1px solid;
+    border-image: linear-gradient(to right, 
+        transparent 10%, 
+        rgba(239, 195, 108, 0.6) 50%, 
+        transparent 90%
+    ) 1;
 }
 
 .brand-selector { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
