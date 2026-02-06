@@ -228,7 +228,6 @@ body {
     height: 18px; /* Un poco más pequeña que el logo de marca */
     width: auto; 
     margin-bottom: 4px; 
-    filter: brightness(0) invert(1); /* Si los logos son negros, esto los pone blancos */
 }
 
 .console-icon span { 
@@ -239,6 +238,10 @@ body {
 }
 
 .console-icon.active span { color: var(--accent); }
+
+.console-logo-img, .brand-logo-img {
+    filter: drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.3));
+}
 
 /* --- GRID Y TARJETAS --- */
 .container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 10px; }
