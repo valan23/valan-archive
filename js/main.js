@@ -210,6 +210,43 @@ function applyFilters() {
     else if (currentSection === 'jugados') renderPlayed(finalFiltered);
 }
 
+function renderUniversalFormatFilters(dataForCounters) {
+    const container = document.getElementById('nav-format-filter');
+    if (!container) return;
+
+    const total = dataForCounters.length; 
+    const digital = dataForCounters.filter(g => 
+        String(g["Formato"] || "").toUpperCase().includes("DIGITAL")
+    ).length;
+    const fisico = total - digital;
+
+    container.innerHTML = `
+        <button class="year-btn ${currentFormat === 'all' ? 'active' : ''}" onclick="setFormatFilter('all')">
+            TODOS <span>${total}</span>
+        </button>
+        <button class="year-btn ${currentFormat === 'fisico' ? 'active' : ''}" onclick="setFormatFilter('fisico')">
+            FÍSICO <span>${fisico}</span>
+        </button>
+        <button class="year-btn ${currentFormat === 'digital' ? 'active' : ''}" onclick="setFormatFilter('digital')">
+            DIGITAL <span>${digital}</span>
+        </button>
+    `;
+
+    // Gestión del grupo de Años (solo visible en Jugados)
+    const yearGroup = document.getElementById('year-filter-group');
+    if (yearGroup) {
+        if (currentSection === 'jugados') {
+            yearGroup.style.display = 'flex';
+            // Llamamos a la función de años que debería estar en tu games.js o similar
+            if (typeof updateYearButtons === 'function') {
+                updateYearButtons(dataForCounters); 
+            }
+        } else {
+            yearGroup.style.display = 'none';
+        }
+    }
+}
+
 // 7. Render de Filtros Profesionales
 function renderUniversalCompleteFilters(dataForCounters) {
     const container = document.getElementById('nav-status-filter');
