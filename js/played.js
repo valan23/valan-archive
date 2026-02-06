@@ -132,7 +132,7 @@ function renderPlayed(games) {
 }
 
 function updateYearButtons(filteredGames) {
-    const container = document.getElementById('year-filter-pills');
+    const container = document.getElementById('nav-year-filter'); 
     if (!container) return;
 
     const counts = { all: filteredGames.length };
