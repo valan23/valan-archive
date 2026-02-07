@@ -1,39 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.querySelector('.main-nav');
+    const filterBar = document.querySelector('.filter-bar');
     const backToTopBtn = document.getElementById('backToTop');
 
-    window.addEventListener('scroll', function() {
+    function updateNavHeight() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        // 1. Lógica de la Barra (Compactar si no estamos arriba)
         if (scrollTop <= 10) {
             navbar.classList.remove('compact');
+            navbar.style.setProperty('--nav-shift', '0px');
         } else {
             navbar.classList.add('compact');
+            
+            // CALCULAMOS LA MAGIA:
+            // Tomamos la distancia desde el tope de la nav hasta el inicio de la barra de filtros
+            const shift = filterBar.offsetTop;
+            navbar.style.setProperty('--nav-shift', `-${shift}px`);
         }
+    }
 
-        // 2. Lógica del Botón (Mostrar solo si bajamos más de 400px)
-        if (scrollTop > 400) {
-            backToTopBtn.classList.add('show');
-        } else {
-            backToTopBtn.classList.remove('show');
-        }
-    }, false);
+    window.addEventListener('scroll', updateNavHeight);
 
-    // 3. Acción del Botón Volver Arriba
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+    // Si cambias de marca o plataforma, el alto puede cambiar, 
+    // así que recalculamos después de un pequeño delay
+    document.addEventListener('click', () => {
+        setTimeout(updateNavHeight, 100);
     });
 
-    // 4. Expandir al hacer clic en cualquier icono de filtro
-    document.querySelectorAll('.brand-icon, .console-icon, .year-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            if (navbar.classList.contains('compact')) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+    // Lógica del botón volver arriba
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-    });
+    }
 });
