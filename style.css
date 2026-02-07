@@ -498,13 +498,16 @@ body {
 
 .icon-gradient-area {
     flex: 0 0 60% !important;
-    background: rgba(255, 255, 255, 0.05) !important; /* Un fondo oscuro muy sutil */
+    /* Degradado de Amarillo a un Dorado/Naranja suave para dar volumen */
+    background: linear-gradient(135deg, var(--accent) 0%, #d4a74a 100%) !important; 
     display: flex !important;
     align-items: center;
     justify-content: center;
-    margin-left: 0px !important; /* Ajustado para que pegue al borde izquierdo */
+    margin-left: 0px !important;
     border-top-left-radius: 11px;
     height: 100%;
+    /* Quitamos cualquier padding o margen que empuje el contenido */
+    padding: 0 !important;
 }
 
 .icon-gradient-area > div, 
@@ -529,22 +532,15 @@ body {
 }
 
 .card-platform-box {
-    background-color: var(--accent) !important; /* Forzamos el amarillo */
-    padding: 4px 10px !important;
-    border-radius: 6px !important;
-    height: 30px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
+    background: transparent !important;
     border: none !important;
-    box-shadow: none !important; /* Eliminamos cualquier sombra que traiga el JS */
+    box-shadow: none !important;
+    padding: 0 !important;
 }
 
 .card-platform-box img { 
     max-height: 20px; 
     width: auto; 
-    /* Si algunos logos blancos no se ven bien, esta línea los vuelve oscuros/negros */
-    filter: brightness(0) saturate(100%); 
 }
 
 .game-title {
