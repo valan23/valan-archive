@@ -96,18 +96,20 @@ body {
 
 /* Estilo para los títulos "Compañías" y "Plataformas" */
 .row-title {
+    position: absolute; /* El título flota a la izquierda sin ocupar espacio real */
+    left: 20px;
+    margin-right: 0;
+    border-right: 1px solid rgba(239, 195, 108, 0.2);
+    padding-right: 15px;
+    /* Mantenemos el resto de tus estilos */
     font-size: 0.65rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: var(--accent);
     opacity: 0.7;
-    min-width: 120px; /* Alineación constante */
-    border-right: 1px solid rgba(239, 195, 108, 0.2);
-    margin-right: 20px;
-    padding-right: 10px;
+    min-width: 100px;
     text-align: right;
-    flex-shrink: 0;
 }
 
 /* FILA SUPERIOR: Logo y Buscador */
@@ -207,6 +209,8 @@ body {
         rgba(239, 195, 108, 0.6) 50%, 
         transparent 90%
     ) 1;
+    align-items: center;
+    position: relative; /* Importante para posicionar el título */
 }
 
 .brand-selector { 
@@ -268,6 +272,8 @@ body {
         rgba(239, 195, 108, 0.6) 50%, 
         transparent 90%
     ) 1;
+    align-items: center;
+    position: relative; /* Importante para posicionar el título */
 }
 
 .console-selector {
