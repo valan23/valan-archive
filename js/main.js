@@ -6,7 +6,8 @@ let currentSection = 'videojuegos';
 let currentFormat = "all";
 let currentSearch = '';
 let currentPlayedYear = 'all'; 
-let currentComplete = 'all'; // Variable actualizada
+let currentComplete = 'all'; 
+let currentPriority = 'all'; // Nueva variable para la Wishlist
 
 // 1. Carga de datos optimizada
 async function loadTabData(sectionId) {
@@ -55,7 +56,8 @@ async function switchSection(sectionId, btn) {
     currentFormat = "all"; 
     currentPlayedYear = "all";
     currentSearch = "";
-    currentComplete = "all"; // Reset aquí
+    currentComplete = "all";
+    currentPriority = "all"; // Reset de prioridad al cambiar de pestaña
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.value = "";
@@ -161,7 +163,7 @@ function filterBySpecificConsole(platform, element, brandName = null) {
     applyFilters();
 }
 
-// 6. EL CEREBRO: Aplicación de Filtros Unificada (ACTUALIZADO)
+// 6. EL CEREBRO: Aplicación de Filtros Unificada
 function applyFilters() {
     const dataToFilter = dataStore[currentSection];
     if (!dataToFilter) return;
@@ -181,11 +183,12 @@ function applyFilters() {
         return matchesSearch && matchesPlatform && matchesYear;
     });
 
-    // 2. Actualizar botones de la interfaz con la base filtrada
+    // 2. Actualizar botones de la interfaz
     renderUniversalFormatFilters(baseFiltered);
-    renderUniversalCompleteFilters(baseFiltered); // Nueva función
+    renderUniversalCompleteFilters(baseFiltered);
+    renderWishlistPriorityFilters(baseFiltered); // Nueva llamada
 
-    // 3. Aplicar filtros de Formato y Completitud sobre la base
+    // 3. Aplicar filtros secundarios (Formato, Completitud y Prioridad)
     const finalFiltered = baseFiltered.filter(game => {
         // Filtro Formato
         let matchesFormat = true;
@@ -201,10 +204,17 @@ function applyFilters() {
             matchesComplete = (valorCSV === currentComplete.toUpperCase());
         }
 
-        return matchesFormat && matchesComplete;
+        // Filtro Prioridad (Solo Wishlist)
+        let matchesPriority = true;
+        if (currentSection === 'deseados' && currentPriority !== 'all') {
+            const priorRaw = String(game["Prioridad"] || "NORMAL").toUpperCase();
+            matchesPriority = priorRaw.includes(currentPriority.toUpperCase());
+        }
+
+        return matchesFormat && matchesComplete && matchesPriority;
     });
 
-    // 4. Renderizado
+    // 4. Renderizado Final
     if (currentSection === 'videojuegos') renderGames(finalFiltered);
     else if (currentSection === 'deseados') renderWishlist(finalFiltered);
     else if (currentSection === 'jugados') renderPlayed(finalFiltered);
@@ -232,35 +242,26 @@ function renderUniversalFormatFilters(dataForCounters) {
         </button>
     `;
 
-    // Gestión del grupo de Años (solo visible en Jugados)
     const yearGroup = document.getElementById('year-filter-group');
     if (yearGroup) {
-        if (currentSection === 'jugados') {
-            yearGroup.style.display = 'flex';
-            // Llamamos a la función de años que debería estar en tu games.js o similar
-            if (typeof updateYearButtons === 'function') {
-                updateYearButtons(dataForCounters); 
-            }
-        } else {
-            yearGroup.style.display = 'none';
+        yearGroup.style.display = (currentSection === 'jugados') ? 'flex' : 'none';
+        if (currentSection === 'jugados' && typeof updateYearButtons === 'function') {
+            updateYearButtons(dataForCounters); 
         }
     }
 }
 
-// 7. Render de Filtros Profesionales
 function renderUniversalCompleteFilters(dataForCounters) {
     const container = document.getElementById('nav-status-filter');
     const groupComplete = document.getElementById('group-estado'); 
     if (!container) return;
 
-    // Solo mostramos este filtro en la sección "videojuegos" (Colección)
     if (currentSection !== 'videojuegos') {
         if (groupComplete) groupComplete.style.display = 'none';
         return;
     }
     if (groupComplete) groupComplete.style.display = 'flex';
 
-    // Tus tipos específicos mapeados a etiquetas legibles
     const types = [
         { id: 'all', label: 'TODOS' },
         { id: 'A Estrenar', label: 'ESTRENAR' },
@@ -273,30 +274,56 @@ function renderUniversalCompleteFilters(dataForCounters) {
     ];
 
     container.innerHTML = types.map(type => {
-        let count = 0;
-        if (type.id === 'all') {
-            count = dataForCounters.length;
-        } else {
-            count = dataForCounters.filter(g => 
-                String(g["Completitud"] || "").trim().toUpperCase() === type.id.toUpperCase()
-            ).length;
-        }
+        let count = (type.id === 'all') ? dataForCounters.length : 
+            dataForCounters.filter(g => String(g["Completitud"] || "").trim().toUpperCase() === type.id.toUpperCase()).length;
 
         return `
-            <button class="year-btn ${currentComplete === type.id ? 'active' : ''}" 
-                    onclick="setCompleteFilter('${type.id}')">
+            <button class="year-btn ${currentComplete === type.id ? 'active' : ''}" onclick="setCompleteFilter('${type.id}')">
                 ${type.label} <span>${count}</span>
             </button>
         `;
     }).join('');
 }
 
+// --- NUEVAS FUNCIONES DE PRIORIDAD ---
+function renderWishlistPriorityFilters(dataForCounters) {
+    const container = document.getElementById('nav-priority-filter');
+    const groupPriority = document.getElementById('group-prioridad'); 
+    if (!container) return;
+
+    if (currentSection !== 'deseados') {
+        if (groupPriority) groupPriority.style.display = 'none';
+        return;
+    }
+    if (groupPriority) groupPriority.style.display = 'flex';
+
+    const levels = [
+        { id: 'all', label: 'TODAS' },
+        { id: 'MUY ALTA', label: 'CRÍTICO 🔥' },
+        { id: 'ALTA', label: 'ALTA' },
+        { id: 'NORMAL', label: 'NORMAL' }
+    ];
+
+    container.innerHTML = levels.map(lv => {
+        let count = (lv.id === 'all') ? dataForCounters.length : 
+            dataForCounters.filter(g => String(g["Prioridad"] || "").toUpperCase().includes(lv.id)).length;
+
+        return `
+            <button class="year-btn ${currentPriority === lv.id ? 'active' : ''}" onclick="setPriorityFilter('${lv.id}')">
+                ${lv.label} <span>${count}</span>
+            </button>
+        `;
+    }).join('');
+}
+
+function setPriorityFilter(value) {
+    currentPriority = value;
+    applyFilters();
+}
+
 function setFormatFilter(format) {
     currentFormat = format;
-    // Si elegimos digital, reseteamos completitud a "all" para evitar conflictos lógicos
-    if (format === 'digital') {
-        currentComplete = 'all';
-    }
+    if (format === 'digital') currentComplete = 'all';
     applyFilters();
 }
 
@@ -304,6 +331,7 @@ function setCompleteFilter(value) {
     currentComplete = value;
     applyFilters();
 }
+
 // Listener del buscador
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchInput')?.addEventListener('input', (e) => {
