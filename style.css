@@ -285,6 +285,8 @@ body {
     flex-wrap: wrap;
     align-items: center;
     width: 100%; /* Ahora sí se centrará respecto a la pantalla */
+    max-width: 900px; /* <--- LIMITADOR: Ajusta este valor según prefieras */
+    margin: 0 auto;   /* Asegura que el bloque limitado esté centrado */
 }
 
 .console-icon {
@@ -562,7 +564,7 @@ body {
 
 
 /* --- RESPONSIVE --- */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     body { 
         padding-top: 310px !important; /* Ajuste para móvil */
     }
@@ -580,5 +582,8 @@ body {
         flex-direction: row; /* Mantener etiqueta al lado de botones */
         justify-content: flex-start;
         width: auto;
+    }
+    .row-title {
+        display: none; /* En móviles es mejor dar todo el espacio a los iconos */
     }
 }
