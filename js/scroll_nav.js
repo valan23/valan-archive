@@ -11,3 +11,12 @@ window.addEventListener('scroll', function() {
         navbar.classList.add('compact');
     }
 }, false);
+
+document.querySelectorAll('.brand-icon, .console-icon').forEach(button => {
+    button.addEventListener('click', () => {
+        const mainNav = document.querySelector('.main-nav');
+        mainNav.classList.remove('compact');
+        // Opcional: hacer scroll suave hacia arriba para que se vea bien
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
