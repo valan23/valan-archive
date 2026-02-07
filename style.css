@@ -55,7 +55,7 @@ body {
 }
 
 .main-nav.compact {
-    transform: translateY(-345px);
+    transform: translateY(var(--nav-shift, -300px));
 }
 
 /* Estilo para los nuevos títulos de las filas */
