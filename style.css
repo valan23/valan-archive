@@ -218,6 +218,8 @@ body {
     justify-content: center !important; /* Cambiado de flex-start a center */ 
     gap: 30px; 
     flex-wrap: wrap; 
+    align-items: center;
+    width: 100%; /* Ahora sí se centrará respecto a la pantalla */
 }
 
 .brand-icon {
@@ -281,6 +283,8 @@ body {
     justify-content: center !important; /* Cambiado de flex-start a center */
     gap: 25px; /* Un poco más cerrado que las marcas */
     flex-wrap: wrap;
+    align-items: center;
+    width: 100%; /* Ahora sí se centrará respecto a la pantalla */
 }
 
 .console-icon {
