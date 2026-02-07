@@ -366,13 +366,16 @@ body {
     align-items: center;
     gap: 20px; /* Bajamos de 40px a 20px */
     padding: 0 15px;
-    flex-wrap: wrap; /* Importante para que no rompa en pantallas pequeñas */
+    flex-wrap: wrap;    /* Esto permite que los grupos salten de línea */
+    padding: 10px 0;
+    align-items: flex-start;
 }
 
 .filter-group {
     display: flex;
-    align-items: center;
-    gap: 8px; /* Reducimos espacio etiqueta-botones */
+    flex-direction: column; /* Etiqueta arriba, botones abajo */
+    gap: 8px;
+    min-width: fit-content;
 }
 
 .filter-label {
@@ -390,6 +393,8 @@ body {
     padding: 3px; /* Bajamos de 4px a 3px */
     border-radius: 8px; /* Menos redondeado para ahorrar aire */
     border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-wrap: wrap;    /* Esto permite que los BOTONES salten de línea si no caben */
 }
 
 .filter-pills::-webkit-scrollbar { display: none; } /* Ocultar scroll en Chrome/Safari */
@@ -399,7 +404,7 @@ body {
     background: transparent;
     border: none;
     color: #888;
-    padding: 4px 10px; /* Reducimos padding vertical de 6px a 4px */
+    padding: 6px 12px;
     font-size: 0.65rem; /* Letra ligeramente más pequeña */
     border-radius: 6px;
     font-weight: 700;
@@ -409,6 +414,8 @@ body {
     text-transform: uppercase;
     display: flex;
     align-items: center;
+    white-space: nowrap; /* Evita que el texto dentro del botón se parta */
+    gap: 6px;
 }
 
 .year-btn span {
