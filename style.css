@@ -499,11 +499,7 @@ body {
 .icon-gradient-area {
     flex: 0 0 60% !important;
     /* Degradado de Amarillo a un Dorado/Naranja suave para dar volumen */
-    background: linear-gradient(to bottom, 
-        var(--accent) 0%, 
-        rgba(239, 195, 108, 0.8) 80%, /* Un tono intermedio */
-        var(--bg-card) 100%           /* Fundido total al color de la tarjeta */
-    ) !important;
+    background: var(--accent) !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
