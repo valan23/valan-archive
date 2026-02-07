@@ -190,8 +190,7 @@ body {
 .nav-row-brands, .nav-row-consoles {
     display: flex;
     align-items: center;
-    justify-content: flex-start !important;
-    
+    justify-content: center !important; /* CAMBIADO de flex-start a center */
 }
 
 /* FILA INFERIOR: Marcas (Sub-Nav) */
