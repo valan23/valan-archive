@@ -1,25 +1,73 @@
 /**
- * played.js - Diario de Juegos Finalizados (Versión con Edición e Iconos)
+ * played.js - Diario de Juegos Finalizados
  */
+
+// --- FUNCIONES AUXILIARES (Definirlas primero para evitar el ReferenceError) ---
+
+function updateYearButtons(filteredGames) {
+    const container = document.getElementById('nav-year-filter'); 
+    if (!container) return;
+
+    const counts = { all: filteredGames.length };
+    filteredGames.forEach(j => {
+        const fecha = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || j["Año"] || "";
+        const match = String(fecha).match(/\d{4}/);
+        if (match) {
+            const y = match[0];
+            counts[y] = (counts[y] || 0) + 1;
+        }
+    });
+
+    const years = Object.keys(counts).filter(y => y !== 'all').sort((a, b) => b - a);
+
+    container.innerHTML = `
+        <button class="year-btn ${currentPlayedYear === 'all' ? 'active' : ''}" onclick="filterByYear('all', this)">
+            TODOS <span>${counts.all}</span>
+        </button>
+        ${years.map(y => `
+            <button class="year-btn ${currentPlayedYear === y ? 'active' : ''}" onclick="filterByYear('${y}', this)">
+                ${y} <span>${counts[y]}</span>
+            </button>
+        `).join('')}
+    `;
+}
+
+function filterByYear(year, element) {
+    currentPlayedYear = year; 
+    const container = document.getElementById('nav-year-filter');
+    if (container) {
+        container.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
+    }
+    if (element) element.classList.add('active');
+    
+    // Llamamos a applyFilters de main.js para refrescar la vista
+    if (typeof applyFilters === 'function') {
+        applyFilters(); 
+    }
+}
+
+// --- FUNCIÓN PRINCIPAL ---
 
 function renderPlayed(games) {
     const container = document.getElementById('played-grid');
     if (!container) return;
 
-    // 1. Filtros y navegación
+    // 1. Filtros de formato (si existen en main.js)
     if (typeof renderFormatFilters === 'function') {
         renderFormatFilters(games, 'format-buttons-container-played', 'played');
     }
+
+    // 2. ACTUALIZAR BOTONES DE AÑO
     updateYearButtons(games);
 
-    // 2. Filtro de año
+    // 3. Filtrar por el año seleccionado
     const filteredByYear = games.filter(j => {
         if (currentPlayedYear === 'all') return true;
         const fechaVal = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || j["Año"] || "";
         return String(fechaVal).includes(currentPlayedYear);
     });
 
-    // 3. Renderizado
+    // 4. Renderizar tarjetas
     container.innerHTML = filteredByYear.map(j => {
         try {
             if (typeof AppUtils === 'undefined') return "";
@@ -37,26 +85,23 @@ function renderPlayed(games) {
             const portada = (j["Portada"] || "").trim();
             const fotoUrl = AppUtils.isValid(portada) ? `images/covers/${carpeta}/${portada}` : `images/covers/default.webp`;
             
-            // --- LÓGICA DE EDICIÓN INTELIGENTE ---
+            // Edición e Iconos
             let edicionHTML = "";
             const edicionTexto = j["Edición"] || "";
             if (AppUtils.isValid(edicionTexto) && edicionTexto.toUpperCase() !== "ESTÁNDAR") {
-                let icono = '<i class="fa-solid fa-star"></i>'; // Icono por defecto
+                let icono = '<i class="fa-solid fa-star"></i>';
                 const upperEd = edicionTexto.toUpperCase();
-                
                 if (upperEd.includes("STEAM")) icono = '<i class="fa-brands fa-steam"></i>';
                 else if (upperEd.includes("GAME PASS")) icono = '<i class="fa-brands fa-xbox"></i>';
                 else if (upperEd.includes("PS PLUS")) icono = '<i class="fa-brands fa-playstation"></i>';
                 else if (upperEd.includes("RETROARCH") || upperEd.includes("NSO")) icono = '<i class="fa-solid fa-gamepad"></i>';
-                else if (upperEd.includes("BATTLE.NET")) icono = '<i class="fa-solid fa-bolt"></i>';
-                else if (upperEd.includes("EPIC")) icono = '<i class="fa-solid fa-e"></i>';
-
+                
                 edicionHTML = `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">${icono} ${edicionTexto}</div>`;
             } else {
                 edicionHTML = `<div style="height: 12px;"></div>`;
             }
 
-            // --- LÓGICA DE LOGROS ---
+            // Logros Manuales
             const ganados = parseInt(j["RA_Ganados"] || 0);
             const totales = parseInt(j["RA_Totales"] || 0);
             const tieneLogros = totales > 0;
@@ -66,11 +111,11 @@ function renderPlayed(games) {
 
             const nota = parseFloat(String(j["Nota"]).replace(',', '.')) || 0;
             const hue = Math.min(Math.max(nota * 12, 0), 120);
-            const proceso = (j["Proceso Juego"] || j["Estado"] || "Terminado").toUpperCase();
+            const proceso = (j["Proceso Juego"] || "Terminado").toUpperCase();
             let colorProceso = "#2E9E7F"; 
             if (proceso.includes("COMPLETADO") || proceso.includes("100%")) colorProceso = "#9825DA";
 
-            const horas = (j["Tiempo Juego"] || j["Tiempo"] || "0").toString().replace("h", "").trim();
+            const horas = (j["Tiempo Juego"] || "0").toString().replace("h", "").trim();
             const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
 
             return `
@@ -79,7 +124,7 @@ function renderPlayed(games) {
                     <div class="icon-gradient-area">
                         <div class="card-platform-box">${AppUtils.getPlatformIcon(plat)}</div>
                     </div>
-                    <div style="flex: 0 0 40%; display: flex; flex-direction: column; align-items: stretch; overflow: hidden;">
+                    <div style="flex: 0 0 40%; display: flex; flex-direction: column; align-items: stretch;">
                         <div style="flex: 1; background: ${toRgba(colorProceso, 0.2)}; color: ${colorProceso}; font-size: 0.55em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase;">
                             ${proceso}
                         </div>
@@ -93,12 +138,6 @@ function renderPlayed(games) {
                     ${edicionHTML}
                     <div class="game-title" style="font-size: 1.1em; color: var(--accent); font-weight: 700; line-height: 1.2;">${j["Nombre Juego"]}</div>
                     <div style="font-size: 0.7em; color: #888; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">${j["Nombre Japones"] || ""}</div>
-                    <div style="margin-top: 8px; line-height: 1.2; display: flex; align-items: center; gap: 8px;">
-                        <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${AppUtils.getRegionStyle(j["Región"]).bg}; color: ${AppUtils.getRegionStyle(j["Región"]).text}; font-weight: bold;">
-                            ${AppUtils.getFlag(j["Región"])} ${j["Región"] || "N/A"}
-                        </div>
-                        <span style="font-size: 0.7em; color: #888; font-weight: bold;">${j["Año"] || "????"}</span>
-                    </div>
                 </div>
 
                 <div style="height: 145px; margin: 15px 12px 5px; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
@@ -121,7 +160,7 @@ function renderPlayed(games) {
                     ` : ''}
                 </div>
 
-                <div style="margin: 5px 12px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent); border-radius: 4px; padding: 10px; flex-grow: 1; font-size: 0.75em; color: #bbb; font-style: italic; line-height: 1.4; display: flex; align-items: center;">
+                <div style="margin: 5px 12px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent); border-radius: 4px; padding: 10px; flex-grow: 1; font-size: 0.75em; color: #bbb; font-style: italic; display: flex; align-items: center;">
                     "${j["Comentarios"] || "Sin comentarios."}"
                 </div>
 
@@ -131,12 +170,7 @@ function renderPlayed(games) {
                         <span style="font-size: 0.55em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                     </div>
                     <div style="flex: 1.4; display: flex; gap: 8px; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05);">
-                        <div style="text-align: center;">
-                            <div style="font-size: 0.45em; color: #555; font-weight: 800;">INICIO</div>
-                            <div style="font-size: 0.6em; color: #888;">${j["Primera fecha"] || "--/--"}</div>
-                        </div>
-                        <div style="color: #333; font-size: 0.7em;">➔</div>
-                        <div style="text-align: center;">
+                         <div style="text-align: center;">
                             <div style="font-size: 0.45em; color: #555; font-weight: 800;">FIN</div>
                             <div style="font-size: 0.6em; color: var(--accent); font-weight: 700;">${j["Ultima fecha"] || "--/--"}</div>
                         </div>
@@ -147,6 +181,9 @@ function renderPlayed(games) {
                     </div>
                 </div>
             </div>`;
-        } catch (e) { return ""; }
+        } catch (e) { 
+            console.error("Error en card:", e);
+            return ""; 
+        }
     }).join('');
 }
