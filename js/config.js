@@ -142,8 +142,8 @@ const RAREZA_COLORS = {
     "DEFAULT": "#888888"
 };
 
-const MOD_COLORS = {
-    "HACK MOD": "#00bcd4", // Cyan para resaltar que tiene algo especial
-    "ADAPTACIÓN": "#6827F5", // Gris para consolas originales
-    "NO": "#888888"
+const HARDWARE_MODS = {
+    "NO": { color: "#888888", icon: "" },                // Gris (Original)
+    "ADAPTACIÓN": { color: "#33b5e5", icon: "fa-gear" }, // Azul (Mejoras funcionales como RGB, Recap, etc.)
+    "HACK MOD": { color: "#ffbb33", icon: "fa-microchip" } // Naranja (Chips, Flash, Mods de región)
 };
