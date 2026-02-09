@@ -89,8 +89,9 @@ const BRANDS_CONFIG = {
         logo: "images/icons/OTROS_logo.png", 
         class: "otros", 
         folder: "otros",
-        platforms: ["PC Engine", "3DO", "WonderSwan Color"],
+        platforms: ["Arcade", "PC Engine", "3DO", "WonderSwan Color"],
         icons: {
+            "Arcade": "images/icons/arcade.png",
             "PC Engine": "images/icons/pce.png",
             "3DO": "images/icons/3do.png",
             "WonderSwan Color": "images/icons/wsc.png"
