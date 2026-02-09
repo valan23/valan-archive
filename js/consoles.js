@@ -29,12 +29,16 @@ function createConsoleCardHTML(c) {
         const plat = c["Plataforma"] || "";
         const carpeta = AppUtils.getPlatformFolder(plat);
         const portada = c["Portada"] ? c["Portada"].trim() : "";
-        // Nota: Asumo que las fotos de consolas van en una carpeta 'consoles' dentro de covers o similar
         const fotoUrl = AppUtils.isValid(portada) ? `images/covers/${carpeta}/${portada}` : `images/covers/default.webp`;
         
         const styleRegion = AppUtils.getRegionStyle(c["Región"]);
         const modelo = c["Modelo"] || "";
         const esModeloEspecial = AppUtils.isValid(modelo) && modelo.toUpperCase() !== "ESTÁNDAR";
+        
+        // Datos para el Header Doble
+        const completitud = (c["Completitud"] || "SUELTA").toUpperCase();
+        const colorCompBase = AppUtils.getCompletitudStyle(c["Completitud"]);
+        const estadoNum = parseFloat(c["Estado General"]) || 0;
 
         // Helpers de estilo
         const toRgba = (hex, alpha = 0.15) => {
@@ -44,32 +48,32 @@ function createConsoleCardHTML(c) {
         };
 
         const getScoreColor = (val) => {
-            const n = parseFloat(val);
-            if (isNaN(n)) return "#555";
-            if (n < 5) return "#ff4444"; // Rojo
-            if (n < 8) return "#ffbb33"; // Amarillo/Naranja
-            return "#00c851"; // Verde
+            if (val < 5) return "#ff4444"; 
+            if (val < 8) return "#ffbb33"; 
+            return "#00c851"; 
         };
-
-        const scoreColor = getScoreColor(c["Estado General"]);
+        const colorEstado = getScoreColor(estadoNum);
 
         // --- CONSTRUCCIÓN DEL HTML ---
         return `
-        <div class="card ${AppUtils.getBrandClass(plat)}" style="display: flex; flex-direction: column; overflow: hidden; min-height: 520px;">
+        <div class="card ${AppUtils.getBrandClass(plat)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px; overflow: hidden; border-radius: 12px;">
             
-            <div style="display: flex; height: 45px; align-items: stretch; position: relative; z-index: 10;">
-                <div style="flex: 0 0 60%;" class="icon-gradient-area">
-                    <div class="card-platform-box">
-                        ${AppUtils.getPlatformIcon(plat)}
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
+                <div class="icon-gradient-area">
+                    <div class="card-platform-box">${AppUtils.getPlatformIcon(plat)}</div>
+                </div>
+                
+                <div style="flex: 0 0 40%; display: flex; flex-direction: column; align-items: stretch; border-left: 1px solid rgba(255,255,255,0.05);">
+                    <div style="flex: 1; background: ${toRgba(colorCompBase, 0.25)}; color: ${colorCompBase}; font-size: 0.55em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase; letter-spacing: 0.5px;">
+                        ${completitud}
+                    </div>
+                    <div style="flex: 1.5; background: ${toRgba(colorEstado, 0.15)}; color: ${colorEstado}; font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 1.2em;">
+                        ${estadoNum.toFixed(1)}
                     </div>
                 </div>
-                <div style="flex: 0 0 40%; background: ${toRgba(scoreColor, 0.2)}; color: ${scoreColor}; font-weight: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px solid rgba(255,255,255,0.05);">
-                    <span style="font-size: 0.5rem; text-transform: uppercase; opacity: 0.8; line-height: 1;">Estado</span>
-                    <span style="font-size: 1.1rem;">${c["Estado General"] || "?"}</span>
-                </div>
             </div>
-            
-            <div style="padding: 15px 15px 0 15px;">
+
+            <div style="margin-top: 45px; padding: 15px 15px 0 15px;">
                 ${esModeloEspecial ? 
                     `<div style="color: var(--cyan); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px;">
                         <i class="fa-solid fa-microchip"></i> ${modelo}
@@ -108,9 +112,9 @@ function createConsoleCardHTML(c) {
             </div>
 
             <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; background: rgba(0,0,0,0.1);">
-                <div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 2px;">
-                    <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase;">Estado</span>
-                    <span style="font-size: 0.6rem; color: var(--accent); font-weight: 900; line-height: 1;">${(c["Completitud"] || "SUELTA").toUpperCase()}</span>
+                <div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase;">Ubicación</span>
+                    <span style="font-size: 0.6rem; color: #ccc; font-weight: 900; line-height: 1;">COLECCIÓN</span>
                 </div>
                 <div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase;">Nº Serie</span>
