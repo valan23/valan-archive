@@ -37,7 +37,7 @@ function createConsoleCardHTML(c) {
         
         // Datos para el Header Doble
         const completitud = (c["Completitud"] || "SUELTA").toUpperCase();
-        const colorCompBase = AppUtils.getCompletitudStyle(c["Completitud"]);
+        const colorCompBase = AppUtils.getHardwareCompletitudStyle(completitud);
         const estadoNum = parseFloat(c["Estado General"]) || 0;
 
         // Helpers de estilo
