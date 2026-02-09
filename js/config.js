@@ -124,6 +124,13 @@ const COMPLETITUD_COLORS = {
     "DEFAULT": { color: "#666666", label: "???" }
 };
 
+const HARDWARE_COMPLETITUD = {
+    "COMPLETO": { color: "#00c851" },     // Verde
+    "CON ACCESORIOS": { color: "#44CE1B" }, // Amarillo
+    "CON MANDOS": { color: "#ffbb33" },     // Naranja
+    "SUELTA": { color: "#ff4444" }          // Rojo
+};
+
 /* --- ESTILOS DE RAREZA (Añadido) --- */
 const RAREZA_COLORS = {
     "MINT": "#FFD700",
