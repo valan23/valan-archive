@@ -1,46 +1,25 @@
 /**
- * played.js - Diario de Juegos Finalizados
+ * played.js - Diario de Juegos Finalizados (Versión con Edición e Iconos)
  */
-
-const RA_USER = "valan87";
-const RA_API_KEY = "BvASVYlfne3kx6UbL2DZuJVgtmI7JkKn";
-
-async function fetchRAProgress(gameID) {
-    if (!gameID || gameID === "---") return null;
-    
-    const cacheKey = `ra_game_${gameID}`;
-    if (sessionStorage.getItem(cacheKey)) return JSON.parse(sessionStorage.getItem(cacheKey));
-
-    const PROXY = "https://api.allorigins.win/get?url=";
-    const URL = `https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?z=${RA_USER}&y=${RA_API_KEY}&g=${gameID}`;
-
-    try {
-        const resp = await fetch(PROXY + encodeURIComponent(URL));
-        const json = await resp.json();
-        const data = JSON.parse(json.contents);
-        sessionStorage.setItem(cacheKey, JSON.stringify(data));
-        return data;
-    } catch (e) {
-        return null;
-    }
-}
 
 function renderPlayed(games) {
     const container = document.getElementById('played-grid');
     if (!container) return;
 
+    // 1. Filtros y navegación
     if (typeof renderFormatFilters === 'function') {
         renderFormatFilters(games, 'format-buttons-container-played', 'played');
     }
-
     updateYearButtons(games);
 
+    // 2. Filtro de año
     const filteredByYear = games.filter(j => {
         if (currentPlayedYear === 'all') return true;
         const fechaVal = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || j["Año"] || "";
         return String(fechaVal).includes(currentPlayedYear);
     });
 
+    // 3. Renderizado
     container.innerHTML = filteredByYear.map(j => {
         try {
             if (typeof AppUtils === 'undefined') return "";
@@ -58,35 +37,50 @@ function renderPlayed(games) {
             const portada = (j["Portada"] || "").trim();
             const fotoUrl = AppUtils.isValid(portada) ? `images/covers/${carpeta}/${portada}` : `images/covers/default.webp`;
             
+            // --- LÓGICA DE EDICIÓN INTELIGENTE ---
+            let edicionHTML = "";
+            const edicionTexto = j["Edición"] || "";
+            if (AppUtils.isValid(edicionTexto) && edicionTexto.toUpperCase() !== "ESTÁNDAR") {
+                let icono = '<i class="fa-solid fa-star"></i>'; // Icono por defecto
+                const upperEd = edicionTexto.toUpperCase();
+                
+                if (upperEd.includes("STEAM")) icono = '<i class="fa-brands fa-steam"></i>';
+                else if (upperEd.includes("GAME PASS")) icono = '<i class="fa-brands fa-xbox"></i>';
+                else if (upperEd.includes("PS PLUS")) icono = '<i class="fa-brands fa-playstation"></i>';
+                else if (upperEd.includes("RETROARCH") || upperEd.includes("NSO")) icono = '<i class="fa-solid fa-gamepad"></i>';
+                else if (upperEd.includes("BATTLE.NET")) icono = '<i class="fa-solid fa-bolt"></i>';
+                else if (upperEd.includes("EPIC")) icono = '<i class="fa-solid fa-e"></i>';
+
+                edicionHTML = `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">${icono} ${edicionTexto}</div>`;
+            } else {
+                edicionHTML = `<div style="height: 12px;"></div>`;
+            }
+
+            // --- LÓGICA DE LOGROS ---
+            const ganados = parseInt(j["RA_Ganados"] || 0);
+            const totales = parseInt(j["RA_Totales"] || 0);
+            const tieneLogros = totales > 0;
+            const pct = tieneLogros ? Math.round((ganados / totales) * 100) : 0;
+            const master = (ganados === totales && totales > 0);
             const raID = j["RA_ID"];
-            const styleRegion = AppUtils.getRegionStyle(j["Región"]);
+
             const nota = parseFloat(String(j["Nota"]).replace(',', '.')) || 0;
             const hue = Math.min(Math.max(nota * 12, 0), 120);
-
-            const tiempoJuego = j["Tiempo Juego"] || j["Tiempo"] || "0";
-            const horas = tiempoJuego.toString().replace("h", "").trim();
-            const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
-            const esEspecial = AppUtils.isValid(j["Edición"]) && j["Edición"].toUpperCase() !== "ESTÁNDAR";
-
             const proceso = (j["Proceso Juego"] || j["Estado"] || "Terminado").toUpperCase();
             let colorProceso = "#2E9E7F"; 
             if (proceso.includes("COMPLETADO") || proceso.includes("100%")) colorProceso = "#9825DA";
-            if (proceso.includes("PROCESO") || proceso.includes("JUGANDO")) colorProceso = "#4242C9";
-            if (proceso.includes("ABANDONADO")) colorProceso = "#FF4D4D";
 
-            const fInicio = j["Primera fecha"] || j["Primera Fecha"] || "--/--";
-            const fFin = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || "--/--";
+            const horas = (j["Tiempo Juego"] || j["Tiempo"] || "0").toString().replace("h", "").trim();
+            const esDigital = (j["Formato"] || "").toString().toUpperCase().includes("DIGITAL");
 
             return `
-            <div class="card ${AppUtils.getBrandClass(plat)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px; overflow: hidden; border-radius: 12px;">
+            <div class="card ${AppUtils.getBrandClass(plat)}" style="display: flex; flex-direction: column; position: relative; min-height: 520px; overflow: hidden; border-radius: 12px; ${master ? 'box-shadow: 0 0 15px rgba(212, 189, 102, 0.25); border: 1px solid rgba(212, 189, 102, 0.3);' : ''}">
                 <div style="position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; display: flex; align-items: stretch;">
                     <div class="icon-gradient-area">
-                        <div class="card-platform-box">
-                            ${AppUtils.getPlatformIcon(plat)}
-                        </div>
+                        <div class="card-platform-box">${AppUtils.getPlatformIcon(plat)}</div>
                     </div>
                     <div style="flex: 0 0 40%; display: flex; flex-direction: column; align-items: stretch; overflow: hidden;">
-                        <div style="flex: 1; background: ${toRgba(colorProceso, 0.2)}; color: ${colorProceso}; font-size: 0.55em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div style="flex: 1; background: ${toRgba(colorProceso, 0.2)}; color: ${colorProceso}; font-size: 0.55em; font-weight: 900; display: flex; align-items: center; justify-content: center; text-transform: uppercase;">
                             ${proceso}
                         </div>
                         <div style="flex: 1.5; background: hsla(${hue}, 80%, 45%, 0.15); color: hsl(${hue}, 80%, 60%); font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 1.2em;">
@@ -96,20 +90,14 @@ function renderPlayed(games) {
                 </div>
 
                 <div style="margin-top: 55px; padding: 0 12px;">
-                    ${esEspecial ? `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;"><i class="fa-solid fa-star"></i> ${j["Edición"]}</div>` : `<div style="height: 12px;"></div>`}
-                    <div class="game-title" style="font-size: 1.1em; color: var(--accent); font-weight: 700; line-height: 1.2; padding: 0;">
-                        ${j["Nombre Juego"]}
-                    </div>
-                    <div style="font-size: 0.7em; color: #888; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">
-                        ${j["Nombre Japones"] || ""}
-                    </div>
-                    
-                    <div style="margin-top: 8px; line-height: 1.2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${styleRegion.bg}; border: 1px solid ${styleRegion.border}; color: ${styleRegion.text}; font-weight: bold;">
+                    ${edicionHTML}
+                    <div class="game-title" style="font-size: 1.1em; color: var(--accent); font-weight: 700; line-height: 1.2;">${j["Nombre Juego"]}</div>
+                    <div style="font-size: 0.7em; color: #888; font-family: 'Noto Sans JP', sans-serif; min-height: 1.2em; margin-top: 2px;">${j["Nombre Japones"] || ""}</div>
+                    <div style="margin-top: 8px; line-height: 1.2; display: flex; align-items: center; gap: 8px;">
+                        <div style="font-size: 0.6em; padding: 2px 6px; border-radius: 4px; background: ${AppUtils.getRegionStyle(j["Región"]).bg}; color: ${AppUtils.getRegionStyle(j["Región"]).text}; font-weight: bold;">
                             ${AppUtils.getFlag(j["Región"])} ${j["Región"] || "N/A"}
                         </div>
                         <span style="font-size: 0.7em; color: #888; font-weight: bold;">${j["Año"] || "????"}</span>
-                        <span style="font-size: 0.7em; color: #555;">| <i>${j["Desarrolladora"] || "---"}</i></span>
                     </div>
                 </div>
 
@@ -117,117 +105,48 @@ function renderPlayed(games) {
                     <img src="${fotoUrl}" loading="lazy" style="max-width: 90%; max-height: 90%; object-fit: contain;" onerror="this.src='images/covers/default.webp'">
                 </div>
 
-                <div id="ra-container-${raID}" style="margin: 0 12px; display: flex; justify-content: flex-end; min-height: 18px;">
-                    ${raID ? `<span style="font-size: 0.5rem; color: #333;"><i class="fa-solid fa-circle-notch fa-spin"></i> RA</span>` : ''}
+                <div style="margin: 0 12px; display: flex; justify-content: flex-end; min-height: ${tieneLogros ? '22px' : '0px'};">
+                    ${tieneLogros ? `
+                        <a href="${raID ? `https://retroachievements.org/game/${raID}` : '#'}" target="_blank" style="text-decoration: none;">
+                            <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.3); padding: 2px 10px; border-radius: 20px; border: 1px solid ${master ? '#D4BD66' : 'rgba(255,255,255,0.1)'}">
+                                <span style="font-size: 0.6em; font-weight: 900; color: ${master ? '#D4BD66' : '#aaa'};">
+                                    ${master ? '<i class="fa-solid fa-trophy"></i> MASTERED' : `<i class="fa-solid fa-medal"></i> ${ganados}/${totales}`}
+                                </span>
+                                <div style="width: 30px; background: rgba(255,255,255,0.1); height: 3px; border-radius: 2px; overflow: hidden;">
+                                    <div style="width: ${pct}%; background: ${master ? '#D4BD66' : '#2e9e7f'}; height: 100%;"></div>
+                                </div>
+                                <span style="font-size: 0.55em; font-weight: bold; color: #777;">${pct}%</span>
+                            </div>
+                        </a>
+                    ` : ''}
                 </div>
 
                 <div style="margin: 5px 12px 15px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent); border-radius: 4px; padding: 10px; flex-grow: 1; font-size: 0.75em; color: #bbb; font-style: italic; line-height: 1.4; display: flex; align-items: center;">
-                    "${j["Comentarios"] || j["Comentario"] || "Sin comentarios."}"
+                    "${j["Comentarios"] || "Sin comentarios."}"
                 </div>
 
                 <div style="height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; background: rgba(0,0,0,0.1);">
                     <div style="flex: 0.8; background: ${esDigital ? 'rgba(0, 242, 255, 0.1)' : 'rgba(239, 195, 108, 0.1)'}; color: ${esDigital ? 'var(--cyan)' : 'var(--accent)'}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}" style="font-size: 0.9em;"></i>
+                        <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}"></i>
                         <span style="font-size: 0.55em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
                     </div>
-
-                    <div style="flex: 1.4; display: flex; gap: 8px; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05); padding: 0 5px;">
+                    <div style="flex: 1.4; display: flex; gap: 8px; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05);">
                         <div style="text-align: center;">
                             <div style="font-size: 0.45em; color: #555; font-weight: 800;">INICIO</div>
-                            <div style="font-size: 0.6em; color: #888;">${fInicio}</div>
+                            <div style="font-size: 0.6em; color: #888;">${j["Primera fecha"] || "--/--"}</div>
                         </div>
                         <div style="color: #333; font-size: 0.7em;">➔</div>
                         <div style="text-align: center;">
                             <div style="font-size: 0.45em; color: #555; font-weight: 800;">FIN</div>
-                            <div style="font-size: 0.6em; color: var(--accent); font-weight: 700;">${fFin}</div>
+                            <div style="font-size: 0.6em; color: var(--accent); font-weight: 700;">${j["Ultima fecha"] || "--/--"}</div>
                         </div>
                     </div>
-
                     <div style="flex: 0.8; background: rgba(46, 158, 127, 0.1); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <span style="font-size: 0.5em; color: #2e9e7f; font-weight: 900;">TIEMPO</span>
-                        <span style="font-size: 0.9em; color: #fff; font-weight: 900; line-height: 1;">${horas}<small style="font-size: 0.6em;">h</small></span>
+                        <span style="font-size: 0.9em; color: #fff; font-weight: 900;">${horas}<small style="font-size: 0.6em;">h</small></span>
                     </div>
                 </div>
             </div>`;
-        } catch (e) { 
-            console.error("Error en card played:", e);
-            return ""; 
-        }
+        } catch (e) { return ""; }
     }).join('');
-
-    // --- DISPARAR ACTUALIZACIÓN RA ---
-    setTimeout(() => {
-        filteredByYear.forEach(async (j) => {
-            const raID = j["RA_ID"];
-            if (!raID) return;
-
-            const data = await fetchRAProgress(raID);
-            const raContainer = document.getElementById(`ra-container-${raID}`);
-            
-            if (raContainer && data && data.NumAwarded !== undefined) {
-                const total = data.NumAchievements;
-                const earned = data.NumAwarded;
-                const pct = total > 0 ? Math.round((earned / total) * 100) : 0;
-                const master = (earned === total && total > 0);
-                
-                raContainer.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 10px; border: 1px solid ${master ? '#D4BD66' : 'rgba(255,255,255,0.05)'}">
-                        <span style="font-size: 0.6em; font-weight: 900; color: ${master ? '#D4BD66' : '#999'};">
-                            ${master ? '<i class="fa-solid fa-trophy"></i> MASTERED' : `<i class="fa-solid fa-medal"></i> ${earned}/${total}`}
-                        </span>
-                        <div style="width: 35px; background: rgba(255,255,255,0.05); height: 3px; border-radius: 2px; overflow: hidden;">
-                            <div style="width: ${pct}%; background: ${master ? '#D4BD66' : '#2e9e7f'}; height: 100%;"></div>
-                        </div>
-                        <span style="font-size: 0.55em; font-weight: bold; color: #666;">${pct}%</span>
-                    </div>
-                `;
-            } else if (raContainer) {
-                raContainer.innerHTML = ""; 
-            }
-        });
-    }, 200);
-}
-
-function updateYearButtons(filteredGames) {
-    const container = document.getElementById('nav-year-filter'); 
-    if (!container) return;
-
-    const counts = { all: filteredGames.length };
-    filteredGames.forEach(j => {
-        const fecha = j["Ultima fecha"] || j["Ultima Fecha"] || j["Última Fecha"] || j["Año"] || "";
-        const match = String(fecha).match(/\d{4}/);
-        if (match) {
-            const y = match[0];
-            counts[y] = (counts[y] || 0) + 1;
-        }
-    });
-
-    const years = Object.keys(counts).filter(y => y !== 'all').sort((a, b) => b - a);
-
-    container.innerHTML = `
-        <button class="year-btn ${currentPlayedYear === 'all' ? 'active' : ''}" 
-                onclick="filterByYear('all', this)">
-            TODOS <span>${counts.all}</span>
-        </button>
-        ${years.map(y => `
-            <button class="year-btn ${currentPlayedYear === y ? 'active' : ''}" 
-                    onclick="filterByYear('${y}', this)">
-                ${y} <span>${counts[y]}</span>
-            </button>
-        `).join('')}
-    `;
-}
-
-function filterByYear(year, element) {
-    currentPlayedYear = year; 
-    const container = document.getElementById('nav-year-filter');
-    if (container) {
-        container.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
-    }
-    if (element) {
-        element.classList.add('active');
-    }
-    if (typeof applyFilters === 'function') {
-        applyFilters(); 
-    }
 }
