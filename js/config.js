@@ -141,3 +141,9 @@ const RAREZA_COLORS = {
     "COMÚN": "#2E9E7F",
     "DEFAULT": "#888888"
 };
+
+const MOD_COLORS = {
+    "HACK MOD": "#00bcd4", // Cyan para resaltar que tiene algo especial
+    "ADAPTACIÓN": "#6827F5", // Gris para consolas originales
+    "NO": "#888888"
+};
