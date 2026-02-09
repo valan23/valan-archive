@@ -7,7 +7,7 @@ let currentFormat = "all";
 let currentSearch = '';
 let currentPlayedYear = 'all'; 
 let currentComplete = 'all'; 
-let currentPriority = 'all'; // Nueva variable para la Wishlist
+let currentPriority = 'all';
 
 // 1. Carga de datos optimizada
 async function loadTabData(sectionId) {
@@ -29,7 +29,11 @@ async function loadTabData(sectionId) {
                     const newRow = {};
                     for (let key in row) { newRow[key.trim()] = row[key]; }
                     return newRow;
-                }).filter(j => j["Nombre Juego"] && j["Nombre Juego"].trim() !== "");
+                }).filter(item => {
+                    // CORRECCIÓN: Filtro genérico para validar que la fila tenga nombre
+                    const nombre = item["Nombre Juego"] || item["Nombre Consola"];
+                    return nombre && nombre.trim() !== "";
+                });
                 dataStore[sectionId] = cleanData;
                 resolve(cleanData);
             },
@@ -58,7 +62,7 @@ async function switchSection(sectionId, btn) {
     currentPlayedYear = "all";
     currentSearch = "";
     currentComplete = "all";
-    currentPriority = "all"; // Reset de prioridad al cambiar de pestaña
+    currentPriority = "all";
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.value = "";
@@ -83,9 +87,9 @@ async function switchSection(sectionId, btn) {
 }
 
 // 4. Generación de Filtros de Marcas
-function createFilters(games, containerId) {
-    const counts = games.reduce((acc, game) => {
-        const p = game["Plataforma"];
+function createFilters(data, containerId) {
+    const counts = data.reduce((acc, item) => {
+        const p = item["Plataforma"];
         if (p) acc[p] = (acc[p] || 0) + 1;
         return acc;
     }, {});
@@ -99,13 +103,13 @@ function createFilters(games, containerId) {
         <span>TODAS</span>
     </div>`;
 
-    for (const [brandName, data] of Object.entries(BRANDS_CONFIG)) {
-        const hasGames = data.platforms.some(p => counts[p] > 0);
-        if (hasGames) {
-            const isActive = Array.isArray(currentPlatform) && currentPlatform.join() === data.platforms.join();
+    for (const [brandName, brandConfig] of Object.entries(BRANDS_CONFIG)) {
+        const hasItems = brandConfig.platforms.some(p => counts[p] > 0);
+        if (hasItems) {
+            const isActive = Array.isArray(currentPlatform) && currentPlatform.join() === brandConfig.platforms.join();
             html += `
                 <div class="brand-icon ${isActive ? 'active' : ''}" onclick="showBrand('${brandName}', this)">
-                    <img src="${data.logo}" class="brand-logo-img">
+                    <img src="${brandConfig.logo}" class="brand-logo-img">
                     <span>${brandName}</span>
                 </div>`;
         }
@@ -133,9 +137,9 @@ function createConsoleFilters(brandName) {
     const container = document.getElementById('consoleSelector');
     if (!container) return;
     const brandData = BRANDS_CONFIG[brandName];
-    const currentGames = dataStore[currentSection] || [];
-    const counts = currentGames.reduce((acc, game) => {
-        const p = game["Plataforma"];
+    const currentData = dataStore[currentSection] || [];
+    const counts = currentData.reduce((acc, item) => {
+        const p = item["Plataforma"];
         acc[p] = (acc[p] || 0) + 1;
         return acc;
     }, {});
@@ -170,15 +174,17 @@ function applyFilters() {
     if (!dataToFilter) return;
 
     // 1. Filtro base (Plataforma, búsqueda y año)
-    const baseFiltered = dataToFilter.filter(game => {
-        const matchesSearch = game["Nombre Juego"].toLowerCase().includes(currentSearch.toLowerCase());
+    const baseFiltered = dataToFilter.filter(item => {
+        // CORRECCIÓN: Buscador dinámico según columna
+        const colNombre = (currentSection === 'consolas') ? "Nombre Consola" : "Nombre Juego";
+        const matchesSearch = (item[colNombre] || "").toLowerCase().includes(currentSearch.toLowerCase());
         
         let matchesPlatform = (currentPlatform === "TODAS") || 
-            (Array.isArray(currentPlatform) ? currentPlatform.includes(game["Plataforma"]) : game["Plataforma"] === currentPlatform);
+            (Array.isArray(currentPlatform) ? currentPlatform.includes(item["Plataforma"]) : item["Plataforma"] === currentPlatform);
         
         let matchesYear = true;
         if (currentSection === 'jugados' && currentPlayedYear !== 'all') {
-            const fecha = game["Ultima fecha"] || game["Ultima Fecha"] || game["Última Fecha"] || game["Año"] || "";
+            const fecha = item["Ultima fecha"] || item["Ultima Fecha"] || item["Última Fecha"] || item["Año"] || "";
             matchesYear = String(fecha).includes(currentPlayedYear);
         }
         return matchesSearch && matchesPlatform && matchesYear;
@@ -187,28 +193,28 @@ function applyFilters() {
     // 2. Actualizar botones de la interfaz
     renderUniversalFormatFilters(baseFiltered);
     renderUniversalCompleteFilters(baseFiltered);
-    renderWishlistPriorityFilters(baseFiltered); // Nueva llamada
+    renderWishlistPriorityFilters(baseFiltered); 
 
     // 3. Aplicar filtros secundarios (Formato, Completitud y Prioridad)
-    const finalFiltered = baseFiltered.filter(game => {
-        // Filtro Formato
+    const finalFiltered = baseFiltered.filter(item => {
+        // Filtro Formato (No aplica a consolas)
         let matchesFormat = true;
-        if (currentFormat !== "all") {
-            const esDigital = String(game["Formato"] || "").toUpperCase().includes("DIGITAL");
+        if (currentSection !== 'consolas' && currentFormat !== "all") {
+            const esDigital = String(item["Formato"] || "").toUpperCase().includes("DIGITAL");
             matchesFormat = (currentFormat === "digital") ? esDigital : !esDigital;
         }
 
         // Filtro Completitud
         let matchesComplete = true;
         if (currentComplete !== "all") {
-            const valorCSV = String(game["Completitud"] || "").trim().toUpperCase();
+            const valorCSV = String(item["Completitud"] || "").trim().toUpperCase();
             matchesComplete = (valorCSV === currentComplete.toUpperCase());
         }
 
         // Filtro Prioridad (Solo Wishlist)
         let matchesPriority = true;
         if (currentSection === 'deseados' && currentPriority !== 'all') {
-            const priorRaw = String(game["Prioridad"] || "NORMAL").toUpperCase();
+            const priorRaw = String(item["Prioridad"] || "NORMAL").toUpperCase();
             matchesPriority = priorRaw.includes(currentPriority.toUpperCase());
         }
 
@@ -224,7 +230,16 @@ function applyFilters() {
 
 function renderUniversalFormatFilters(dataForCounters) {
     const container = document.getElementById('nav-format-filter');
+    const groupFormat = document.getElementById('group-formato'); // Asumiendo que existe este ID de contenedor
     if (!container) return;
+
+    // Ocultar si estamos en consolas
+    if (currentSection === 'consolas') {
+        if (groupFormat) groupFormat.style.display = 'none';
+        container.innerHTML = "";
+        return;
+    }
+    if (groupFormat) groupFormat.style.display = 'flex';
 
     const total = dataForCounters.length; 
     const digital = dataForCounters.filter(g => 
@@ -258,6 +273,7 @@ function renderUniversalCompleteFilters(dataForCounters) {
     const groupComplete = document.getElementById('group-estado'); 
     if (!container) return;
 
+    // En consolas de momento no mostramos este filtro de completitud de juegos
     if (currentSection !== 'videojuegos') {
         if (groupComplete) groupComplete.style.display = 'none';
         return;
@@ -287,7 +303,6 @@ function renderUniversalCompleteFilters(dataForCounters) {
     }).join('');
 }
 
-// --- NUEVAS FUNCIONES DE PRIORIDAD ---
 function renderWishlistPriorityFilters(dataForCounters) {
     const container = document.getElementById('nav-priority-filter');
     const groupPriority = document.getElementById('group-prioridad'); 
