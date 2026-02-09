@@ -96,7 +96,7 @@ function createConsoleCardHTML(c) {
                         ${AppUtils.getFlag(c["Región"])} ${c["Región"] || "N/A"}
                     </div>
                     <span style="font-size: 0.7em; color: #888; font-weight: bold;">Fab: ${c["Año Fabricación"] || "????"}</span>
-                    <span style="font-size: 0.7em; color: #555; font-weight: 800; text-transform: uppercase;">Nº Serie: ${c["Número Serie"] || "S/N"</span>
+                    <span style="font-size: 0.7em; color: #555; font-weight: 800; text-transform: uppercase;">Nº Serie: ${c["Número Serie"] || "S/N"}</span>
                 </div>
             </div>
 
