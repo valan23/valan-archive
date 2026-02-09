@@ -105,14 +105,6 @@ function createConsoleCardHTML(c) {
             </div>
 
             <div style="margin: 0 15px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; flex-grow: 1; display: flex; flex-direction: column; gap: 6px; border: 1px solid rgba(255,255,255,0.02);">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 4px;">
-                    <span style="font-size: 0.55rem; color: #555; font-weight: 800; text-transform: uppercase;">Modificada</span>
-                    <span style="font-size: 0.65rem; color: ${c["Modificada"] === 'No' ? '#888' : 'var(--cyan)'}; font-weight: 900;">${(c["Modificada"] || "NO").toUpperCase()}</span>
-                </div>
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-size: 0.5rem; color: #555; font-weight: 800; text-transform: uppercase;">Tipo Mod / Detalles</span>
-                    <span style="font-size: 0.65rem; color: #bbb; line-height: 1.2;">${c["Tipo Mod"] || "Sin modificaciones"}</span>
-                </div>
                 <div style="display: flex; flex-direction: column; margin-top: 4px;">
                     <span style="font-size: 0.5rem; color: #555; font-weight: 800; text-transform: uppercase;">Accesorios Originales</span>
                     <span style="font-size: 0.65rem; color: #bbb;">${c["Accesorios originales"] || "Ninguno"}</span>
@@ -121,13 +113,19 @@ function createConsoleCardHTML(c) {
 
             <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; background: rgba(0,0,0,0.1);">
                 <div style="flex: 1.2; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 5px;">
-                    <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase;">MOD</span>
-                    <span style="font-size: 0.6rem; color: ${colorMod}; font-weight: 900; text-align: center; line-height: 1;">
-                        ${iconoMod}${modCampo.toUpperCase() === "NO" ? "ORIGINAL" : modCampo.toUpperCase()}
-                    </span>
-                    <span style="font-size: 0.45rem; color: #666; font-weight: 600; text-transform: uppercase; margin-top: 2px;">
-                        ${modCampo.toUpperCase() === "NO" ? "" : detalleMod}
-                    </span>
+                    <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase; margin-bottom: 3px;">Hardware</span>
+    
+                    <div style="background: ${toRgba(colorMod, 0.15)}; color: ${colorMod}; padding: 2px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; width: 90%;">
+                        <span style="font-size: 0.55rem; font-weight: 900; text-align: center; line-height: 1; text-transform: uppercase;">
+                            ${iconoMod}${modCampo.toUpperCase() === "NO" ? "ORIGINAL" : modCampo.toUpperCase()}
+                        </span>
+                    </div>
+
+                    ${modCampo.toUpperCase() !== "NO" ? 
+                        `<span style="font-size: 0.42rem; color: #666; font-weight: 600; text-transform: uppercase; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px;">
+                            ${detalleMod}
+                        </span>` : ''
+                    }
                 </div>
                 <div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase;">Nº Serie</span>
