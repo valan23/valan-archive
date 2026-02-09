@@ -85,18 +85,21 @@ function renderPlayed(games) {
             const portada = (j["Portada"] || "").trim();
             const fotoUrl = AppUtils.isValid(portada) ? `images/covers/${carpeta}/${portada}` : `images/covers/default.webp`;
             
-            // Edición e Iconos
+            // Edición e Iconos (ACTUALIZADO)
             let edicionHTML = "";
             const edicionTexto = j["Edición"] || "";
+            
             if (AppUtils.isValid(edicionTexto) && edicionTexto.toUpperCase() !== "ESTÁNDAR") {
-                let icono = '<i class="fa-solid fa-star"></i>';
-                const upperEd = edicionTexto.toUpperCase();
-                if (upperEd.includes("STEAM")) icono = '<i class="fa-brands fa-steam"></i>';
-                else if (upperEd.includes("GAME PASS")) icono = '<i class="fa-brands fa-xbox"></i>';
-                else if (upperEd.includes("PS PLUS")) icono = '<i class="fa-brands fa-playstation"></i>';
-                else if (upperEd.includes("RETROARCH") || upperEd.includes("NSO")) icono = '<i class="fa-solid fa-gamepad"></i>';
-                
-                edicionHTML = `<div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">${icono} ${edicionTexto}</div>`;
+                // Llamamos a la función de utils.js que busca la imagen
+                const iconoContenido = AppUtils.getEdicionIcon(edicionTexto);
+                const esImagen = iconoContenido.includes('<img');
+
+                edicionHTML = `
+                    <div style="color: var(--cyan); font-size: 0.65em; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; display: flex; align-items: center; gap: 4px;">
+                        ${iconoContenido} 
+                        ${esImagen ? '' : edicionTexto}
+                    </div>`;
+                // Nota: Si es imagen, el texto no se pone para que no quede redundante (ej: Logo NSO + "Nintendo Switch Online")
             } else {
                 edicionHTML = `<div style="height: 12px;"></div>`;
             }
