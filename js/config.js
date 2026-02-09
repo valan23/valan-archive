@@ -125,8 +125,8 @@ const COMPLETITUD_COLORS = {
 };
 
 const HARDWARE_COMPLETITUD = {
-    "COMPLETO": { color: "#00c851" },     // Verde
-    "CON ACCESORIOS": { color: "#44CE1B" }, // Amarillo
+    "COMPLETA": { color: "#00c851" },     // Verde
+    "CON ACCESORIOS": { color: "#F5D327" }, // Amarillo
     "CON MANDOS": { color: "#ffbb33" },     // Naranja
     "SUELTA": { color: "#ff4444" }          // Rojo
 };
