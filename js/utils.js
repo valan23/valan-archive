@@ -58,21 +58,18 @@ const AppUtils = {
         return "#555";
     },
 
-    // NUEVA FUNCIÓN específica para Consolas
+    // NUEVA FUNCIÓN específica para Consolas (Corregida para "Completa")
     getHardwareCompletitudStyle: (valor) => {
-        if (!valor) return "#777";
+        if (!valor || typeof HARDWARE_COMPLETITUD === 'undefined') return "#777";
         const v = valor.toUpperCase().trim();
         
-        // Buscamos en el nuevo objeto de hardware
-        if (typeof HARDWARE_COMPLETITUD !== 'undefined') {
-            if (HARDWARE_COMPLETITUD[v]) return HARDWARE_COMPLETITUD[v].color;
-            
-            // Búsqueda por coincidencia parcial (por si el CSV dice "Completa")
-            for (let key in HARDWARE_COMPLETITUD) {
-                if (v.includes(key)) return HARDWARE_COMPLETITUD[key].color;
-            }
+        // Buscamos si alguna de nuestras claves está contenida en el texto del CSV
+        // Esto hace que "COMPLETA" coincida con nuestra clave "COMPLET"
+        for (let key in HARDWARE_COMPLETITUD) {
+            if (v.includes(key)) return HARDWARE_COMPLETITUD[key].color;
         }
-        return "#777"; // Color neutro si no coincide
+        
+        return "#777"; 
     },
 
     obtenerValorEnEuros: (precioStr) => {
