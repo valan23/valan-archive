@@ -125,33 +125,29 @@ function createConsoleCardHTML(c) {
                 </div>
             </div>
 
-            <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; background: rgba(0,0,0,0.1);">
+            <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; background: rgba(0,0,0,0.1); padding-left: 5px;">
+                
                 <div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.05); background: ${toRgba(colorMod, 0.15)}; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 5px;">
-                    <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase; margin-bottom: 3px;">MOD</span>
-    
-                    <div style="color: ${colorMod}; padding: 2px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; width: 90%;">
+                    <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">MOD</span>
+                    <div style="color: ${colorMod}; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                         <span style="font-size: 0.55rem; font-weight: 900; text-align: center; line-height: 1; text-transform: uppercase;">
                             ${iconoMod}${modCampo.toUpperCase() === "NO" ? "ORIGINAL" : modCampo.toUpperCase()}
                         </span>
                     </div>
-
-                    ${modCampo.toUpperCase() !== "NO" ? 
-                        `<span style="font-size: 0.42rem; color: #666; font-weight: 600; text-transform: uppercase; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px;">
-                            ${detalleMod}
-                        </span>` : ''
-                    }
                 </div>
+
                 <div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.02);">
                     <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Output / Región</span>
                     <span style="font-size: 0.6rem; color: #eee; font-weight: 800;">${salidaVideo}</span>
                     <span style="font-size: 0.45rem; color: ${regionFree ? '#00c851' : '#888'}; font-weight: 900; text-transform: uppercase;">
-                        ${regionFree ? '<i class="fa-solid fa-unlock"></i> REGION FREE' : '<i class="fa-solid fa-lock"></i> REGION LOCKED'}
+                        ${regionFree ? 'REGION FREE' : 'REGION LOCKED'}
                     </span>
                 </div>
+
                 <div style="flex: 1; background: rgba(46, 158, 127, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 2px;">
-                    <span style="font-size: 0.45rem; color: #2e9e7f; font-weight: 800; text-transform: uppercase;">Tasación</span>
+                    <span style="font-size: 0.45rem; color: #2e9e7f; font-weight: 800; text-transform: uppercase;">Valor Est.</span>
                     <span style="font-size: 0.7rem; color: #fff; font-weight: 900;">${c["Tasación Actual"] || "---"}</span>
-                    <span style="font-size: 0.55rem; color: #555;">${c["Fecha revisión"] || ""}</span>
+                    <span style="font-size: 0.45rem; color: #555;">${c["Fecha revisión"] || ""}</span>
                 </div>
             </div>
         </div>`;
