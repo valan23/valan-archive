@@ -127,7 +127,7 @@ function createConsoleCardHTML(c) {
                 </div>
             </div>
 
-            <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; background: rgba(0,0,0,0.1);">
+            <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; background: rgba(0,0,0,0.1); margin-left: 6px; border-bottom-left-radius: 11px;">
                 
                 <div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.05); background: ${toRgba(colorMod, 0.15)}; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 5px;">
                     <span style="font-size: 0.45rem; color: #555; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">MOD</span>
