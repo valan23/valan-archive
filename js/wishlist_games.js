@@ -123,7 +123,7 @@ function createWishlistCardHTML(j) {
                 }).join('') : `<div style="text-align:center; color:#444; font-size:0.6rem; margin-top:20px;">SIN DATOS DE PRECIO</div>`}
             </div>
 
-            <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch;">
+            <div style="margin-top: 15px; height: 55px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: stretch; margin-left: 6px; border-bottom-left-radius: 11px;">
                 <div style="flex: 1; background: ${bgFormato}; color: ${colorTextoFormato}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}" style="font-size: 1em; margin-bottom: 2px;"></i>
                     <span style="font-size: 0.6em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
