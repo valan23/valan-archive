@@ -167,7 +167,7 @@ function renderPlayed(games) {
                     "${j["Comentarios"] || "Sin comentarios."}"
                 </div>
 
-                <div style="height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; background: rgba(0,0,0,0.1);">
+                <div style="height: 55px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: stretch; background: rgba(0,0,0,0.1); margin-left: 6px; border-bottom-left-radius: 11px;">
                     <div style="flex: 0.8; background: ${esDigital ? 'rgba(0, 242, 255, 0.1)' : 'rgba(239, 195, 108, 0.1)'}; color: ${esDigital ? 'var(--cyan)' : 'var(--accent)'}; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <i class="fa-solid ${esDigital ? 'fa-cloud-download' : 'fa-compact-disc'}"></i>
                         <span style="font-size: 0.55em; font-weight: 900;">${esDigital ? 'DIGITAL' : 'FÍSICO'}</span>
