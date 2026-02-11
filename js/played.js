@@ -158,7 +158,7 @@ function renderPlayed(games) {
                                 ${estrellasHTML}
                             </div>
                             <div style="font-size: 0.85em; line-height: 1;">
-                                ${nota.toFixed(1)}
+                                ${nota}
                             </div>
                         </div>
                     </div>
